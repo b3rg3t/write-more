@@ -1,15 +1,25 @@
-import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import {
+  createEntityAdapter,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { RootState } from "../../redux/store";
 import { EStoreKeys } from "../../../models/enum/EStoreKeys";
 import { TNote } from "../../../models/type/TNote";
+import { INote } from "../../../models/interface/INote";
 
 const notesAdapter = createEntityAdapter({
   selectId: (note: TNote) => note.id,
   sortComparer: (a, b) => a.name.localeCompare(b.name),
 });
 
-const initialState = notesAdapter.getInitialState();
-export const filledNotesState = notesAdapter.upsertMany(initialState, []);
+const initialState: INote = {
+  ...notesAdapter.getInitialState(),
+};
+
+export const filledNotesState = {
+  ...notesAdapter.upsertMany(initialState, []),
+};
 
 export const notesSlice = createSlice({
   name: EStoreKeys.NOTES,
@@ -18,6 +28,12 @@ export const notesSlice = createSlice({
     addOneNote: notesAdapter.addOne,
     updateOneNote: notesAdapter.updateOne,
     removeOneNote: notesAdapter.removeOne,
+    editNote: (state, action: PayloadAction<TNote["id"]>) => {
+      state.isEditing = action.payload;
+    },
+    stopEditNote: (state) => {
+      state.isEditing = undefined;
+    },
     // // TODO: not in use
     // roundsReceived(state, action) {
     //   // Or, call them as "mutating" helpers in a case reducer
@@ -41,5 +57,11 @@ const selectAllEntities = selectAllNotes.selectEntities;
 
 export const { selectAll, selectById, selectTotal, selectIds } = selectAllNotes;
 
-export const { addOneNote, removeOneNote, updateOneNote } = notesSlice.actions;
+export const {
+  addOneNote,
+  removeOneNote,
+  updateOneNote,
+  editNote,
+  stopEditNote,
+} = notesSlice.actions;
 export { selectAllNotes as selectAllPlayers, selectAllEntities };

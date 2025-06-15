@@ -6,23 +6,23 @@ import { addOneNote } from "../../store/reducers/notes/notesSlice";
 export const Actions = () => {
   const dispatch = useAppDispatch();
   return (
-    <>
-      <Fab
-        size="small"
-        color="primary"
-        aria-label="Add note"
-        onClick={() =>
-          dispatch(
-            addOneNote({
-              id: crypto.randomUUID(),
-              name: "New Note",
-              content: "",
-            })
-          )
-        }
-      >
-        <AddIcon />
-      </Fab>
-    </>
+    <Fab
+      size="small"
+      color="primary"
+      aria-label="Add note"
+      onClick={() =>
+        dispatch(
+          addOneNote({
+            id: crypto.randomUUID(),
+            name: "New Note",
+            content: "",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          })
+        )
+      }
+    >
+      <AddIcon />
+    </Fab>
   );
 };

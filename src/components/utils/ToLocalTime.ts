@@ -1,3 +1,3 @@
-export const toLocalTime = (date: number) => {
-    return new Date(date).toLocaleString()
-}
+export const toLocalTime = (date: string) => {
+  return new Date(date).toLocaleString();
+};

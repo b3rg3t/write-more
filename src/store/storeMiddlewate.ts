@@ -7,11 +7,10 @@ const storeMiddleware = (store: any) => (next: any) => (action: any) => {
   const state: RootState = store.getState();
 
   Object.keys(state).forEach((s) => {
-    // @ts-ignore
-    setLocalStorage(s, state[s]);
+    setLocalStorage(s, state[s as keyof RootState]);
   });
 
   return result;
 };
 
-export { storeMiddleware};
+export { storeMiddleware };
