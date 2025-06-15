@@ -1,0 +1,27 @@
+.portal__menu {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  transition: 850ms;
+  z-index: 9999;
+  border-left: 1px solid white;
+}
+.portal__menu.portal-active.portal__menu-left {
+  left: 0;
+  transition: 450ms;
+}
+
+.portal__menu.portal-active.portal__menu-right {
+  right: 0;
+  transition: 450ms;
+}
+
+.portal__menu-left {
+  left: -100%;
+}
+
+.portal__menu-right {
+  right: -100%;
+} 
