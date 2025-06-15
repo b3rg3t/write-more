@@ -18,7 +18,6 @@ export const NoteList = () => {
       {notes.map((note) => (
         <ListItem
           key={note.id}
-          onClick={() => alert(`Clicked on note: ${note.name}`)}
           secondaryAction={
             <IconButton
               edge="end"
