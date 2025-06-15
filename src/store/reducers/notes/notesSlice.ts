@@ -15,14 +15,14 @@ export const notesSlice = createSlice({
   name: EStoreKeys.NOTES,
   initialState: filledNotesState,
   reducers: {
-    addOnePlayer: notesAdapter.addOne,
-    updateOnePlayer: notesAdapter.updateOne,
-    removeOnePlayer: notesAdapter.removeOne,
-    // TODO: not in use
-    roundsReceived(state, action) {
-      // Or, call them as "mutating" helpers in a case reducer
-      notesAdapter.setAll(state, action.payload.round);
-    },
+    addOneNote: notesAdapter.addOne,
+    updateOneNote: notesAdapter.updateOne,
+    removeOneNote: notesAdapter.removeOne,
+    // // TODO: not in use
+    // roundsReceived(state, action) {
+    //   // Or, call them as "mutating" helpers in a case reducer
+    //   notesAdapter.setAll(state, action.payload.round);
+    // },
   },
   // extraReducers: (builder) => {
   //   builder.addCase(createGameAction, (state, action) => {
@@ -39,9 +39,7 @@ const selectAllNotes = notesAdapter.getSelectors<RootState>(
 
 const selectAllEntities = selectAllNotes.selectEntities;
 
-export const { selectAll, selectById, selectTotal, selectIds } =
-  selectAllNotes;
+export const { selectAll, selectById, selectTotal, selectIds } = selectAllNotes;
 
-export const { addOnePlayer, removeOnePlayer, updateOnePlayer } =
-  notesSlice.actions;
+export const { addOneNote, removeOneNote, updateOneNote } = notesSlice.actions;
 export { selectAllNotes as selectAllPlayers, selectAllEntities };

@@ -1,4 +1,5 @@
 export type TNote = {
   id: string;
-  name: string
+  name: string;
+  content: string;
 };
