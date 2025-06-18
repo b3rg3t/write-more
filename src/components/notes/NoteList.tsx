@@ -1,7 +1,6 @@
 import { useAppSelector, useAppDispatch } from "../../store/redux/hooks";
 import {
   selectAll,
-  updateAllNotes,
   updateOneNote,
 } from "../../store/reducers/notes/notesSlice";
 import { NoteItem } from "./NoteItem";

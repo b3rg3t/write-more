@@ -6,10 +6,10 @@ const manifestConfig: Partial<VitePWAOptions> = {
   registerType: "autoUpdate",
   includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
   manifest: {
-    name: "Score More",
-    short_name: "Score More",
+    name: "Write More",
+    short_name: "Write More",
     description:
-      "Keep your score in this immersive scoreboard for all your games",
+      "Keep your all your notes in one place. Write more, worry less.",
     icons: [
       { src: "/16x16.png", sizes: "16x16", type: "image/png" },
       { src: "/32x32.png", sizes: "32x32", type: "image/png" },
@@ -33,8 +33,8 @@ const manifestConfig: Partial<VitePWAOptions> = {
     theme_color: "#6f528b",
     background_color: "#6f528b",
     display: "standalone",
-    scope: "https://score-even-more.vercel.app/",
-    start_url: "https://score-even-more.vercel.app/",
+    scope: "https://write-more-tau.vercel.app/",
+    start_url: "https://write-more-tau.vercel.app/",
     orientation: "portrait",
   },
   devOptions: {
