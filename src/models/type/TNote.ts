@@ -5,4 +5,5 @@ export type TNote = {
   createdAt: string;
   updatedAt: string;
   isNew?: boolean;
+  order: number;
 };

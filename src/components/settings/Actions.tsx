@@ -24,11 +24,12 @@ export const Actions = () => {
           dispatch(
             addOneNote({
               id: crypto.randomUUID(),
-              name: "New Note",
+              name: "",
               content: "",
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
               isNew: true,
+              order: -1,
             })
           )
         }

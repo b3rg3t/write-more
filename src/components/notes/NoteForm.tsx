@@ -15,6 +15,9 @@ import { useAppDispatch } from "../../store/redux/hooks";
 import { stopEditNote } from "../../store/reducers/notes/notesSlice";
 import { updateOneNote } from "../../store/reducers/notes/notesSlice";
 import { TNote } from "../../models/type/TNote";
+import { fontSize16 } from "../utils/FontSize";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 
 export const NoteForm: FC<{ note: TNote }> = ({ note }) => {
   const dispatch = useAppDispatch();
@@ -75,11 +78,21 @@ export const NoteForm: FC<{ note: TNote }> = ({ note }) => {
         maxWidth: 500,
         margin: "32px auto",
         borderRadius: 4,
-        p: 4,
-        background: "#fff",
+        p: 2,
+        my: 2,
+        mx: 2,
+        position: "relative",
       }}
     >
-      <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+      <IconButton
+        aria-label="close"
+        onClick={onCancel}
+        sx={{ position: "absolute", top: 8, right: 8 }}
+        size="small"
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+      <Typography variant="h2" fontSize={fontSize16} sx={{ fontWeight: 600 }}>
         {formTitle}
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>

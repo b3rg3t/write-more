@@ -10,7 +10,7 @@ import { INote } from "../../../models/interface/INote";
 
 const notesAdapter = createEntityAdapter({
   selectId: (note: TNote) => note.id,
-  sortComparer: (a, b) => a.name.localeCompare(b.name),
+  sortComparer: (a, b) => a.order - b.order,
 });
 
 const initialState: INote = {
@@ -31,6 +31,7 @@ export const notesSlice = createSlice({
       state.editingNote = action.payload;
     },
     updateOneNote: notesAdapter.updateOne,
+    updateAllNotes: notesAdapter.updateMany,
     removeOneNote: notesAdapter.removeOne,
     editNote: (state, action: PayloadAction<TNote>) => {
       state.isEditing = action.payload.id;
@@ -69,5 +70,6 @@ export const {
   updateOneNote,
   editNote,
   stopEditNote,
+  updateAllNotes,
 } = notesSlice.actions;
 export { selectAllNotes as selectAllPlayers, selectAllEntities };
