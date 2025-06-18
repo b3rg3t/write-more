@@ -25,14 +25,20 @@ export const notesSlice = createSlice({
   name: EStoreKeys.NOTES,
   initialState: filledNotesState,
   reducers: {
-    addOneNote: notesAdapter.addOne,
+    addOneNote: (state, action: PayloadAction<TNote>) => {
+      notesAdapter.addOne(state, action);
+      state.isEditing = action.payload.id;
+      state.editingNote = action.payload;
+    },
     updateOneNote: notesAdapter.updateOne,
     removeOneNote: notesAdapter.removeOne,
-    editNote: (state, action: PayloadAction<TNote["id"]>) => {
-      state.isEditing = action.payload;
+    editNote: (state, action: PayloadAction<TNote>) => {
+      state.isEditing = action.payload.id;
+      state.editingNote = action.payload;
     },
     stopEditNote: (state) => {
       state.isEditing = undefined;
+      state.editingNote = undefined;
     },
     // // TODO: not in use
     // roundsReceived(state, action) {

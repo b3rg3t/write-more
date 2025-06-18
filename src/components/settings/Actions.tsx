@@ -1,28 +1,41 @@
+import { Fab, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { addOneNote } from "../../store/reducers/notes/notesSlice";
 
 export const Actions = () => {
   const dispatch = useAppDispatch();
   return (
-    <Fab
-      size="small"
-      color="primary"
-      aria-label="Add note"
-      onClick={() =>
-        dispatch(
-          addOneNote({
-            id: crypto.randomUUID(),
-            name: "New Note",
-            content: "",
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          })
-        )
-      }
+    <Box
+      position="fixed"
+      left={0}
+      right={0}
+      bottom={24}
+      display="flex"
+      justifyContent="center"
+      zIndex={1300}
+      sx={{ pointerEvents: "none" }}
     >
-      <AddIcon />
-    </Fab>
+      <Fab
+        size="large"
+        color="primary"
+        aria-label="Add note"
+        onClick={() =>
+          dispatch(
+            addOneNote({
+              id: crypto.randomUUID(),
+              name: "New Note",
+              content: "",
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              isNew: true,
+            })
+          )
+        }
+        sx={{ pointerEvents: "auto" }}
+      >
+        <AddIcon />
+      </Fab>
+    </Box>
   );
 };
