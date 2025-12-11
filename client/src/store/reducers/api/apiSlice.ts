@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { INote } from "../../../models/interface/INote";
 
-const API_BASE_URL = import.meta.env.PROD ? "https://write-more-gmobx6541-david-bergs-projects.vercel.app/api/" : "http://localhost:5000/api/";
+const API_BASE_URL = import.meta.env.PROD ? "https://write-more-api.vercel.app/api/" : "http://localhost:5000/api/";
 
 export const noteApiSlice = createApi({
   reducerPath: "noteApi",
