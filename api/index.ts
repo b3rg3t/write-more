@@ -6,7 +6,7 @@ import cors from 'cors';
 import notesRouter from "./routes/notes.ts";
 
 // Load environment variables from config.env
-dotenv.config({ path: "./server/config.env" });
+dotenv.config({ path: ".env" });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
