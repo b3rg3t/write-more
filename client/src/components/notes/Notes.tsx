@@ -14,7 +14,9 @@ export const Notes = () => {
           {text.appName}
         </Typography>
       </Container>
-      <EditNote />
+      <Container sx={{ px: 0, mx: 0}}>
+        <EditNote />
+      </Container>
       <NoteList />
       <Actions />
     </Container>

@@ -7,26 +7,31 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { reorderNotesHelper } from "../../store/reducers/notes/reorderNotes";
-import { ListItem } from "@mui/material";
+import {
+  Alert,
+  CircularProgress,
+  Container,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import {
   useGetAllNotesQuery,
   useReorderNotesMutation,
 } from "../../store/reducers/api/apiSlice";
 import { INote } from "../../models/interface/INote";
+import { useEffect, useState, useMemo } from "react";
 
 export const NoteList = () => {
-  const { data, isLoading, isFetching, isUninitialized } = useGetAllNotesQuery(
-    undefined,
-    {
-      selectFromResult: ({ data, isLoading, isFetching, isUninitialized }) => ({
-        data: data ? [...data].sort((a, b) => a.order - b.order) : [],
-        isLoading,
-        isFetching,
-        isUninitialized,
-      }),
-    }
-  );
-  const [reorderNotes] = useReorderNotesMutation();
+  const { data, isLoading, isUninitialized, error } = useGetAllNotesQuery();
+  const sortedData = useMemo(() => {
+    return data ? [...data].sort((a, b) => a.order - b.order ) : [];
+  }, [data]);
+  const [notes, setNotes] = useState<INote[]>([]);
+  const [reorderNotes, {}] = useReorderNotesMutation();
+
+  useEffect(() => {
+    setNotes(sortedData);
+  }, [sortedData]);
 
   const handleReorderNotes = async (notes: Pick<INote, "_id" | "order">[]) => {
     try {
@@ -40,25 +45,53 @@ export const NoteList = () => {
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     const reordered = reorderNotesHelper(
-      data!,
+      notes,
       result.source.index,
       result.destination.index
     );
 
+    console.log("Reordered notes:", reordered);
     handleReorderNotes(reordered);
+    setNotes(reordered);
   };
 
-  if (isLoading || isFetching || isUninitialized) {
-    return <div>Loading...</div>;
+  if (isLoading || isUninitialized) {
+    return (
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <Container
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+          <Typography variant="body1" sx={{ mt: 2 }}>
+            Loading notes
+          </Typography>
+        </Container>
+      </Container>
+    );
+  } else if (error) {
+    return <Alert severity="error">Error fetching notes</Alert>;
   }
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="note-list">
         {(provided) => (
           <List dense ref={provided.innerRef} {...provided.droppableProps}>
-            {data!.map((note, index) => (
-              <Draggable key={note._id} draggableId={note._id} index={index}>
+            {notes.map((note, index) => (
+              <Draggable
+                key={note._id}
+                draggableId={note._id}
+                index={index}
+              >
                 {(provided) => (
                   <ListItem
                     ref={provided.innerRef}

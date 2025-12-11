@@ -19,7 +19,11 @@ router.post("/", async (req, res) => {
   const { title, content } = req.body;
 
   try {
-    const newNote = new Note({ title, content });
+    // Find the highest order
+    const highestOrderNote = await Note.findOne().sort({ order: -1 });
+    const newOrder = highestOrderNote ? highestOrderNote.order + 1 : 0;
+
+    const newNote = new Note({ title, content, order: newOrder });
     const savedNote = await newNote.save();
     res.status(201).json(savedNote);
   } catch (err) {

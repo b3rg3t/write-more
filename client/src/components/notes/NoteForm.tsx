@@ -94,7 +94,6 @@ export const NoteForm: FC<{ note?: INote }> = ({ note }) => {
         borderRadius: 4,
         p: 2,
         my: 2,
-        mx: 2,
         position: "relative",
       }}
     >
