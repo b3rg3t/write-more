@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import cors from 'cors';
 
 import notesRouter from "./src/routes/notes";
-  
+
 // Load environment variables from config.env
 dotenv.config({ path: ".env" });
 
@@ -75,3 +75,5 @@ process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
   gracefulShutdown('unhandledRejection');
 });
+
+export default app;
