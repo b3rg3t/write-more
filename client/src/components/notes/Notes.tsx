@@ -5,9 +5,11 @@ import { text } from "../../localization/eng";
 import Typography from "@mui/material/Typography";
 import { EditNote } from "./EditNote";
 import { fontSize16 } from "../utils/FontSize";
+import { DeleteNoteModal } from "../modal/DeleteNoteModal";
 
 export const Notes = () => {
-  return (
+  return (<>
+    <DeleteNoteModal />
     <Container maxWidth="md" sx={{ px: 0, py: 2 }}>
       <Container sx={{ px: 2 }}>
         <Typography variant="h1" fontSize={fontSize16} fontWeight="bold">
@@ -19,6 +21,6 @@ export const Notes = () => {
       </Container>
       <NoteList />
       <Actions />
-    </Container>
+    </Container></>
   );
 };

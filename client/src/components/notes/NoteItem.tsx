@@ -14,11 +14,9 @@ import { FC } from "react";
 import { fontSize16 } from "../utils/FontSize";
 import { INote } from "../../models/interface/INote";
 import { text } from "../../localization/eng";
-import { setEditNote } from "../../store/reducers/notes/notesSlice";
-import { useDeleteNoteMutation } from "../../store/reducers/api/apiSlice";
+import { deleteNote, setEditNote } from "../../store/reducers/notes/notesSlice";
 
 export const NoteItem: FC<{ note: INote }> = ({ note }) => {
-  const [deleteNote] = useDeleteNoteMutation();
   const dispatch = useAppDispatch();
 
   const handleEditNote = () => {
@@ -26,8 +24,7 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
   };
 
   const handleDeleteNote = async () => {
-    await deleteNote({ _id: note._id });
-    console.log("Delete note:", note._id);
+    dispatch(deleteNote(note._id));
   };
 
   return (

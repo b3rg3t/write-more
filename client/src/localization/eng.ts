@@ -18,6 +18,12 @@ export const text = {
       created: "Created",
       updated: "Updated",
     },
+    deleteNote: {
+      title: "Delete Note",
+      confirmation: "Are you sure you want to delete '{title}'? This action cannot be undone.",
+      confirm: "Delete",
+      cancel: "Cancel",
+    },
   },
   errors: {
     root: "An error occurred",

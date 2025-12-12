@@ -9,11 +9,13 @@ import { INote } from "../../../models/interface/INote";
 interface INotesState {
   isEditing?: INote["_id"];
   isNew?: boolean;
+  isDeleting?: INote["_id"];
 }
 
 const initialState: INotesState = {
   isEditing: undefined,
   isNew: false,
+  isDeleting: undefined,
 };
 
 export const notesSlice = createSlice({
@@ -29,6 +31,9 @@ export const notesSlice = createSlice({
     cancelNote: (state) => {
       state.isNew = false;
       state.isEditing = undefined;
+    },
+    deleteNote: (state, action: PayloadAction<INote["_id"] | undefined>) => {
+      state.isDeleting = action.payload;
     }
   },
 });
@@ -36,12 +41,14 @@ export const notesSlice = createSlice({
 
 const selectIsNew = (state: RootState) => state.notes.isNew;
 const selectIsEditing = (state: RootState) => state.notes.isEditing;
+const selectIsDeleting = (state: RootState) => state.notes.isDeleting;
 
-export { selectIsNew , selectIsEditing  };
+export { selectIsNew , selectIsEditing, selectIsDeleting  };
 
 export const {
   cancelNote,
   createNewNote,
-  setEditNote
+  setEditNote,
+  deleteNote,
 } = notesSlice.actions;
 
