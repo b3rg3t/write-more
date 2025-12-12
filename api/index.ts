@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from 'cors';
 
-import notesRouter from "./routes/notes.ts";
-
+import notesRouter from "./src/routes/notes";
+  
 // Load environment variables from config.env
 dotenv.config({ path: ".env" });
 

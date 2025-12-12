@@ -1,6 +1,6 @@
 import express from "express";
-import type { INote } from "../models/types/Note.ts";
-import Note from "../models/types/Note.ts";
+import type { INote } from "../models/types/Note";
+import Note from "../models/types/Note";
 
 const router = express.Router();
 
