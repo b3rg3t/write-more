@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "Backend for Write More application using Express.js",
   "main": "server/index.js",
-  "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node index.js",
+    "start": "node dist/index.js",
     "dev": "nodemon index.ts"
   },
   "keywords": [],
