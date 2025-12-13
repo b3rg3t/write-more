@@ -111,7 +111,7 @@ export const NoteList = () => {
                 {(provided) => (
                   <ListItem
                     ref={provided.innerRef}
-                    sx={{ width: "100%" }}
+                    sx={{ width: "100%", px: 1 }}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >

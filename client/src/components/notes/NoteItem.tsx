@@ -32,7 +32,7 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
       variant="outlined"
       sx={{ boxShadow: 2, borderRadius: 2, width: "100%", mb: 0 }}
     >
-      <CardContent>
+      <CardContent sx={{ px: 1, pt: 1, pb: 0 }}>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -56,7 +56,7 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
           {note.content}
         </Typography>
       </CardContent>
-      <CardActions sx={{ justifyContent: "flex-end" }}>
+      <CardActions sx={{ justifyContent: "flex-end", px: 2, pt: 0 }}>
         <IconButton
           color="primary"
           edge="end"

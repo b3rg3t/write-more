@@ -1,5 +1,5 @@
 import { FormGroup, TextField } from "@mui/material";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { TBasicNote } from "../../models/type/TBasicNote";
 import { ENoteForm } from "../../models/enum/ENoteForm";
@@ -20,6 +20,7 @@ export const NoteForm: FC<{
   const [createNote] = useAddNoteMutation();
   const [updateNote] = useUpdateNoteMutation();
   const dispatch = useAppDispatch();
+  const titleRef = useRef<HTMLInputElement>(null);
 
   const {
     handleSubmit,
@@ -42,6 +43,13 @@ export const NoteForm: FC<{
     setValue(ENoteForm.TITLE, note?.title || "");
     setValue(ENoteForm.CONTENT, note?.content || "");
   }, [note, setValue]);
+
+  useEffect(() => {
+    // Focus the title field when the form opens
+    if (titleRef.current) {
+      titleRef.current.focus();
+    }
+  }, []);
 
   const handlePostNote = async (data: TBasicNote) => {
     if (isNew) {
@@ -92,6 +100,7 @@ export const NoteForm: FC<{
           margin="normal"
           fullWidth
           sx={{ mt: 0 }}
+          inputRef={titleRef}
         />
         <TextField
           id={ENoteForm.CONTENT}
