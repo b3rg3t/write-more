@@ -1,9 +1,10 @@
 {
-  "name": "score-even-more",
+  "name": "write-more-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "prepare": "husky install",
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
@@ -37,7 +38,15 @@
     "eslint": "^9.20.1",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "typescript": "^5.7.3",
     "vite": "^6.1.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --max-warnings 0 ."
+    ]
   }
 }
