@@ -1,11 +1,4 @@
-import {
-  FormGroup,
-  TextField,
-  Button,
-  ButtonGroup,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { FormGroup, TextField } from "@mui/material";
 import { FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { TBasicNote } from "../../models/type/TBasicNote";
