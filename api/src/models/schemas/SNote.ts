@@ -21,4 +21,4 @@ const SNote: Schema = new Schema(
   }
 );
 
-export default mongoose.model<INote>("Note", SNote);
+export default mongoose.model<INote>("Note", SNote, "my_notes");

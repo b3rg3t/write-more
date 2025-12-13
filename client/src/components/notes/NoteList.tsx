@@ -9,6 +9,7 @@ import {
 import { reorderNotesHelper } from "../../store/reducers/notes/reorderNotes";
 import {
   Alert,
+  Button,
   CircularProgress,
   Container,
   ListItem,
@@ -20,11 +21,15 @@ import {
 } from "../../store/reducers/api/apiSlice";
 import { INote } from "../../models/interface/INote";
 import { useEffect, useState, useMemo } from "react";
+import { text } from "../../localization/eng";
+import { useAppDispatch } from "../../store/redux/hooks";
+import { createNewNote } from "../../store/reducers/notes/notesSlice";
 
 export const NoteList = () => {
   const { data, isLoading, isUninitialized, error } = useGetAllNotesQuery();
+  const dispatch = useAppDispatch();
   const sortedData = useMemo(() => {
-    return data ? [...data].sort((a, b) => a.order - b.order ) : [];
+    return data ? [...data].sort((a, b) => a.order - b.order) : [];
   }, [data]);
   const [notes, setNotes] = useState<INote[]>([]);
   const [reorderNotes, {}] = useReorderNotesMutation();
@@ -55,6 +60,8 @@ export const NoteList = () => {
     setNotes(reordered);
   };
 
+  const { loading, createNote, noNotes, fetchError } = text.notes.notesList;
+
   if (isLoading || isUninitialized) {
     return (
       <Container
@@ -73,13 +80,26 @@ export const NoteList = () => {
         >
           <CircularProgress />
           <Typography variant="body1" sx={{ mt: 2 }}>
-            Loading notes
+            {loading}
           </Typography>
         </Container>
       </Container>
     );
   } else if (error) {
-    return <Alert severity="error">Error fetching notes</Alert>;
+    return <Alert severity="error">{fetchError}</Alert>;
+  } else if (notes.length === 0) {
+    return (
+      <Alert
+        severity="info"
+        action={
+          <Button onClick={() => dispatch(createNewNote())}>
+            {createNote}
+          </Button>
+        }
+      >
+        {noNotes}
+      </Alert>
+    );
   }
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -87,11 +107,7 @@ export const NoteList = () => {
         {(provided) => (
           <List dense ref={provided.innerRef} {...provided.droppableProps}>
             {notes.map((note, index) => (
-              <Draggable
-                key={note._id}
-                draggableId={note._id}
-                index={index}
-              >
+              <Draggable key={note._id} draggableId={note._id} index={index}>
                 {(provided) => (
                   <ListItem
                     ref={provided.innerRef}

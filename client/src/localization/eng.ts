@@ -18,6 +18,12 @@ export const text = {
       created: "Created",
       updated: "Updated",
     },
+    notesList: {
+      loading: "Loading notes",
+      noNotes: "Create a new note to get started!",
+      createNote: "Create Note",
+      fetchError: "Failed to load notes. Please try again.",
+    },
     deleteNote: {
       title: "Delete Note",
       titleUnknown: "Unknown Note",

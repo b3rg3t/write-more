@@ -2,7 +2,6 @@ import { Fab, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { createNewNote } from "../../store/reducers/notes/notesSlice";
-// import { addOneNote } from "../../store/reducers/notes/notesSlice";
 
 export const Actions = () => {
   const dispatch = useAppDispatch();
