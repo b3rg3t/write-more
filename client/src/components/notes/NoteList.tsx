@@ -63,7 +63,7 @@ export const NoteList = () => {
 
   const { loading, createNote, noNotes, fetchError } = text.notes.notesList;
 
-  if (isLoading || isUninitialized || isFetching) {
+  if (isLoading || isUninitialized) {
     return (
       <Container
         sx={{
@@ -88,7 +88,7 @@ export const NoteList = () => {
     );
   } else if (error) {
     return <Alert severity="error">{fetchError}</Alert>;
-  } else if (data?.length === 0) {
+  } else if (data?.length === 0 && !isFetching) {
     return (
       <Alert
         severity="info"
