@@ -5,7 +5,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { text } from "../../localization/eng";
 import {
   useDeleteNoteMutation,
@@ -20,6 +24,8 @@ import {
 export const DeleteNoteModal = () => {
   const isDeleting = useAppSelector(selectIsDeleting);
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { note } = useGetAllNotesQuery(undefined, {
     selectFromResult: ({ data }) => ({
       note: isDeleting
@@ -54,12 +60,27 @@ export const DeleteNoteModal = () => {
       onClose={onClose}
       maxWidth="sm"
       fullWidth
+      fullScreen={isMobile}
       transitionDuration={0}
       aria-labelledby="delete-note-dialog-title"
       aria-describedby="delete-note-dialog-description"
     >
-      <DialogTitle id="delete-note-dialog-title">{title}</DialogTitle>
-      <DialogContent>
+      <DialogTitle
+        id="delete-note-dialog-title"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          px: { xs: 1, sm: 3 },
+          py: { xs: 1, sm: 2 },
+        }}
+      >
+        {title}
+        <IconButton onClick={onClose} size="small">
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
         <DialogContentText id="delete-note-dialog-description" sx={{ mb: 2 }}>
           {confirmation.replace("{title}", note?.title || titleUnknown)}
         </DialogContentText>

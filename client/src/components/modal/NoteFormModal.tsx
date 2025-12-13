@@ -4,7 +4,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   cancelNote,
@@ -19,7 +23,8 @@ export const NoteFormModal = () => {
   const isNew = useAppSelector(selectIsNew);
   const isEditing = useAppSelector(selectIsEditing);
   const dispatch = useAppDispatch();
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { note } = useGetAllNotesQuery(undefined, {
     selectFromResult: ({ data }) => ({
       note: isEditing
@@ -42,13 +47,26 @@ export const NoteFormModal = () => {
       onClose={onClose}
       maxWidth="sm"
       fullWidth
+      fullScreen={isMobile}
       transitionDuration={0}
       aria-labelledby="note-form-dialog-title"
     >
-      <DialogTitle id="note-form-dialog-title">
+      <DialogTitle
+        id="note-form-dialog-title"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          px: { xs: 1, sm: 3 },
+          py: { xs: 1, sm: 2 },
+        }}
+      >
         {isNew ? titleNew : titleEdit}
+        <IconButton onClick={onClose} size="small">
+          <CloseIcon />
+        </IconButton>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
         <NoteForm note={note}>
           <DialogActions sx={{ p: 0 }}>
             <Button onClick={onClose} color="inherit">
