@@ -88,7 +88,7 @@ export const NoteList = () => {
     );
   } else if (error) {
     return <Alert severity="error">{fetchError}</Alert>;
-  } else if (notes.length === 0) {
+  } else if (data?.length === 0) {
     return (
       <Alert
         severity="info"
