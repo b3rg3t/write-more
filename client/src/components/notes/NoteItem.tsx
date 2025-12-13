@@ -52,7 +52,11 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
             </Typography>
           </Stack>
         </Stack>
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ mt: 1, whiteSpace: "pre-wrap" }}
+        >
           {note.content}
         </Typography>
       </CardContent>
