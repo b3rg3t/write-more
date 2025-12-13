@@ -20,9 +20,10 @@ export const text = {
     },
     deleteNote: {
       title: "Delete Note",
-      confirmation: "Are you sure you want to delete '{title}'? This action cannot be undone.",
-      confirm: "Delete",
-      cancel: "Cancel",
+      titleUnknown: "Unknown Note",
+      confirmation:
+        "Are you sure you want to delete '{title}'? This action cannot be undone.",
+      buttons: { confirm: "Delete", cancel: "Cancel" },
     },
   },
   errors: {

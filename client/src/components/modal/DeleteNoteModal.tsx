@@ -46,6 +46,8 @@ export const DeleteNoteModal = () => {
 
   const open = !!isDeleting;
 
+  const { title, titleUnknown, confirmation, buttons } = text.notes.deleteNote;
+
   return (
     <Dialog
       open={open}
@@ -56,25 +58,20 @@ export const DeleteNoteModal = () => {
       aria-labelledby="delete-note-dialog-title"
       aria-describedby="delete-note-dialog-description"
     >
-      <DialogTitle id="delete-note-dialog-title">
-        {text.notes.deleteNote.title}
-      </DialogTitle>
+      <DialogTitle id="delete-note-dialog-title">{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="delete-note-dialog-description">
-          {text.notes.deleteNote.confirmation.replace(
-            "{title}",
-            note?.title || text.notes.notesForm.titleUnknown
-          )}
+        <DialogContentText id="delete-note-dialog-description" sx={{ mb: 2 }}>
+          {confirmation.replace("{title}", note?.title || titleUnknown)}
         </DialogContentText>
+        <DialogActions>
+          <Button onClick={onClose} color="inherit">
+            {buttons.cancel}
+          </Button>
+          <Button onClick={handleConfirm} color="error" variant="contained">
+            {buttons.confirm}
+          </Button>
+        </DialogActions>
       </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button onClick={onClose} color="inherit">
-          {text.notes.deleteNote.cancel}
-        </Button>
-        <Button onClick={handleConfirm} color="error" variant="contained">
-          {text.notes.deleteNote.confirm}
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };
