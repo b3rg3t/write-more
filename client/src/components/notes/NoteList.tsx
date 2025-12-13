@@ -26,7 +26,8 @@ import { useAppDispatch } from "../../store/redux/hooks";
 import { createNewNote } from "../../store/reducers/notes/notesSlice";
 
 export const NoteList = () => {
-  const { data, isLoading, isUninitialized, error } = useGetAllNotesQuery();
+  const { data, isLoading, isUninitialized, isFetching, error } =
+    useGetAllNotesQuery();
   const dispatch = useAppDispatch();
   const sortedData = useMemo(() => {
     return data ? [...data].sort((a, b) => a.order - b.order) : [];
@@ -62,7 +63,7 @@ export const NoteList = () => {
 
   const { loading, createNote, noNotes, fetchError } = text.notes.notesList;
 
-  if (isLoading || isUninitialized) {
+  if (isLoading || isUninitialized || isFetching) {
     return (
       <Container
         sx={{
