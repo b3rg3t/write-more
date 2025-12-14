@@ -38,6 +38,26 @@ export const text = {
       buttons: { confirm: "Delete", cancel: "Cancel" },
     },
   },
+  todos: {
+    todosForm: {
+      titleNew: "New Todo",
+      titleEdit: "Edit Todo",
+      titleUnknown: "Unknown Todo",
+      buttons: {
+        submit: "Submit",
+        cancel: "Cancel",
+      },
+      helperText: {
+        nameRequired: "Name is required",
+      },
+    },
+    todosList: {
+      loading: "Loading todos",
+      noTodos: "Create a new todo to get started!",
+      createTodo: "Create Todo",
+      fetchError: "Failed to load todos. Please try again.",
+    },
+  },
   errors: {
     root: "An error occurred",
   },

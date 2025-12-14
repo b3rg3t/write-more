@@ -6,6 +6,10 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { createTheme } from "@mui/material/styles";
+import { Todos } from "./components/todos/Todos";
+import { Container, Typography } from "@mui/material";
+import { text } from "./localization/eng";
+import { fontSize16 } from "./components/utils/FontSize";
 
 const theme = createTheme({
   palette: {
@@ -101,7 +105,15 @@ const theme = createTheme({
 
 const App = () => (
   <ThemeProvider theme={theme}>
-    <Notes />
+    <Container maxWidth="md" sx={{ px: 0, py: 2 }}>
+      <Container sx={{ px: 2 }}>
+        <Typography variant="h1" fontSize={fontSize16} fontWeight="bold">
+          {text.appName}
+        </Typography>
+      </Container>
+      <Todos />
+      <Notes />
+    </Container>
   </ThemeProvider>
 );
 

@@ -1,12 +1,9 @@
 import { TLink } from "../type/TLink";
+import { IBase } from "./IBase";
 
-export interface INote {
+export interface INote extends IBase {
   content: string;
-  createdAt: string;
   title: string;
-  updatedAt: string;
   order: number;
   links: TLink[];
-  __v: number;
-  _id: string;
 }

@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { INote } from "../../../models/interface/INote";
-
-const API_BASE_URL = import.meta.env.PROD ? "https://write-more-api.vercel.app/api/" : "http://localhost:5000/api/";
+import { API_BASE_URL } from "./util";
 
 export const noteApiSlice = createApi({
   reducerPath: "noteApi",
@@ -51,5 +50,5 @@ export const {
   useAddNoteMutation,
   useUpdateNoteMutation,
   useReorderNotesMutation,
-  useDeleteNoteMutation
+  useDeleteNoteMutation,
 } = noteApiSlice;

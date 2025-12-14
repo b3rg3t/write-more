@@ -10,36 +10,38 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
+import { cancelTodo } from "../../store/reducers/todos/todosSlice";
+import { useGetAllTodosQuery } from "../../store/reducers/api/todoApiSlice";
+import { text } from "../../localization/eng";
 import {
-  cancelNote,
   selectIsEditing,
   selectIsNew,
-} from "../../store/reducers/notes/notesSlice";
-import { useGetAllNotesQuery } from "../../store/reducers/api/noteApiSlice";
-import { NoteForm } from "../notes/NoteForm";
-import { text } from "../../localization/eng";
+} from "../../store/reducers/todos/todosSlice";
+import { TodoForm } from "../todos/TodoForm";
 
-export const NoteFormModal = () => {
+export const TodoFormModal = () => {
   const isNew = useAppSelector(selectIsNew);
   const isEditing = useAppSelector(selectIsEditing);
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { note } = useGetAllNotesQuery(undefined, {
+  const { todo } = useGetAllTodosQuery(undefined, {
     selectFromResult: ({ data }) => ({
-      note: isEditing
-        ? data?.find((note) => note._id === isEditing)
+      todo: isEditing
+        ? data?.find((todo) => todo._id === isEditing)
         : undefined,
     }),
   });
 
+  console.log("TodoFormModal render", { isNew, isEditing, todo });
+
   const onClose = () => {
-    dispatch(cancelNote());
+    dispatch(cancelTodo());
   };
 
   const open = !!isNew || !!isEditing;
 
-  const { titleNew, titleEdit, buttons } = text.notes.notesForm;
+  const { titleNew, titleEdit, buttons } = text.todos.todosForm;
 
   return (
     <Dialog
@@ -49,10 +51,10 @@ export const NoteFormModal = () => {
       fullWidth
       fullScreen={isMobile}
       transitionDuration={0}
-      aria-labelledby="note-form-dialog-title"
+      aria-labelledby="todo-form-dialog-title"
     >
       <DialogTitle
-        id="note-form-dialog-title"
+        id="todo-form-dialog-title"
         sx={{
           display: "flex",
           alignItems: "center",
@@ -67,7 +69,7 @@ export const NoteFormModal = () => {
         </IconButton>
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
-        <NoteForm note={note}>
+        <TodoForm todo={todo}>
           <DialogActions sx={{ p: 0 }}>
             <Button onClick={onClose} color="inherit">
               {buttons.cancel}
@@ -75,8 +77,8 @@ export const NoteFormModal = () => {
             <Button type="submit" variant="contained">
               {buttons.submit}
             </Button>
-          </DialogActions>
-        </NoteForm>
+          </DialogActions>{" "}
+        </TodoForm>
       </DialogContent>
     </Dialog>
   );

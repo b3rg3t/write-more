@@ -1,3 +1,4 @@
 export enum EStoreKeys {
-    NOTES = "notes",
+  NOTES = "notes",
+  TODOS = "todos",
 }

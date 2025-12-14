@@ -10,7 +10,7 @@ import { cancelNote, selectIsNew } from "../../store/reducers/notes/notesSlice";
 import {
   useAddNoteMutation,
   useUpdateNoteMutation,
-} from "../../store/reducers/api/apiSlice";
+} from "../../store/reducers/api/noteApiSlice";
 import { LinkForm } from "./links/LinkForm";
 
 export const NoteForm: FC<{
@@ -82,10 +82,6 @@ export const NoteForm: FC<{
 
   const onSubmit = (data: TBasicNote) => {
     handlePostNote(data);
-    onCancel();
-  };
-
-  const onCancel = () => {
     reset();
     dispatch(cancelNote());
   };

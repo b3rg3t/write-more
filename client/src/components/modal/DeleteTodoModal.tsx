@@ -11,39 +11,39 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { text } from "../../localization/eng";
-import {
-  useDeleteNoteMutation,
-  useGetAllNotesQuery,
-} from "../../store/reducers/api/noteApiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
-  deleteNote,
+  deleteTodo,
   selectIsDeleting,
-} from "../../store/reducers/notes/notesSlice";
+} from "../../store/reducers/todos/todosSlice";
+import {
+  useDeleteTodoMutation,
+  useGetAllTodosQuery,
+} from "../../store/reducers/api/todoApiSlice";
 
-export const DeleteNoteModal = () => {
+export const DeleteTodoModal = () => {
   const isDeleting = useAppSelector(selectIsDeleting);
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { note } = useGetAllNotesQuery(undefined, {
+  const { todo } = useGetAllTodosQuery(undefined, {
     selectFromResult: ({ data }) => ({
-      note: isDeleting
+      todo: isDeleting
         ? data?.find((note) => note._id === isDeleting)
         : undefined,
     }),
   });
-  const [deleteNoteApi] = useDeleteNoteMutation();
+  const [deleteTodoApi] = useDeleteTodoMutation();
 
   const onClose = () => {
-    dispatch(deleteNote(undefined));
+    dispatch(deleteTodo(undefined));
   };
   const handleConfirm = async () => {
-    if (note) {
+    if (todo) {
       try {
-        const payload = await deleteNoteApi({ _id: note._id }).unwrap();
+        const payload = await deleteTodoApi({ _id: todo._id }).unwrap();
         console.log("fulfilled", payload);
-        dispatch(deleteNote(undefined));
+        dispatch(deleteTodo(undefined));
       } catch (error) {
         console.error("rejected", error);
       }
@@ -82,7 +82,7 @@ export const DeleteNoteModal = () => {
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
         <DialogContentText id="delete-note-dialog-description" sx={{ mb: 2 }}>
-          {confirmation.replace("{title}", note?.title || titleUnknown)}
+          {confirmation.replace("{title}", todo?.name || titleUnknown)}
         </DialogContentText>
         <DialogActions>
           <Button onClick={onClose} color="inherit">

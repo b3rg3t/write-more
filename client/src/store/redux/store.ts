@@ -1,13 +1,17 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-// import { getPreloadedState } from "./preloadedState";
 import { EStoreKeys } from "../../models/enum/EStoreKeys";
-import { notesSlice } from "../reducers/notes/notesSlice";
 import { storeMiddleware } from "../storeMiddlewate";
-import { noteApiSlice } from "../reducers/api/apiSlice";
+
+import { notesSlice } from "../reducers/notes/notesSlice";
+import { noteApiSlice } from "../reducers/api/noteApiSlice";
+import { todoApiSlice } from "../reducers/api/todoApiSlice";
+import { todosSlice } from "../reducers/todos/todosSlice";
 
 const rootReducer = combineReducers({
   [EStoreKeys.NOTES]: notesSlice.reducer,
+  [EStoreKeys.TODOS]: todosSlice.reducer,
   [noteApiSlice.reducerPath]: noteApiSlice.reducer,
+  [todoApiSlice.reducerPath]: todoApiSlice.reducer,
 });
 
 export const setupStore = () => {
@@ -16,8 +20,8 @@ export const setupStore = () => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
         .concat(storeMiddleware)
-        .concat(noteApiSlice.middleware),
-    // preloadedState: getPreloadedState(),
+        .concat(noteApiSlice.middleware)
+        .concat(todoApiSlice.middleware),
   });
 };
 
