@@ -101,7 +101,7 @@ export const LinkForm: FC<{
                     required: helperText.contentRequired,
                     pattern: {
                       value:
-                        /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i,
+                        /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
                       message: helperText.urlValid,
                     },
                   })}
