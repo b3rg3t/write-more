@@ -81,19 +81,23 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
           pt: 0,
         }}
       >
-        <Container
-          disableGutters
-          sx={{
-            display: "flex",
-            justifyContent: "flex-start",
-            flex: 1,
-            pr: 0,
-            pl: 1,
-          }}
-        >
-          <List dense sx={{ p: 0, display: "flex", flexWrap: "wrap", gap: 1 }}>
-            {note.links &&
-              note.links.map((link, index) => (
+        {note.links && (
+          <Container
+            disableGutters
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start",
+              flex: 1,
+              mt: 1,
+              pr: 0,
+              pl: 1,
+            }}
+          >
+            <List
+              dense
+              sx={{ p: 0, display: "flex", flexWrap: "wrap", gap: 1 }}
+            >
+              {note.links.map((link, index) => (
                 <ListItem key={link.url + index} sx={{ p: 0, display: "flex" }}>
                   <Chip
                     icon={<OpenInNewIcon fontSize="small" />}
@@ -103,8 +107,9 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
                   />
                 </ListItem>
               ))}
-          </List>
-        </Container>
+            </List>
+          </Container>
+        )}
         <Container
           sx={{
             display: "flex",
