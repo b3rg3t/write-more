@@ -114,12 +114,12 @@ export const TodoList = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <Container sx={{ display: "flex", justifyContent: "center" }}>
+      <Container sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
         <Button variant="contained" onClick={() => dispatch(createNewTodo())}>
           {createTodo}
         </Button>
       </Container>
-      <Divider sx={{ p: 2 }} />
+      <Divider sx={{ mx: 2, my: 1 }} />
       <Notes />
     </RtkQueryWrapper>
   );
