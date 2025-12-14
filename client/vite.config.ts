@@ -33,8 +33,8 @@ const manifestConfig: Partial<VitePWAOptions> = {
     theme_color: "#09378dff",
     background_color: "#09378dff",
     display: "standalone",
-    scope: "https://write-more-tau.vercel.app/",
-    start_url: "https://write-more-tau.vercel.app/",
+    scope: "https://write-more-gamma.vercel.app/",
+    start_url: "https://write-more-gamma.vercel.app/",
     orientation: "portrait",
   },
   devOptions: {
