@@ -33,8 +33,6 @@ export const TodoFormModal = () => {
     }),
   });
 
-  console.log("TodoFormModal render", { isNew, isEditing, todo });
-
   const onClose = () => {
     dispatch(cancelTodo());
   };
@@ -77,7 +75,7 @@ export const TodoFormModal = () => {
             <Button type="submit" variant="contained">
               {buttons.submit}
             </Button>
-          </DialogActions>{" "}
+          </DialogActions>
         </TodoForm>
       </DialogContent>
     </Dialog>

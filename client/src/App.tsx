@@ -112,7 +112,6 @@ const App = () => (
         </Typography>
       </Container>
       <Todos />
-      <Notes />
     </Container>
   </ThemeProvider>
 );

@@ -13,6 +13,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { TodoItem } from "./TodoItem";
+import { Notes } from "../notes/Notes";
 // import { reorderNotesHelper } from "../../store/reducers/notes/reorderNotes";
 
 export const TodoList = () => {
@@ -79,6 +80,7 @@ export const TodoList = () => {
         </Droppable>
       </DragDropContext>
       <Button onClick={() => dispatch(createNewTodo())}>Create Todo</Button>
+      <Notes />
     </RtkQueryWrapper>
   );
 };
