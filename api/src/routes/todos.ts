@@ -12,16 +12,16 @@ const router = express.Router();
 // Get all notes
 router.get("/", getTodos);
 
-// Create a new note
+// Create a new todo
 router.post("/", createTodo);
 
-// Update a note
+// Update a todo
 router.put("/:id", updateTodo);
 
-// Update isCompleted for all notes
-router.patch("/done", updateAll);
+// Update order for all todos
+router.patch("/order", updateAll);
 
-// Delete a note
+// Delete a todo
 router.delete("/:id", deleteTodo);
 
 export default router;

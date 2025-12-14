@@ -115,7 +115,7 @@ export const LinkForm: FC<{
       <Box sx={{ "& button": { m: 1 } }}>
         <Button
           type="button"
-          variant="outlined"
+          variant="contained"
           size="small"
           onClick={() => append({ name: "", url: "" })}
         >

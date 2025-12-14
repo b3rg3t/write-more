@@ -1,5 +1,4 @@
 import { ThemeProvider } from "@emotion/react";
-import { Notes } from "./components/notes/Notes";
 import "./styles/App.scss";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -51,7 +50,7 @@ const theme = createTheme({
     h2: {
       fontWeight: 600,
       fontSize: "2rem",
-      color: "#ffffff",
+      color: "#09378dff",
     },
     body1: {
       color: "#b3b3b3",
@@ -64,9 +63,9 @@ const theme = createTheme({
           borderRadius: "12px",
           textTransform: "none",
           fontWeight: 600,
-          boxShadow: "0 4px 12px rgba(0, 229, 255, 0.3)",
+          boxShadow: "0 1px 2px rgba(255, 255, 255, 0.3)",
           "&:hover": {
-            boxShadow: "0 6px 20px rgba(0, 229, 255, 0.5)",
+            boxShadow: "0 2px 4px rgba(0, 229, 255, 0.5)",
           },
         },
       },

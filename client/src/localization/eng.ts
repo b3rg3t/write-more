@@ -25,10 +25,12 @@ export const text = {
       updated: "Updated",
     },
     notesList: {
+      header: "Notes",
       loading: "Loading notes",
       noNotes: "Create a new note to get started!",
       createNote: "Create Note",
       fetchError: "Failed to load notes. Please try again.",
+      createTodo: "Create Todo",
     },
     deleteNote: {
       title: "Delete Note",
@@ -52,6 +54,7 @@ export const text = {
       },
     },
     todosList: {
+      header: "Todos",
       loading: "Loading todos",
       noTodos: "Create a new todo to get started!",
       createTodo: "Create Todo",

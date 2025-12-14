@@ -17,7 +17,11 @@ export const createTodo = async (req: Request, res: Response) => {
   const { name, isCompleted } = req.body;
 
   try {
-    const newNote = new STodo({ name, isCompleted });
+    // Find the highest order
+    const highestOrderNote = await STodo.findOne().sort({ order: -1 });
+    const newOrder = highestOrderNote ? highestOrderNote.order + 1 : 0;
+
+    const newNote = new STodo({ name, isCompleted, order: newOrder });
     const savedNote = await newNote.save();
     res.status(201).json(savedNote);
   } catch (err) {
@@ -27,12 +31,12 @@ export const createTodo = async (req: Request, res: Response) => {
 
 // Update a note
 export const updateTodo = async (req: Request, res: Response) => {
-  const { name, isCompleted } = req.body;
+  const { name, isCompleted, order } = req.body;
 
   try {
     const updatedNote = await STodo.findByIdAndUpdate(
       req.params.id,
-      { name, isCompleted },
+      { name, isCompleted, order },
       { new: true }
     );
     if (!updatedNote) {
@@ -46,13 +50,13 @@ export const updateTodo = async (req: Request, res: Response) => {
 
 // Update order for all notes
 export const updateAll = async (req: Request, res: Response) => {
-  const updates: Pick<ITodo, "_id" | "isCompleted">[] = req.body;
+  const updates: Pick<ITodo, "_id" | "order">[] = req.body;
 
   try {
     const promises = updates.map((update) =>
       STodo.findByIdAndUpdate(
         update._id,
-        { isCompleted: update.isCompleted },
+        { order: update.order },
         { new: true }
       )
     );

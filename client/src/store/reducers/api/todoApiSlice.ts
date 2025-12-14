@@ -27,10 +27,7 @@ export const todoApiSlice = createApi({
       }),
       invalidatesTags: ["Todos"],
     }),
-    isCompletedTodo: builder.mutation<
-      ITodo[],
-      Pick<ITodo, "_id" | "isCompleted">[]
-    >({
+    reorderTodos: builder.mutation<ITodo[], Pick<ITodo, "_id" | "order">[]>({
       query: (body) => ({
         url: `todos/order`,
         method: "PATCH",
@@ -52,6 +49,6 @@ export const {
   useGetAllTodosQuery,
   useAddTodoMutation,
   useDeleteTodoMutation,
-  useIsCompletedTodoMutation,
+  useReorderTodosMutation,
   useUpdateTodoMutation,
 } = todoApiSlice;
