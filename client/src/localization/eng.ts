@@ -12,6 +12,12 @@ export const text = {
       helperText: {
         nameRequired: "Name is required",
         contentRequired: "Content is required",
+        urlValid: "Please enter a valid URL",
+      },
+      links: {
+        name: "Link name",
+        url: "Link URL",
+        addLink: "Add Link",
       },
     },
     noteItem: {

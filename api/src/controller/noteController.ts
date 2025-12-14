@@ -14,14 +14,14 @@ export const getNotes = async (req: Request, res: Response) => {
 
 // Create a new note
 export const createNote = async (req: Request, res: Response) => {
-  const { title, content } = req.body;
+  const { title, content, links } = req.body;
 
   try {
     // Find the highest order
     const highestOrderNote = await SNote.findOne().sort({ order: -1 });
     const newOrder = highestOrderNote ? highestOrderNote.order + 1 : 0;
 
-    const newNote = new SNote({ title, content, order: newOrder });
+    const newNote = new SNote({ title, content, links, order: newOrder });
     const savedNote = await newNote.save();
     res.status(201).json(savedNote);
   } catch (err) {
@@ -31,12 +31,12 @@ export const createNote = async (req: Request, res: Response) => {
 
 // Update a note
 export const updateNote = async (req: Request, res: Response) => {
-  const { title, content } = req.body;
+  const { title, content, links } = req.body;
 
   try {
     const updatedNote = await SNote.findByIdAndUpdate(
       req.params.id,
-      { title, content },
+      { title, content, links },
       { new: true }
     );
     if (!updatedNote) {
@@ -54,7 +54,11 @@ export const updateOrder = async (req: Request, res: Response) => {
 
   try {
     const promises = updates.map((update) =>
-      SNote.findByIdAndUpdate(update._id, { order: update.order }, { new: true })
+      SNote.findByIdAndUpdate(
+        update._id,
+        { order: update.order },
+        { new: true }
+      )
     );
     const updatedNotes = await Promise.all(promises);
     res.json(updatedNotes);

@@ -5,6 +5,10 @@ import {
   Typography,
   Stack,
   IconButton,
+  Container,
+  List,
+  ListItem,
+  Chip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
@@ -15,6 +19,8 @@ import { fontSize16 } from "../utils/FontSize";
 import { INote } from "../../models/interface/INote";
 import { text } from "../../localization/eng";
 import { deleteNote, setEditNote } from "../../store/reducers/notes/notesSlice";
+import { TLink } from "../../models/type/TLink";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 export const NoteItem: FC<{ note: INote }> = ({ note }) => {
   const dispatch = useAppDispatch();
@@ -25,6 +31,10 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
 
   const handleDeleteNote = async () => {
     dispatch(deleteNote(note._id));
+  };
+
+  const handleClick = (url: TLink["url"]) => {
+    window.open(url, "_blank");
   };
 
   return (
@@ -60,23 +70,67 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
           {note.content}
         </Typography>
       </CardContent>
-      <CardActions sx={{ justifyContent: "flex-end", px: 2, pt: 0 }}>
-        <IconButton
-          color="primary"
-          edge="end"
-          aria-label="edit"
-          onClick={handleEditNote}
+
+      <CardActions
+        sx={{
+          display: "flex",
+          justifyContent: "between",
+          alignItems: "end",
+          flex: 1,
+          px: 0,
+          pt: 0,
+        }}
+      >
+        <Container
+          disableGutters
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            flex: 1,
+            pr: 0,
+            pl: 1,
+          }}
         >
-          <EditSquareIcon />
-        </IconButton>
-        <IconButton
-          color="error"
-          edge="end"
-          aria-label="delete"
-          onClick={handleDeleteNote}
+          <List dense sx={{ p: 0, display: "flex", flexWrap: "wrap", gap: 1 }}>
+            {note.links &&
+              note.links.map((link, index) => (
+                <ListItem key={link.url + index} sx={{ p: 0, display: "flex" }}>
+                  <Chip
+                    icon={<OpenInNewIcon fontSize="small" />}
+                    label={link.name}
+                    variant="outlined"
+                    onClick={() => handleClick(link.url)}
+                  />
+                </ListItem>
+              ))}
+          </List>
+        </Container>
+        <Container
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            flex: 1,
+            pl: 0,
+            pr: 1,
+          }}
         >
-          <DeleteIcon />
-        </IconButton>
+          <IconButton
+            color="primary"
+            edge="end"
+            aria-label="edit"
+            onClick={handleEditNote}
+          >
+            <EditSquareIcon />
+          </IconButton>
+          <IconButton
+            color="error"
+            edge="end"
+            aria-label="delete"
+            onClick={handleDeleteNote}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Container>
       </CardActions>
     </Card>
   );

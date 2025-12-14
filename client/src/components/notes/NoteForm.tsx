@@ -1,6 +1,6 @@
 import { FormGroup, TextField } from "@mui/material";
 import { FC, useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { TBasicNote } from "../../models/type/TBasicNote";
 import { ENoteForm } from "../../models/enum/ENoteForm";
 import { text } from "../../localization/eng";
@@ -11,6 +11,7 @@ import {
   useAddNoteMutation,
   useUpdateNoteMutation,
 } from "../../store/reducers/api/apiSlice";
+import { LinkForm } from "./links/LinkForm";
 
 export const NoteForm: FC<{
   note?: INote;
@@ -28,10 +29,12 @@ export const NoteForm: FC<{
     register,
     reset,
     setValue,
+    control,
   } = useForm<TBasicNote>({
     defaultValues: {
       [ENoteForm.TITLE]: note?.title || "",
       [ENoteForm.CONTENT]: note?.content || "",
+      [ENoteForm.LINKS]: [],
     },
   });
 
@@ -42,6 +45,7 @@ export const NoteForm: FC<{
   useEffect(() => {
     setValue(ENoteForm.TITLE, note?.title || "");
     setValue(ENoteForm.CONTENT, note?.content || "");
+    setValue(ENoteForm.LINKS, note?.links || []);
   }, [note, setValue]);
 
   useEffect(() => {
@@ -57,6 +61,7 @@ export const NoteForm: FC<{
         createNote({
           title: data[ENoteForm.TITLE],
           content: data[ENoteForm.CONTENT],
+          links: data[ENoteForm.LINKS],
         });
       } catch (error) {
         console.error("Error creating note:", error);
@@ -67,6 +72,7 @@ export const NoteForm: FC<{
           _id: note._id,
           title: data[ENoteForm.TITLE],
           content: data[ENoteForm.CONTENT],
+          links: data[ENoteForm.LINKS],
         });
       } catch (error) {
         console.error("Error updating note:", error);
@@ -120,6 +126,7 @@ export const NoteForm: FC<{
           fullWidth
           sx={{ mb: 2 }}
         />
+        <LinkForm control={control} register={register} errors={errors} />
         {children}
       </FormGroup>
     </form>

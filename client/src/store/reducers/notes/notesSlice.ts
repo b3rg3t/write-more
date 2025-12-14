@@ -1,8 +1,5 @@
-import {
-  createSlice,
-  PayloadAction,
-} from "@reduxjs/toolkit";
- import { RootState } from "../../redux/store";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../../redux/store";
 import { EStoreKeys } from "../../../models/enum/EStoreKeys";
 import { INote } from "../../../models/interface/INote";
 
@@ -34,21 +31,15 @@ export const notesSlice = createSlice({
     },
     deleteNote: (state, action: PayloadAction<INote["_id"] | undefined>) => {
       state.isDeleting = action.payload;
-    }
+    },
   },
 });
-
 
 const selectIsNew = (state: RootState) => state.notes.isNew;
 const selectIsEditing = (state: RootState) => state.notes.isEditing;
 const selectIsDeleting = (state: RootState) => state.notes.isDeleting;
 
-export { selectIsNew , selectIsEditing, selectIsDeleting  };
+export { selectIsNew, selectIsEditing, selectIsDeleting };
 
-export const {
-  cancelNote,
-  createNewNote,
-  setEditNote,
-  deleteNote,
-} = notesSlice.actions;
-
+export const { cancelNote, createNewNote, setEditNote, deleteNote } =
+  notesSlice.actions;

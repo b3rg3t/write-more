@@ -15,6 +15,18 @@ const SNote: Schema = new Schema(
       type: Number,
       default: 0,
     },
+    links: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

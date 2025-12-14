@@ -1,3 +1,3 @@
 import { INote } from "../interface/INote";
 
-export type TBasicNote = Partial<Omit<INote, "createdAt" | "updatedAt" | "id">>;
+export type TBasicNote = Partial<Omit<INote, "createdAt" | "updatedAt">>;
