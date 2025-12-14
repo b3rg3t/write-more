@@ -49,7 +49,7 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
           alignItems="center"
         >
           <Typography
-            variant="h2"
+            variant="h3"
             component="div"
             fontSize={fontSize16}
             sx={{ fontWeight: 600 }}
