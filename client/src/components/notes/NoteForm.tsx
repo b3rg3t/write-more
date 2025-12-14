@@ -1,6 +1,6 @@
 import { FormGroup, TextField } from "@mui/material";
 import { FC, useEffect, useRef } from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { TBasicNote } from "../../models/type/TBasicNote";
 import { ENoteForm } from "../../models/enum/ENoteForm";
 import { text } from "../../localization/eng";
