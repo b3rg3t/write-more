@@ -1,8 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ITrip } from "../../../models/interface/ITrip";
 import { API_BASE_URL } from "./util";
-import { INote } from "../../../models/interface/INote";
-import { ITodo } from "../../../models/interface/ITodo";
 
 export const tripApiSlice = createApi({
   reducerPath: "tripApi",
@@ -21,8 +19,8 @@ export const tripApiSlice = createApi({
       ITrip,
       Partial<
         Pick<ITrip, "title" | "description"> & {
-          notes: INote[];
-          todos: ITodo[];
+          notes: ITrip["_id"][];
+          todos: ITrip["_id"][];
         }
       >
     >({
@@ -37,8 +35,8 @@ export const tripApiSlice = createApi({
       ITrip,
       Partial<
         Pick<ITrip, "_id" | "title" | "description"> & {
-          notes: INote[];
-          todos: ITodo[];
+          notes: ITrip["_id"][];
+          todos: ITrip["_id"][];
         }
       >
     >({

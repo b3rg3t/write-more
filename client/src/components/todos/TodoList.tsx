@@ -33,7 +33,12 @@ export const TodoList: FC<TodoListProps> = ({ todos, headingLevel }) => {
   const handleReorderNotes = async (todos: ITodo[]) => {
     if (id) {
       try {
-        const response = await updateTrip({ ...trip, todos: todos });
+        const response = await updateTrip({
+          ...trip,
+          notes:
+            trip?.notes?.map((n) => (typeof n === "string" ? n : n._id)) || [],
+          todos: todos.map((t) => t._id),
+        });
         console.log("Reordered todos response:", response);
       } catch (error) {
         console.error("Error reordering todos:", error);

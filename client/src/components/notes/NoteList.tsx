@@ -38,7 +38,12 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel }) => {
   const handleReorderNotes = async (notes: INote[]) => {
     if (id) {
       try {
-        const response = await updateTrip({ ...trip, notes: notes });
+        const response = await updateTrip({
+          ...trip,
+          notes: notes.map((n) => n._id) || [],
+          todos:
+            trip?.todos?.map((t) => (typeof t === "string" ? t : t._id)) || [],
+        });
         console.log("Reordered todos response:", response);
       } catch (error) {
         console.error("Error reordering todos:", error);
