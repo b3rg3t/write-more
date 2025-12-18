@@ -4,105 +4,15 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { createTheme } from "@mui/material/styles";
 import { Todos } from "./components/todos/Todos";
-import { Container, Divider, Typography } from "@mui/material";
+import { Container, Typography, Button, Box, Divider } from "@mui/material";
 import { text } from "./localization/eng";
 import { fontSize16 } from "./components/utils/FontSize";
 import { Notes } from "./components/notes/Notes";
 import { Trips } from "./components/trips/Trips";
-
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-    primary: {
-      main: "#09378dff", // Bright cyan for a futuristic glow
-    },
-    secondary: {
-      main: "#ff4081", // Vibrant pink for accents
-    },
-    background: {
-      default: "#0a0a0a", // Deep black for space-like feel
-      paper: "#1a1a1a", // Slightly lighter for cards/modals
-    },
-    text: {
-      primary: "#ffffff",
-      secondary: "#b3b3b3",
-    },
-    error: {
-      main: "#862a2aff",
-    },
-    warning: {
-      main: "#ffb74d",
-    },
-    info: {
-      main: "#64b5f6",
-    },
-    success: {
-      main: "#81c784",
-    },
-  },
-  typography: {
-    fontFamily: "Roboto, sans-serif",
-    h1: {
-      fontWeight: 700,
-      fontSize: "2.5rem",
-      color: "#09378dff",
-    },
-    h2: {
-      fontWeight: 600,
-      fontSize: "2rem",
-      color: "#09378dff",
-    },
-    body1: {
-      color: "#b3b3b3",
-    },
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: "12px",
-          textTransform: "none",
-          fontWeight: 600,
-          boxShadow: "0 1px 2px rgba(255, 255, 255, 0.3)",
-          "&:hover": {
-            boxShadow: "0 2px 4px rgba(0, 229, 255, 0.5)",
-          },
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          "& .MuiOutlinedInput-root": {
-            borderRadius: "12px",
-            backgroundColor: "#1a1a1a",
-            "& fieldset": {
-              borderColor: "#333",
-            },
-            "&:hover fieldset": {
-              borderColor: "#00e5ff",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "#00e5ff",
-            },
-          },
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: "none",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
-          backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
-        },
-      },
-    },
-  },
-});
+import { Routes, Route, Link } from "react-router-dom";
+import { TripDetail } from "./components/trips/TripDetail";
+import { theme } from "./theme";
 
 const App = () => (
   <ThemeProvider theme={theme}>
@@ -111,12 +21,30 @@ const App = () => (
         <Typography variant="h1" fontSize={fontSize16} fontWeight="bold">
           {text.appName}
         </Typography>
+        <Box sx={{ mt: 1, mb: 0 }}>
+          <Button component={Link} to="/" variant="outlined" sx={{ mr: 1 }}>
+            {text.trips.tripsList.header}
+          </Button>
+          <Button
+            component={Link}
+            to="/notes"
+            variant="outlined"
+            sx={{ mr: 1 }}
+          >
+            {text.notes.notesList.header}
+          </Button>
+          <Button component={Link} to="/todos" variant="outlined">
+            {text.todos.todosList.header}
+          </Button>
+        </Box>
       </Container>
-      <Todos />
-      <Divider sx={{ mx: 2, my: 1 }} />
-      <Notes />
-      <Divider sx={{ mx: 2, my: 1 }} />
-      <Trips />
+      <Divider sx={{ mt: 1 }} />
+      <Routes>
+        <Route path="/" element={<Trips />} />
+        <Route path="/notes" element={<Notes />} />
+        <Route path="/todos" element={<Todos />} />
+        <Route path="/trip/:id" element={<TripDetail />} />
+      </Routes>
     </Container>
   </ThemeProvider>
 );

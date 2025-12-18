@@ -1,15 +1,14 @@
-import { Fab, Box } from "@mui/material";
+import { ButtonProps, Box, Fab } from "@mui/material";
+import { FC } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { useAppDispatch } from "../../store/redux/hooks";
-import { createNewNote } from "../../store/reducers/notes/notesSlice";
 
-export const Actions = () => {
-  const dispatch = useAppDispatch();
+interface ActionProps extends Omit<ButtonProps, "onClick"> {
+  onClick: () => void;
+  text: string;
+  centered?: boolean;
+}
 
-  const handleAddNote = () => {
-    dispatch(createNewNote());
-  };
-
+export const Action: FC<ActionProps> = ({ onClick }) => {
   return (
     <Box
       position="fixed"
@@ -22,10 +21,10 @@ export const Actions = () => {
       sx={{ pointerEvents: "none" }}
     >
       <Fab
-        size="large"
+        size="medium"
         color="primary"
         aria-label="Add note"
-        onClick={handleAddNote}
+        onClick={onClick}
         sx={{ pointerEvents: "auto" }}
       >
         <AddIcon />

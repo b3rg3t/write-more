@@ -1,4 +1,4 @@
-import { Button, Container, List, ListItem, Typography } from "@mui/material";
+import { List, ListItem, Typography } from "@mui/material";
 import { createNewTrip } from "../../store/reducers/trips/tripsSlice";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
@@ -17,6 +17,7 @@ import {
 } from "@hello-pangea/dnd";
 import { fontSize16 } from "../utils/FontSize";
 import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
+import { Action } from "../utils/Action";
 import { TripItem } from "./TripItem";
 
 export const TripList = () => {
@@ -92,7 +93,7 @@ export const TripList = () => {
                   {(provided) => (
                     <ListItem
                       ref={provided.innerRef}
-                      sx={{ width: "100%", px: 1, py: 0 }}
+                      sx={{ width: "100%", px: 1 }}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
@@ -106,11 +107,11 @@ export const TripList = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <Container sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
-        <Button variant="contained" onClick={() => dispatch(createNewTrip())}>
-          {createTrip}
-        </Button>
-      </Container>
+      <Action
+        onClick={() => dispatch(createNewTrip())}
+        text={createTrip}
+        variant="contained"
+      />
     </RtkQueryWrapper>
   );
 };

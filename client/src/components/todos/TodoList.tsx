@@ -1,4 +1,4 @@
-import { Button, Container, List, ListItem, Typography } from "@mui/material";
+import { List, ListItem, Typography } from "@mui/material";
 import { createNewTodo } from "../../store/reducers/todos/todosSlice";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
@@ -18,6 +18,7 @@ import {
 import { TodoItem } from "./TodoItem";
 import { fontSize16 } from "../utils/FontSize";
 import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
+import { Action } from "../utils/Action";
 
 export const TodoList = () => {
   const { data, isLoading, isUninitialized, isFetching, error } =
@@ -106,11 +107,11 @@ export const TodoList = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <Container sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
-        <Button variant="contained" onClick={() => dispatch(createNewTodo())}>
-          {createTodo}
-        </Button>
-      </Container>
+      <Action
+        onClick={() => dispatch(createNewTodo())}
+        text={createTodo}
+        variant="contained"
+      />
     </RtkQueryWrapper>
   );
 };

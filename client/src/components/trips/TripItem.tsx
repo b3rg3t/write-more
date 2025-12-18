@@ -18,9 +18,11 @@ import { ITrip } from "../../models/interface/ITrip";
 import { text } from "../../localization/eng";
 import { deleteTrip, setEditTrip } from "../../store/reducers/trips/tripsSlice";
 import DoneIcon from "@mui/icons-material/Done";
+import { useNavigate } from "react-router-dom";
 
 export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleEditTrip = () => {
     dispatch(setEditTrip(trip._id));
@@ -30,10 +32,21 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
     dispatch(deleteTrip(trip._id));
   };
 
+  const handleClick = () => {
+    navigate(`/trip/${trip._id}`);
+  };
+
   return (
     <Card
       variant="outlined"
-      sx={{ boxShadow: 2, borderRadius: 2, width: "100%", mb: 0 }}
+      sx={{
+        boxShadow: 2,
+        borderRadius: 2,
+        width: "100%",
+        mb: 0,
+        cursor: "pointer",
+      }}
+      onClick={handleClick}
     >
       <CardContent sx={{ px: 1, pt: 1, pb: 0 }}>
         <Stack
@@ -147,7 +160,10 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             color="primary"
             edge="end"
             aria-label="edit"
-            onClick={handleEditTrip}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEditTrip();
+            }}
           >
             <EditSquareIcon />
           </IconButton>
@@ -155,7 +171,10 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             color="error"
             edge="end"
             aria-label="delete"
-            onClick={handleDeleteTrip}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteTrip();
+            }}
           >
             <DeleteIcon />
           </IconButton>

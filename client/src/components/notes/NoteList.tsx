@@ -19,6 +19,7 @@ import { useAppDispatch } from "../../store/redux/hooks";
 import { createNewNote } from "../../store/reducers/notes/notesSlice";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 import { fontSize16 } from "../utils/FontSize";
+import { Action } from "../utils/Action";
 
 export const NoteList = () => {
   const { data, isLoading, isUninitialized, isFetching, error } =
@@ -108,6 +109,11 @@ export const NoteList = () => {
           </Droppable>
         </DragDropContext>
       </RtkQueryWrapper>
+      <Action
+        onClick={() => dispatch(createNewNote())}
+        text={createNote}
+        variant="contained"
+      />
     </>
   );
 };
