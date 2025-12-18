@@ -14,12 +14,11 @@ export const TripDetail = () => {
     isLoading,
     error,
     isUninitialized,
-    isFetching,
   } = useGetTripQuery(id!);
 
   return (
     <RtkQueryWrapper
-      isLoading={isLoading || isUninitialized || isFetching}
+      isLoading={isLoading || isUninitialized}
       data={trip ? [trip] : []}
       error={error}
       texts={{
