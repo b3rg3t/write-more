@@ -7,12 +7,15 @@ import {
   IconButton,
   Container,
   Chip,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { toLocalTime } from "../utils/ToLocalTime";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { fontSize16 } from "../utils/FontSize";
 import { ITrip } from "../../models/interface/ITrip";
 import { text } from "../../localization/eng";
@@ -20,10 +23,12 @@ import { deleteTrip, setEditTrip } from "../../store/reducers/trips/tripsSlice";
 import DoneIcon from "@mui/icons-material/Done";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [expanded, setExpanded] = useState<string | false>(false);
 
   const handleEditTrip = () => {
     dispatch(setEditTrip(trip._id));
@@ -44,6 +49,13 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
   const handleTodoClick = (todoId: string) => {
     navigate(ERoutes.TODO_DETAIL.replace(":id", todoId));
   };
+
+  const handleAccordionChange =
+    (panel: string) =>
+    (event: React.SyntheticEvent<Element, Event>, newExpanded: boolean) => {
+      event.stopPropagation();
+      setExpanded(newExpanded ? panel : false);
+    };
 
   return (
     <Card
@@ -77,47 +89,120 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             </Typography>
           </Stack>
         </Stack>
-        {trip.description && (
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ mt: 1, whiteSpace: "pre-wrap" }}
-          >
-            {trip.description}
-          </Typography>
-        )}
-        {trip.notes.length > 0 && (
-          <Container disableGutters sx={{ mt: 1 }}>
-            <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
-              {text.notes.header}:
-            </Typography>
-            <Stack
-              direction="row"
-              spacing={0}
-              flexWrap="wrap"
-              sx={{ gap: 0.5 }}
+        <Container disableGutters sx={{ display: "flex", alignItems: "start" }}>
+          {trip.description && (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ mt: 1, whiteSpace: "pre-wrap" }}
             >
-              {trip.notes.map((note) => (
-                <Chip
-                  key={note._id}
-                  label={note.title}
-                  size="small"
-                  variant="outlined"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleNoteClick(note._id);
-                  }}
-                  sx={{ cursor: "pointer" }}
-                />
-              ))}
-            </Stack>
-          </Container>
-        )}
-        {trip.todos.length > 0 && (
-          <Container disableGutters sx={{ mt: 1 }}>
-            <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
-              {text.todos.header}:
+              {trip.description}
             </Typography>
+          )}
+          <CardActions
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "end",
+              flex: 1,
+              px: 0,
+              pt: 0,
+              pb: 0,
+            }}
+          >
+            <Container
+              disableGutters
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                flex: 1,
+                pl: 0,
+                pr: 1,
+              }}
+            >
+              <IconButton
+                color="primary"
+                edge="end"
+                aria-label="edit"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEditTrip();
+                }}
+              >
+                <EditSquareIcon />
+              </IconButton>
+              <IconButton
+                color="error"
+                edge="end"
+                aria-label="delete"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteTrip();
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Container>
+          </CardActions>
+        </Container>
+        <Accordion
+          expanded={expanded === "panel1"}
+          onChange={handleAccordionChange("panel1")}
+          sx={{ mt: 1 }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <Typography variant="body2">
+              {text.notes.header} ({trip.notes.length})
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ px: 1, pb: 1 }}>
+            {trip.notes.length > 0 && (
+              <Container disableGutters sx={{ mt: 1 }}>
+                <Stack
+                  direction="row"
+                  spacing={0}
+                  flexWrap="wrap"
+                  sx={{ gap: 0.5 }}
+                >
+                  {trip.notes.map((note) => (
+                    <Chip
+                      key={note._id}
+                      label={note.title}
+                      size="small"
+                      variant="outlined"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleNoteClick(note._id);
+                      }}
+                      sx={{ cursor: "pointer" }}
+                    />
+                  ))}
+                </Stack>
+              </Container>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion
+          expanded={expanded === "panel2"}
+          onChange={handleAccordionChange("panel2")}
+          sx={{ mt: 0 }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2-content"
+            id="panel2-header"
+            sx={{}}
+          >
+            <Typography variant="body2">
+              {text.todos.header} ({trip.todos.length})
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ px: 1, pb: 1 }}>
             <Stack
               direction="row"
               spacing={0}
@@ -152,53 +237,9 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
                 />
               ))}
             </Stack>
-          </Container>
-        )}
+          </AccordionDetails>
+        </Accordion>
       </CardContent>
-
-      <CardActions
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "end",
-          flex: 1,
-          px: 0,
-          pt: 0,
-        }}
-      >
-        <Container
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            flex: 1,
-            pl: 0,
-            pr: 1,
-          }}
-        >
-          <IconButton
-            color="primary"
-            edge="end"
-            aria-label="edit"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEditTrip();
-            }}
-          >
-            <EditSquareIcon />
-          </IconButton>
-          <IconButton
-            color="error"
-            edge="end"
-            aria-label="delete"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteTrip();
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Container>
-      </CardActions>
     </Card>
   );
 };
