@@ -59,7 +59,7 @@ const App = () => {
             </Button>
           </Box>
         </Container>
-        <Divider sx={{ mt: 1 }} />
+        <Divider sx={{ my: 1 }} />
         <Routes>
           <Route path={ERoutes.TRIPS} element={<Trips />} />
           <Route path={ERoutes.NOTES} element={<Notes />} />
