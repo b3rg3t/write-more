@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { toLocalTime } from "../utils/ToLocalTime";
 import { FC } from "react";
@@ -20,10 +21,12 @@ import { INote } from "../../models/interface/INote";
 import { text } from "../../localization/eng";
 import { deleteNote, setEditNote } from "../../store/reducers/notes/notesSlice";
 import { TLink } from "../../models/type/TLink";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { useNavigate } from "react-router-dom";
+import { ERoutes } from "../../models/enum/ERoutes";
 
 export const NoteItem: FC<{ note: INote }> = ({ note }) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleEditNote = () => {
     dispatch(setEditNote(note._id));
@@ -33,14 +36,25 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
     dispatch(deleteNote(note._id));
   };
 
-  const handleClick = (url: TLink["url"]) => {
+  const handleClick = () => {
+    navigate(ERoutes.NOTE_DETAIL.replace(":id", note._id));
+  };
+
+  const handleLinkClick = (url: TLink["url"]) => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
     <Card
       variant="outlined"
-      sx={{ boxShadow: 2, borderRadius: 2, width: "100%", mb: 0 }}
+      sx={{
+        boxShadow: 2,
+        borderRadius: 2,
+        width: "100%",
+        mb: 0,
+        cursor: "pointer",
+      }}
+      onClick={handleClick}
     >
       <CardContent sx={{ px: 1, pt: 1, pb: 0 }}>
         <Stack
@@ -103,7 +117,10 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
                     icon={<OpenInNewIcon fontSize="small" />}
                     label={link.name}
                     variant="outlined"
-                    onClick={() => handleClick(link.url)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLinkClick(link.url);
+                    }}
                   />
                 </ListItem>
               ))}
@@ -125,7 +142,10 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
             color="primary"
             edge="end"
             aria-label="edit"
-            onClick={handleEditNote}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEditNote();
+            }}
           >
             <EditSquareIcon />
           </IconButton>
@@ -133,7 +153,10 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
             color="error"
             edge="end"
             aria-label="delete"
-            onClick={handleDeleteNote}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteNote();
+            }}
           >
             <DeleteIcon />
           </IconButton>

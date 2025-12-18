@@ -13,11 +13,14 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { useUpdateTodoMutation } from "../../store/reducers/api/todoApiSlice";
+import { useNavigate } from "react-router-dom";
+import { ERoutes } from "../../models/enum/ERoutes";
 
 export const TodoItem: FC<{ todo: ITodo }> = ({ todo }) => {
   const dispatch = useAppDispatch();
   const [updateTodo] = useUpdateTodoMutation();
   const [isChecked, setIsChecked] = useState(todo.isCompleted);
+  const navigate = useNavigate();
 
   const handleEditTodo = () => {
     dispatch(setEditTodo(todo._id));
@@ -27,7 +30,12 @@ export const TodoItem: FC<{ todo: ITodo }> = ({ todo }) => {
     dispatch(deleteTodo(todo._id));
   };
 
-  const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleClick = () => {
+    navigate(ERoutes.TODO_DETAIL.replace(":id", todo._id));
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
     setIsChecked(event.target.checked);
     updateTodo({
       _id: todo._id,
@@ -45,11 +53,13 @@ export const TodoItem: FC<{ todo: ITodo }> = ({ todo }) => {
         mb: 0,
         display: "flex",
         alignItems: "center",
+        cursor: "pointer",
       }}
+      onClick={handleClick}
     >
       <Checkbox
         checked={isChecked}
-        onChange={handleClick}
+        onChange={handleCheckboxChange}
         slotProps={{ input: { "aria-label": todo.name } }}
       />
       <Typography
@@ -71,7 +81,10 @@ export const TodoItem: FC<{ todo: ITodo }> = ({ todo }) => {
           color="primary"
           edge="end"
           aria-label="edit"
-          onClick={handleEditTodo}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEditTodo();
+          }}
         >
           <EditSquareIcon />
         </IconButton>
@@ -79,7 +92,10 @@ export const TodoItem: FC<{ todo: ITodo }> = ({ todo }) => {
           color="error"
           edge="end"
           aria-label="delete"
-          onClick={handleDeleteTodo}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteTodo();
+          }}
         >
           <DeleteIcon />
         </IconButton>

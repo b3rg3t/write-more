@@ -19,6 +19,7 @@ import { text } from "../../localization/eng";
 import { deleteTrip, setEditTrip } from "../../store/reducers/trips/tripsSlice";
 import DoneIcon from "@mui/icons-material/Done";
 import { useNavigate } from "react-router-dom";
+import { ERoutes } from "../../models/enum/ERoutes";
 
 export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
   const dispatch = useAppDispatch();
@@ -33,7 +34,15 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
   };
 
   const handleClick = () => {
-    navigate(`/trip/${trip._id}`);
+    navigate(ERoutes.TRIP_DETAIL.replace(":id", trip._id));
+  };
+
+  const handleNoteClick = (noteId: string) => {
+    navigate(ERoutes.NOTE_DETAIL.replace(":id", noteId));
+  };
+
+  const handleTodoClick = (todoId: string) => {
+    navigate(ERoutes.TODO_DETAIL.replace(":id", todoId));
   };
 
   return (
@@ -94,6 +103,11 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
                   label={note.title}
                   size="small"
                   variant="outlined"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNoteClick(note._id);
+                  }}
+                  sx={{ cursor: "pointer" }}
                 />
               ))}
             </Stack>
@@ -130,6 +144,11 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
                   }
                   size="small"
                   variant="outlined"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleTodoClick(todo._id);
+                  }}
+                  sx={{ cursor: "pointer" }}
                 />
               ))}
             </Stack>
