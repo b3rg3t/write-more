@@ -16,6 +16,8 @@ import {
   useUpdateTripMutation,
 } from "../../store/reducers/api/tripApiSlice";
 import { useParams } from "react-router-dom";
+import { DeleteNoteModal } from "../modal/DeleteNoteModal";
+import { NoteFormModal } from "../modal/NoteFormModal";
 
 interface NoteListProps {
   notes: INote[];
@@ -63,30 +65,38 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel }) => {
   };
 
   return (
-    <Container disableGutters maxWidth="md" sx={{ px: 0 }}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="note-list">
-          {(provided) => (
-            <List dense ref={provided.innerRef} {...provided.droppableProps}>
-              {notesState.map((note, index) => (
-                <Draggable key={note._id} draggableId={note._id} index={index}>
-                  {(provided) => (
-                    <ListItem
-                      ref={provided.innerRef}
-                      sx={{ width: "100%", px: 1 }}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <NoteItem note={note} headingLevel={headingLevel} />
-                    </ListItem>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </List>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </Container>
+    <>
+      <DeleteNoteModal />
+      <NoteFormModal />
+      <Container disableGutters maxWidth="md" sx={{ px: 0 }}>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="note-list">
+            {(provided) => (
+              <List dense ref={provided.innerRef} {...provided.droppableProps}>
+                {notesState.map((note, index) => (
+                  <Draggable
+                    key={note._id}
+                    draggableId={note._id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <ListItem
+                        ref={provided.innerRef}
+                        sx={{ width: "100%", px: 1 }}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <NoteItem note={note} headingLevel={headingLevel} />
+                      </ListItem>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </List>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </Container>
+    </>
   );
 };

@@ -1,6 +1,4 @@
-import { TodoFormModal } from "../modal/TodoFormModal";
 import { TodoList } from "./TodoList";
-import { DeleteTodoModal } from "../modal/DeleteTodoModal";
 import { Typography } from "@mui/material";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 import { useGetAllTodosQuery } from "../../store/reducers/api/todoApiSlice";
@@ -24,8 +22,6 @@ export const Todos = () => {
   const { loading, createTodo, noTodos, fetchError } = text.todos.todosList;
   return (
     <>
-      <TodoFormModal />
-      <DeleteTodoModal />
       <Typography
         variant="h2"
         fontSize={fontSize16}

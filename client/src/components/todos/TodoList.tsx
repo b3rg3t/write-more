@@ -15,6 +15,8 @@ import {
   useGetTripQuery,
   useUpdateTripMutation,
 } from "../../store/reducers/api/tripApiSlice";
+import { TodoFormModal } from "../modal/TodoFormModal";
+import { DeleteTodoModal } from "../modal/DeleteTodoModal";
 
 interface TodoListProps {
   todos: ITodo[];
@@ -62,35 +64,43 @@ export const TodoList: FC<TodoListProps> = ({ todos, headingLevel }) => {
   }, [todos]);
 
   return (
-    <Container disableGutters maxWidth="md" sx={{ px: 0 }}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="note-list">
-          {(provided) => (
-            <List
-              dense
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              sx={{ pt: 1 }}
-            >
-              {todosState.map((todo, index) => (
-                <Draggable key={todo._id} draggableId={todo._id} index={index}>
-                  {(provided) => (
-                    <ListItem
-                      ref={provided.innerRef}
-                      sx={{ width: "100%", px: 1, py: 0 }}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <TodoItem todo={todo} headingLevel={headingLevel} />
-                    </ListItem>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </List>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </Container>
+    <>
+      <TodoFormModal />
+      <DeleteTodoModal />
+      <Container disableGutters maxWidth="md" sx={{ px: 0 }}>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="note-list">
+            {(provided) => (
+              <List
+                dense
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                sx={{ pt: 1 }}
+              >
+                {todosState.map((todo, index) => (
+                  <Draggable
+                    key={todo._id}
+                    draggableId={todo._id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <ListItem
+                        ref={provided.innerRef}
+                        sx={{ width: "100%", px: 1, py: 0 }}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <TodoItem todo={todo} headingLevel={headingLevel} />
+                      </ListItem>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </List>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </Container>
+    </>
   );
 };

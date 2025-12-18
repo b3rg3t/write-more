@@ -1,6 +1,4 @@
 import { NoteList } from "./NoteList";
-import { DeleteNoteModal } from "../modal/DeleteNoteModal";
-import { NoteFormModal } from "../modal/NoteFormModal";
 import { Typography } from "@mui/material";
 import { fontSize16 } from "../utils/FontSize";
 import { text } from "../../localization/eng";
@@ -24,8 +22,6 @@ export const Notes = () => {
 
   return (
     <>
-      <DeleteNoteModal />
-      <NoteFormModal />
       <Typography
         variant="h2"
         fontSize={fontSize16}
