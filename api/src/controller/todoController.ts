@@ -12,6 +12,19 @@ export const getTodos = async (req: Request, res: Response) => {
   }
 };
 
+// Get a specific todo by ID
+export const getTodo = async (req: Request, res: Response) => {
+  try {
+    const todo = await STodo.findById(req.params.id);
+    if (!todo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+    res.json(todo);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 // Create a new note
 export const createTodo = async (req: Request, res: Response) => {
   const { name, isCompleted } = req.body;

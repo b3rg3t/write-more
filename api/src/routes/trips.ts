@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getTrips,
+  getTrip,
   createTrip,
   updateTrip,
   updateOrder,
@@ -11,6 +12,9 @@ const router = express.Router();
 
 // Get all trips
 router.get("/", getTrips);
+
+// Get a specific trip
+router.get("/:id", getTrip);
 
 // Create a new trip
 router.post("/", createTrip);

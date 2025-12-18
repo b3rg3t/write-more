@@ -12,6 +12,21 @@ export const getTrips = async (req: Request, res: Response) => {
   }
 };
 
+// Get a specific trip by ID
+export const getTrip = async (req: Request, res: Response) => {
+  try {
+    const trip = await STrip.findById(req.params.id)
+      .populate("notes")
+      .populate("todos");
+    if (!trip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
+    res.json(trip);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 // Create a new trip
 export const createTrip = async (req: Request, res: Response) => {
   const { title, description, notes, todos } = req.body;
