@@ -31,12 +31,12 @@ export const createTodo = async (req: Request, res: Response) => {
 
 // Update a note
 export const updateTodo = async (req: Request, res: Response) => {
-  const { name, isCompleted, order } = req.body;
+  const { name, isCompleted } = req.body;
 
   try {
     const updatedNote = await STodo.findByIdAndUpdate(
       req.params.id,
-      { name, isCompleted, order },
+      { name, isCompleted },
       { new: true }
     );
     if (!updatedNote) {

@@ -1,11 +1,4 @@
-import {
-  Button,
-  Container,
-  Divider,
-  List,
-  ListItem,
-  Typography,
-} from "@mui/material";
+import { Button, Container, List, ListItem, Typography } from "@mui/material";
 import { createNewTodo } from "../../store/reducers/todos/todosSlice";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
@@ -23,7 +16,6 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { TodoItem } from "./TodoItem";
-import { Notes } from "../notes/Notes";
 import { fontSize16 } from "../utils/FontSize";
 import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
 
@@ -119,8 +111,6 @@ export const TodoList = () => {
           {createTodo}
         </Button>
       </Container>
-      <Divider sx={{ mx: 2, my: 1 }} />
-      <Notes />
     </RtkQueryWrapper>
   );
 };

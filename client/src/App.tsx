@@ -6,9 +6,10 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { createTheme } from "@mui/material/styles";
 import { Todos } from "./components/todos/Todos";
-import { Container, Typography } from "@mui/material";
+import { Container, Divider, Typography } from "@mui/material";
 import { text } from "./localization/eng";
 import { fontSize16 } from "./components/utils/FontSize";
+import { Notes } from "./components/notes/Notes";
 
 const theme = createTheme({
   palette: {
@@ -111,6 +112,8 @@ const App = () => (
         </Typography>
       </Container>
       <Todos />
+      <Divider sx={{ mx: 2, my: 1 }} />
+      <Notes />
     </Container>
   </ThemeProvider>
 );
