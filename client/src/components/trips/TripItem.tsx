@@ -89,7 +89,7 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
         {trip.notes.length > 0 && (
           <Container disableGutters sx={{ mt: 1 }}>
             <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
-              {text.notes.notesList.header}:
+              {text.notes.header}:
             </Typography>
             <Stack
               direction="row"
@@ -116,7 +116,7 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
         {trip.todos.length > 0 && (
           <Container disableGutters sx={{ mt: 1 }}>
             <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
-              {text.todos.todosList.header}:
+              {text.todos.header}:
             </Typography>
             <Stack
               direction="row"

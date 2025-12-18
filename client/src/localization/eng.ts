@@ -1,6 +1,7 @@
 export const text = {
   appName: "Write More",
   notes: {
+    header: "Notes",
     notesForm: {
       titleNew: "New Note",
       titleEdit: "Edit Note",
@@ -25,7 +26,6 @@ export const text = {
       updated: "Updated",
     },
     notesList: {
-      header: "Notes",
       loading: "Loading notes",
       noNotes: "Create a new note to get started!",
       createNote: "Create Note",
@@ -45,6 +45,7 @@ export const text = {
     },
   },
   todos: {
+    header: "Todos",
     todosForm: {
       titleNew: "New Todo",
       titleEdit: "Edit Todo",
@@ -58,7 +59,6 @@ export const text = {
       },
     },
     todosList: {
-      header: "Todos",
       loading: "Loading todos",
       noTodos: "Create a new todo to get started!",
       createTodo: "Create Todo",
@@ -70,6 +70,7 @@ export const text = {
     },
   },
   trips: {
+    header: "Trips",
     tripsForm: {
       titleNew: "New Trip",
       titleEdit: "Edit Trip",
@@ -90,7 +91,6 @@ export const text = {
       buttons: { confirm: "Delete", cancel: "Cancel" },
     },
     tripsList: {
-      header: "Trips",
       loading: "Loading trips",
       noTrips: "Create a new trip to get started!",
       createTrip: "Create Trip",

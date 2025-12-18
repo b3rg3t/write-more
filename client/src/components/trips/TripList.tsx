@@ -1,37 +1,23 @@
-import { List, ListItem, Typography } from "@mui/material";
-import { createNewTrip } from "../../store/reducers/trips/tripsSlice";
-import { useAppDispatch } from "../../store/redux/hooks";
-import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
-import {
-  useGetAllTripsQuery,
-  useReorderTripsMutation,
-} from "../../store/reducers/api/tripApiSlice";
-import { useEffect, useMemo, useState } from "react";
+import { Container, List, ListItem } from "@mui/material";
+import { useReorderTripsMutation } from "../../store/reducers/api/tripApiSlice";
+import { FC, useEffect, useState } from "react";
 import { ITrip } from "../../models/interface/ITrip";
-import { text } from "../../localization/eng";
 import {
   DragDropContext,
   Draggable,
   Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { fontSize16 } from "../utils/FontSize";
 import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
-import { Action } from "../utils/Action";
 import { TripItem } from "./TripItem";
 
-export const TripList = () => {
-  const { data, isLoading, isUninitialized, isFetching, error } =
-    useGetAllTripsQuery();
-  const dispatch = useAppDispatch();
-  const sortedData = useMemo(() => {
-    return data ? [...data].sort((a, b) => a.order - b.order) : [];
-  }, [data]);
-  const [reorderTrips, {}] = useReorderTripsMutation();
-  const [trips, setTrips] = useState<ITrip[]>([]);
+interface TripListProps {
+  trips: ITrip[];
+}
 
-  const { header, loading, createTrip, noTrips, fetchError } =
-    text.trips.tripsList;
+export const TripList: FC<TripListProps> = ({ trips }) => {
+  const [reorderTrips, {}] = useReorderTripsMutation();
+  const [tripsState, setTrips] = useState<ITrip[]>(trips);
 
   const handleReorderTrips = async (trips: Pick<ITrip, "_id" | "order">[]) => {
     try {
@@ -54,31 +40,11 @@ export const TripList = () => {
   };
 
   useEffect(() => {
-    setTrips(sortedData);
-  }, [sortedData]);
+    setTrips(trips);
+  }, [trips]);
 
   return (
-    <RtkQueryWrapper
-      isLoading={isLoading || isUninitialized}
-      data={data}
-      error={error}
-      isFetching={isFetching}
-      texts={{
-        loading,
-        createMessage: createTrip,
-        noData: noTrips,
-        fetchError,
-      }}
-      onCreate={() => dispatch(createNewTrip())}
-    >
-      <Typography
-        variant="h2"
-        fontSize={fontSize16}
-        fontWeight="bold"
-        sx={{ px: 2 }}
-      >
-        {header}
-      </Typography>
+    <Container disableGutters maxWidth="md" sx={{ px: 0 }}>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="trip-list">
           {(provided) => (
@@ -88,7 +54,7 @@ export const TripList = () => {
               {...provided.droppableProps}
               sx={{ pt: 1 }}
             >
-              {trips.map((trip, index) => (
+              {tripsState.map((trip, index) => (
                 <Draggable key={trip._id} draggableId={trip._id} index={index}>
                   {(provided) => (
                     <ListItem
@@ -107,11 +73,6 @@ export const TripList = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <Action
-        onClick={() => dispatch(createNewTrip())}
-        text={createTrip}
-        variant="contained"
-      />
-    </RtkQueryWrapper>
+    </Container>
   );
 };

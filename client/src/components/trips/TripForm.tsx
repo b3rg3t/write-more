@@ -147,7 +147,7 @@ export const TripForm: FC<{
           sx={{ mb: 2 }}
         />
         <FormControl fullWidth margin="normal">
-          <InputLabel>{text.notes.notesList.header}</InputLabel>
+          <InputLabel>{text.notes.header}</InputLabel>
           <Controller
             name={ETripForm.NOTES}
             control={control}
@@ -168,7 +168,7 @@ export const TripForm: FC<{
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
-          <InputLabel>{text.todos.todosList.header}</InputLabel>
+          <InputLabel>{text.todos.header}</InputLabel>
           <Controller
             name={ETripForm.TODOS}
             control={control}

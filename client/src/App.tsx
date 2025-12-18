@@ -36,7 +36,7 @@ const App = () => {
               }
               sx={{ mr: 1 }}
             >
-              {text.trips.tripsList.header}
+              {text.trips.header}
             </Button>
             <Button
               component={Link}
@@ -46,7 +46,7 @@ const App = () => {
               }
               sx={{ mr: 1 }}
             >
-              {text.notes.notesList.header}
+              {text.notes.header}
             </Button>
             <Button
               component={Link}
@@ -55,7 +55,7 @@ const App = () => {
                 location.pathname === ERoutes.TODOS ? "contained" : "outlined"
               }
             >
-              {text.todos.todosList.header}
+              {text.todos.header}
             </Button>
           </Box>
         </Container>
