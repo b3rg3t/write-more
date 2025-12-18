@@ -1,15 +1,17 @@
 import { useParams } from "react-router-dom";
-import { useGetAllTodosQuery } from "../../store/reducers/api/todoApiSlice";
+import { useGetTodoQuery } from "../../store/reducers/api/todoApiSlice";
 import { TodoItem } from "./TodoItem";
 import { Container, Typography } from "@mui/material";
 
 export const TodoDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: todos } = useGetAllTodosQuery();
+  const { data: todo, isLoading, error } = useGetTodoQuery(id!);
 
-  const todo = todos?.find((t) => t._id === id);
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
 
-  if (!todo) {
+  if (error || !todo) {
     return <Typography>Todo not found</Typography>;
   }
 

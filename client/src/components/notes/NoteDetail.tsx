@@ -1,15 +1,17 @@
 import { useParams } from "react-router-dom";
-import { useGetAllNotesQuery } from "../../store/reducers/api/noteApiSlice";
+import { useGetNoteQuery } from "../../store/reducers/api/noteApiSlice";
 import { NoteItem } from "./NoteItem";
 import { Container, Typography } from "@mui/material";
 
 export const NoteDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: notes } = useGetAllNotesQuery();
+  const { data: note, isLoading, error } = useGetNoteQuery(id!);
 
-  const note = notes?.find((n) => n._id === id);
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
 
-  if (!note) {
+  if (error || !note) {
     return <Typography>Note not found</Typography>;
   }
 

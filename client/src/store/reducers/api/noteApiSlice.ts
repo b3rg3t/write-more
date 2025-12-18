@@ -11,6 +11,10 @@ export const noteApiSlice = createApi({
       query: () => "notes",
       providesTags: ["Notes"],
     }),
+    getNote: builder.query<INote, string>({
+      query: (id) => `notes/${id}`,
+      providesTags: ["Notes"],
+    }),
     addNote: builder.mutation<INote, Partial<INote>>({
       query: (body) => ({
         url: `notes`,
@@ -47,6 +51,7 @@ export const noteApiSlice = createApi({
 
 export const {
   useGetAllNotesQuery,
+  useGetNoteQuery,
   useAddNoteMutation,
   useUpdateNoteMutation,
   useReorderNotesMutation,

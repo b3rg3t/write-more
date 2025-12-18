@@ -11,6 +11,10 @@ export const tripApiSlice = createApi({
       query: () => "trips",
       providesTags: ["Trips"],
     }),
+    getTrip: builder.query<ITrip, string>({
+      query: (id) => `trips/${id}`,
+      providesTags: ["Trips"],
+    }),
     addTrip: builder.mutation<
       ITrip,
       Partial<
@@ -63,6 +67,7 @@ export const tripApiSlice = createApi({
 
 export const {
   useGetAllTripsQuery,
+  useGetTripQuery,
   useAddTripMutation,
   useUpdateTripMutation,
   useReorderTripsMutation,

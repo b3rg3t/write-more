@@ -11,6 +11,10 @@ export const todoApiSlice = createApi({
       query: () => "todos",
       providesTags: ["Todos"],
     }),
+    getTodo: builder.query<ITodo, string>({
+      query: (id) => `todos/${id}`,
+      providesTags: ["Todos"],
+    }),
     addTodo: builder.mutation<ITodo, Partial<ITodo>>({
       query: (body) => ({
         url: `todos`,
@@ -47,6 +51,7 @@ export const todoApiSlice = createApi({
 
 export const {
   useGetAllTodosQuery,
+  useGetTodoQuery,
   useAddTodoMutation,
   useDeleteTodoMutation,
   useReorderTodosMutation,
