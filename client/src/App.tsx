@@ -10,6 +10,7 @@ import { Container, Divider, Typography } from "@mui/material";
 import { text } from "./localization/eng";
 import { fontSize16 } from "./components/utils/FontSize";
 import { Notes } from "./components/notes/Notes";
+import { Trips } from "./components/trips/Trips";
 
 const theme = createTheme({
   palette: {
@@ -114,6 +115,8 @@ const App = () => (
       <Todos />
       <Divider sx={{ mx: 2, my: 1 }} />
       <Notes />
+      <Divider sx={{ mx: 2, my: 1 }} />
+      <Trips />
     </Container>
   </ThemeProvider>
 );

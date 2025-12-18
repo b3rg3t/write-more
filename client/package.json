@@ -8,7 +8,10 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:all": "concurrently \"npm run dev --prefix api\" \"npm run dev --prefix client\"",
+    "build:all": "npm run build --prefix api && npm run build --prefix client",
+    "start:all": "npm run start --prefix api"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

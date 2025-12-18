@@ -111,12 +111,14 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
           </Container>
         )}
         <Container
+          disableGutters
           sx={{
             display: "flex",
             justifyContent: "flex-end",
             flex: 1,
-            pl: 0,
-            pr: 1,
+            mt: 1,
+            pr: 0,
+            px: 1,
           }}
         >
           <IconButton

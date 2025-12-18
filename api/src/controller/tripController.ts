@@ -1,0 +1,89 @@
+import type { Request, Response } from "express";
+import { ITrip } from "../models/interfaces/ITrip";
+import STrip from "../models/schemas/STrip";
+
+// Get all trips
+export const getTrips = async (req: Request, res: Response) => {
+  try {
+    const trips = await STrip.find().populate("notes").populate("todos");
+    res.json(trips);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Create a new trip
+export const createTrip = async (req: Request, res: Response) => {
+  const { title, description, notes, todos } = req.body;
+
+  try {
+    // Find the highest order
+    const highestOrderTrip = await STrip.findOne().sort({ order: -1 });
+    const newOrder = highestOrderTrip ? highestOrderTrip.order + 1 : 0;
+
+    const newTrip = new STrip({
+      title,
+      description,
+      notes,
+      todos,
+      order: newOrder,
+    });
+    const savedTrip = await newTrip.save();
+    res.status(201).json(savedTrip);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Update a trip
+export const updateTrip = async (req: Request, res: Response) => {
+  const { title, description, notes, todos } = req.body;
+
+  try {
+    const updatedTrip = await STrip.findByIdAndUpdate(
+      req.params.id,
+      { title, description, notes, todos },
+      { new: true }
+    )
+      .populate("notes")
+      .populate("todos");
+    if (!updatedTrip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
+    res.json(updatedTrip);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Update order for all trips
+export const updateOrder = async (req: Request, res: Response) => {
+  const updates: Pick<ITrip, "_id" | "order">[] = req.body; // array of { id, order }
+
+  try {
+    const promises = updates.map((update) =>
+      STrip.findByIdAndUpdate(
+        update._id,
+        { order: update.order },
+        { new: true }
+      )
+    );
+    const updatedTrips = await Promise.all(promises);
+    res.json(updatedTrips);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Delete a trip
+export const deleteTrip = async (req: Request, res: Response) => {
+  try {
+    const deletedTrip = await STrip.findByIdAndDelete(req.params.id);
+    if (!deletedTrip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
+    res.json({ message: "Trip deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

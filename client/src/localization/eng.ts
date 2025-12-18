@@ -61,6 +61,34 @@ export const text = {
       fetchError: "Failed to load todos. Please try again.",
     },
   },
+  trips: {
+    tripsForm: {
+      titleNew: "New Trip",
+      titleEdit: "Edit Trip",
+      titleUnknown: "Unknown Trip",
+      buttons: {
+        submit: "Submit",
+        cancel: "Cancel",
+      },
+      helperText: {
+        titleRequired: "Title is required",
+      },
+    },
+    deleteTrip: {
+      title: "Delete Trip",
+      titleUnknown: "Unknown Trip",
+      confirmation:
+        "Are you sure you want to delete '{title}'? This action cannot be undone.",
+      buttons: { confirm: "Delete", cancel: "Cancel" },
+    },
+    tripsList: {
+      header: "Trips",
+      loading: "Loading trips",
+      noTrips: "Create a new trip to get started!",
+      createTrip: "Create Trip",
+      fetchError: "Failed to load trips. Please try again.",
+    },
+  },
   errors: {
     root: "An error occurred",
   },

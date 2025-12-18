@@ -5,6 +5,7 @@ import cors from "cors";
 
 import notesRouter from "./src/routes/notes";
 import todosRouter from "./src/routes/todos";
+import tripsRouter from "./src/routes/trips";
 
 // Load environment variables from config.env
 dotenv.config({ path: ".env" });
@@ -44,6 +45,7 @@ app.use(
 // Routes
 app.use("/api/notes", notesRouter);
 app.use("/api/todos", todosRouter);
+app.use("/api/trips", tripsRouter);
 
 // Start the server
 const server = app.listen(PORT, () => {
