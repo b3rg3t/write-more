@@ -14,7 +14,6 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { useAppDispatch } from "../../store/redux/hooks";
-import { toLocalTime } from "../utils/ToLocalTime";
 import { FC, useState } from "react";
 import { fontSize16 } from "../utils/FontSize";
 import { ITrip } from "../../models/interface/ITrip";
@@ -83,22 +82,6 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
           >
             {trip.title ? trip.title : text.trips.tripsForm.titleUnknown}
           </Typography>
-          <Stack direction="column" alignItems="flex-end" spacing={0.5}>
-            <Typography variant="caption" color="text.secondary">
-              {toLocalTime(trip.updatedAt)}
-            </Typography>
-          </Stack>
-        </Stack>
-        <Container disableGutters sx={{ display: "flex", alignItems: "start" }}>
-          {trip.description && (
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ mt: 1, whiteSpace: "pre-wrap" }}
-            >
-              {trip.description}
-            </Typography>
-          )}
           <CardActions
             sx={{
               display: "flex",
@@ -144,6 +127,17 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
               </IconButton>
             </Container>
           </CardActions>
+        </Stack>
+        <Container disableGutters>
+          {trip.description && (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ mt: 1, whiteSpace: "pre-wrap" }}
+            >
+              {trip.description}
+            </Typography>
+          )}
         </Container>
         <Accordion
           expanded={expanded === "panel1"}

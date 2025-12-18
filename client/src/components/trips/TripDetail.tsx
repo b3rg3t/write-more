@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useGetTripQuery } from "../../store/reducers/api/tripApiSlice";
-import { Card, Container, Divider, Typography } from "@mui/material";
+import { Card, Container, Divider, Stack, Typography } from "@mui/material";
 import { text } from "../../localization/eng";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 import { TodoList } from "../todos/TodoList";
@@ -29,6 +29,12 @@ export const TripDetail = () => {
       }}
     >
       <Container maxWidth="md" sx={{ px: 0 }}>
+        <Stack direction="row" justifyContent="end" spacing={2} sx={{ px: 2 }}>
+          <Typography fontSize={"small"}>
+            {trip?.createdAt &&
+              `Created at: ${new Date(trip.createdAt).toLocaleDateString()}`}
+          </Typography>
+        </Stack>
         <Container disableGutters sx={{ px: 1 }}>
           <Card
             variant="outlined"
