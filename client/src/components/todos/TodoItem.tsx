@@ -14,8 +14,6 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { useUpdateTodoMutation } from "../../store/reducers/api/todoApiSlice";
-import { useNavigate } from "react-router-dom";
-import { ERoutes } from "../../models/enum/ERoutes";
 import { fontSize16 } from "../utils/FontSize";
 
 export const TodoItem: FC<{
@@ -25,7 +23,6 @@ export const TodoItem: FC<{
   const dispatch = useAppDispatch();
   const [updateTodo] = useUpdateTodoMutation();
   const [isChecked, setIsChecked] = useState(todo.isCompleted);
-  const navigate = useNavigate();
 
   const handleEditTodo = () => {
     dispatch(setEditTodo(todo._id));
@@ -33,10 +30,6 @@ export const TodoItem: FC<{
 
   const handleDeleteTodo = async () => {
     dispatch(deleteTodo(todo._id));
-  };
-
-  const handleClick = () => {
-    navigate(ERoutes.TODO_DETAIL.replace(":id", todo._id));
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,14 +51,13 @@ export const TodoItem: FC<{
         mb: 0,
         display: "flex",
         alignItems: "center",
-        cursor: "pointer",
       }}
-      onClick={handleClick}
     >
       <Checkbox
         checked={isChecked}
         onChange={handleCheckboxChange}
         slotProps={{ input: { "aria-label": todo.name } }}
+        sx={{ cursor: "pointer" }}
       />
       <Typography
         variant={headingLevel}
