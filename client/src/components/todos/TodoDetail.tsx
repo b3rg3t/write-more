@@ -12,11 +12,12 @@ export const TodoDetail = () => {
     isLoading,
     error,
     isUninitialized,
+    isFetching,
   } = useGetTodoQuery(id!);
 
   return (
     <RtkQueryWrapper
-      isLoading={isLoading || isUninitialized}
+      isLoading={isLoading || isUninitialized || isFetching}
       data={todo ? [todo] : []}
       error={error}
       texts={{

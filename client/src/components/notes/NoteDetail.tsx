@@ -12,11 +12,12 @@ export const NoteDetail = () => {
     isLoading,
     error,
     isUninitialized,
+    isFetching,
   } = useGetNoteQuery(id!);
 
   return (
     <RtkQueryWrapper
-      isLoading={isLoading || isUninitialized}
+      isLoading={isLoading || isUninitialized || isFetching}
       data={note ? [note] : []}
       error={error}
       texts={{
