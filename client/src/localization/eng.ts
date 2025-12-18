@@ -97,7 +97,7 @@ export const text = {
       fetchError: "Failed to load trips. Please try again.",
     },
     tripDetail: {
-      loading: "Loading...",
+      loading: "Loading trip",
       notFound: "Trip not found",
     },
   },
