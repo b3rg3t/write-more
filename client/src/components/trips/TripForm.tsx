@@ -45,10 +45,8 @@ export const TripForm: FC<{
     defaultValues: {
       [ETripForm.TITLE]: trip?.title || "",
       [ETripForm.DESCRIPTION]: trip?.description || "",
-      [ETripForm.NOTES]:
-        trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || [],
-      [ETripForm.TODOS]:
-        trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || [],
+      [ETripForm.NOTES]: trip?.notes || [],
+      [ETripForm.TODOS]: trip?.todos || [],
     },
   });
 
@@ -59,8 +57,8 @@ export const TripForm: FC<{
   useEffect(() => {
     setValue(ETripForm.TITLE, trip?.title || "");
     setValue(ETripForm.DESCRIPTION, trip?.description || "");
-    setValue(ETripForm.NOTES, trip?.notes.map((n) => n._id) || []);
-    setValue(ETripForm.TODOS, trip?.todos.map((t) => t._id) || []);
+    setValue(ETripForm.NOTES, trip?.notes || []);
+    setValue(ETripForm.TODOS, trip?.todos || []);
   }, [trip, setValue]);
 
   useEffect(() => {
@@ -76,14 +74,8 @@ export const TripForm: FC<{
         createTrip({
           title: data[ETripForm.TITLE],
           description: data[ETripForm.DESCRIPTION],
-          notes:
-            data[ETripForm.NOTES]?.map((n) =>
-              typeof n === "string" ? n : n._id
-            ) || [],
-          todos:
-            data[ETripForm.TODOS]?.map((t) =>
-              typeof t === "string" ? t : t._id
-            ) || [],
+          notes: data[ETripForm.NOTES] || [],
+          todos: data[ETripForm.TODOS] || [],
         });
       } catch (error) {
         console.error("Error creating trip:", error);
@@ -94,17 +86,11 @@ export const TripForm: FC<{
           _id: trip._id,
           title: data[ETripForm.TITLE],
           description: data[ETripForm.DESCRIPTION],
-          notes:
-            data[ETripForm.NOTES]?.map((n) =>
-              typeof n === "string" ? n : n._id
-            ) || [],
-          todos:
-            data[ETripForm.TODOS]?.map((t) =>
-              typeof t === "string" ? t : t._id
-            ) || [],
+          notes: data[ETripForm.NOTES] || [],
+          todos: data[ETripForm.TODOS] || [],
         });
       } catch (error) {
-        console.error("Error updating trip:", error);
+        console.error("Error creating trip:", error);
       }
     }
   };

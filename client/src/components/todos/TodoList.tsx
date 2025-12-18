@@ -1,4 +1,4 @@
-import { Container, List, ListItem } from "@mui/material";
+import { Container, List, ListItem, TypographyVariant } from "@mui/material";
 import { useReorderTodosMutation } from "../../store/reducers/api/todoApiSlice";
 import { FC, useEffect, useState } from "react";
 import { ITodo } from "../../models/interface/ITodo";
@@ -10,21 +10,39 @@ import {
 } from "@hello-pangea/dnd";
 import { TodoItem } from "./TodoItem";
 import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
+import { useParams } from "react-router-dom";
+import {
+  useGetTripQuery,
+  useUpdateTripMutation,
+} from "../../store/reducers/api/tripApiSlice";
 
 interface TodoListProps {
   todos: ITodo[];
+  headingLevel?: TypographyVariant;
 }
 
-export const TodoList: FC<TodoListProps> = ({ todos }) => {
+export const TodoList: FC<TodoListProps> = ({ todos, headingLevel }) => {
+  const { id } = useParams<{ id: string }>();
   const [reorderTodos, {}] = useReorderTodosMutation();
+  const [updateTrip, {}] = useUpdateTripMutation();
+  const { data: trip } = useGetTripQuery(id || "");
   const [todosState, setTodos] = useState<ITodo[]>([]);
 
-  const handleReorderNotes = async (todo: Pick<ITodo, "_id" | "order">[]) => {
-    try {
-      const response = await reorderTodos(todo);
-      console.log("Reordered todos response:", response);
-    } catch (error) {
-      console.error("Error reordering todos:", error);
+  const handleReorderNotes = async (todos: ITodo[]) => {
+    if (id) {
+      try {
+        const response = await updateTrip({ ...trip, todos: todos });
+        console.log("Reordered todos response:", response);
+      } catch (error) {
+        console.error("Error reordering todos:", error);
+      }
+    } else {
+      try {
+        const response = await reorderTodos(todos);
+        console.log("Reordered todos response:", response);
+      } catch (error) {
+        console.error("Error reordering todos:", error);
+      }
     }
   };
 
@@ -63,7 +81,7 @@ export const TodoList: FC<TodoListProps> = ({ todos }) => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <TodoItem todo={todo} />
+                      <TodoItem todo={todo} headingLevel={headingLevel} />
                     </ListItem>
                   )}
                 </Draggable>

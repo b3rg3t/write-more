@@ -8,6 +8,7 @@ import {
   Container,
   IconButton,
   Typography,
+  TypographyVariant,
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -15,8 +16,12 @@ import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { useUpdateTodoMutation } from "../../store/reducers/api/todoApiSlice";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
+import { fontSize16 } from "../utils/FontSize";
 
-export const TodoItem: FC<{ todo: ITodo }> = ({ todo }) => {
+export const TodoItem: FC<{
+  todo: ITodo;
+  headingLevel?: TypographyVariant;
+}> = ({ todo, headingLevel = "h3" }) => {
   const dispatch = useAppDispatch();
   const [updateTodo] = useUpdateTodoMutation();
   const [isChecked, setIsChecked] = useState(todo.isCompleted);
@@ -63,7 +68,13 @@ export const TodoItem: FC<{ todo: ITodo }> = ({ todo }) => {
         slotProps={{ input: { "aria-label": todo.name } }}
       />
       <Typography
-        sx={{ textDecoration: isChecked ? "line-through" : undefined, py: 1 }}
+        variant={headingLevel}
+        fontSize={fontSize16}
+        sx={{
+          color: "text.primary",
+          textDecoration: isChecked ? "line-through" : undefined,
+          py: 1,
+        }}
       >
         {todo.name}
       </Typography>

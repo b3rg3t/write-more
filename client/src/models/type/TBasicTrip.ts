@@ -4,7 +4,7 @@ import { ITrip } from "../interface/ITrip";
 
 export type TBasicTrip = Partial<
   Omit<ITrip, "createdAt" | "updatedAt" | "notes" | "todos"> & {
-    notes: string[] | INote[];
-    todos: string[] | ITodo[];
+    notes: INote[];
+    todos: ITodo[];
   }
 >;

@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+import { fontSize16 } from "./components/utils/FontSize";
 
 export const theme = createTheme({
   palette: {
@@ -38,8 +39,11 @@ export const theme = createTheme({
       color: "#09378dff",
     },
     h2: {
-      fontWeight: 600,
-      fontSize: "2rem",
+      fontSize: fontSize16,
+      color: "#09378dff",
+    },
+    h3: {
+      fontSize: fontSize16,
       color: "#09378dff",
     },
     body1: {

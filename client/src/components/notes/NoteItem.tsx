@@ -9,6 +9,7 @@ import {
   List,
   ListItem,
   Chip,
+  TypographyVariant,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
@@ -24,7 +25,10 @@ import { TLink } from "../../models/type/TLink";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 
-export const NoteItem: FC<{ note: INote }> = ({ note }) => {
+export const NoteItem: FC<{
+  note: INote;
+  headingLevel?: TypographyVariant;
+}> = ({ headingLevel = "h3", note }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -63,10 +67,9 @@ export const NoteItem: FC<{ note: INote }> = ({ note }) => {
           alignItems="center"
         >
           <Typography
-            variant="h3"
-            component="div"
+            variant={headingLevel}
             fontSize={fontSize16}
-            sx={{ fontWeight: 600 }}
+            sx={{ fontWeight: 600, color: "text.primary" }}
           >
             {note.title ? note.title : text.notes.notesForm.titleUnknown}
           </Typography>

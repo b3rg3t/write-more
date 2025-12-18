@@ -67,7 +67,7 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             variant="h3"
             component="div"
             fontSize={fontSize16}
-            sx={{ fontWeight: 600 }}
+            sx={{ color: "text.primary", fontWeight: 600 }}
           >
             {trip.title ? trip.title : text.trips.tripsForm.titleUnknown}
           </Typography>

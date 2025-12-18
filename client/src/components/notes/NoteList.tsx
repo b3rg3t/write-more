@@ -7,29 +7,47 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
-import { Container, ListItem } from "@mui/material";
+import { Container, ListItem, TypographyVariant } from "@mui/material";
 import { useReorderNotesMutation } from "../../store/reducers/api/noteApiSlice";
 import { INote } from "../../models/interface/INote";
 import { useEffect, useState, FC } from "react";
+import {
+  useGetTripQuery,
+  useUpdateTripMutation,
+} from "../../store/reducers/api/tripApiSlice";
+import { useParams } from "react-router-dom";
 
 interface NoteListProps {
   notes: INote[];
+  headingLevel?: TypographyVariant;
 }
 
-export const NoteList: FC<NoteListProps> = ({ notes }) => {
+export const NoteList: FC<NoteListProps> = ({ notes, headingLevel }) => {
+  const { id } = useParams<{ id: string }>();
   const [reorderNotes, {}] = useReorderNotesMutation();
+  const [updateTrip, {}] = useUpdateTripMutation();
+  const { data: trip } = useGetTripQuery(id || "");
   const [notesState, setNotes] = useState<INote[]>([]);
 
   useEffect(() => {
     setNotes(notes);
   }, [notes]);
 
-  const handleReorderNotes = async (notes: Pick<INote, "_id" | "order">[]) => {
-    try {
-      const response = await reorderNotes(notes);
-      console.log("Reordered notes response:", response);
-    } catch (error) {
-      console.error("Error reordering notes:", error);
+  const handleReorderNotes = async (notes: INote[]) => {
+    if (id) {
+      try {
+        const response = await updateTrip({ ...trip, notes: notes });
+        console.log("Reordered todos response:", response);
+      } catch (error) {
+        console.error("Error reordering todos:", error);
+      }
+    } else {
+      try {
+        const response = await reorderNotes(notes);
+        console.log("Reordered notes response:", response);
+      } catch (error) {
+        console.error("Error reordering notes:", error);
+      }
     }
   };
 
@@ -59,7 +77,7 @@ export const NoteList: FC<NoteListProps> = ({ notes }) => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <NoteItem note={note} />
+                      <NoteItem note={note} headingLevel={headingLevel} />
                     </ListItem>
                   )}
                 </Draggable>
