@@ -32,6 +32,10 @@ export const text = {
       fetchError: "Failed to load notes. Please try again.",
       createTodo: "Create Todo",
     },
+    noteDetail: {
+      loading: "Loading...",
+      notFound: "Note not found",
+    },
     deleteNote: {
       title: "Delete Note",
       titleUnknown: "Unknown Note",
@@ -60,6 +64,10 @@ export const text = {
       createTodo: "Create Todo",
       fetchError: "Failed to load todos. Please try again.",
     },
+    todoDetail: {
+      loading: "Loading...",
+      notFound: "Todo not found",
+    },
   },
   trips: {
     tripsForm: {
@@ -87,6 +95,10 @@ export const text = {
       noTrips: "Create a new trip to get started!",
       createTrip: "Create Trip",
       fetchError: "Failed to load trips. Please try again.",
+    },
+    tripDetail: {
+      loading: "Loading...",
+      notFound: "Trip not found",
     },
   },
   errors: {
