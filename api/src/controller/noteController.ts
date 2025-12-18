@@ -12,6 +12,19 @@ export const getNotes = async (req: Request, res: Response) => {
   }
 };
 
+// Get a specific note by ID
+export const getNote = async (req: Request, res: Response) => {
+  try {
+    const note = await SNote.findById(req.params.id);
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+    res.json(note);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 // Create a new note
 export const createNote = async (req: Request, res: Response) => {
   const { title, content, links } = req.body;
