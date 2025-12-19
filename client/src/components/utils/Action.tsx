@@ -14,7 +14,7 @@ export const Action: FC<ActionProps> = ({ onClick }) => {
       position="fixed"
       left={0}
       right={0}
-      bottom={24}
+      bottom={46}
       display="flex"
       justifyContent="center"
       zIndex={1300}
