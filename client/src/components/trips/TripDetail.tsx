@@ -53,7 +53,9 @@ export const TripDetail = () => {
             >
               {trip?.title}
             </Typography>
-            <Typography sx={{ mt: 1 }}>{trip?.description}</Typography>
+            <Typography sx={{ mt: 1, whiteSpace: "pre-wrap" }}>
+              {trip?.description}
+            </Typography>
           </Card>
         </Container>
         <Divider sx={{ my: 2 }} />
