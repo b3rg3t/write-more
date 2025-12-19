@@ -31,6 +31,10 @@ export const notesSlice = createSlice({
     },
     deleteNote: (state, action: PayloadAction<INote["_id"] | undefined>) => {
       state.isDeleting = action.payload;
+      if (action.payload === undefined) {
+        state.isNew = false;
+        state.isEditing = undefined;
+      }
     },
   },
 });

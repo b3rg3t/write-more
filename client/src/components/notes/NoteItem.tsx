@@ -11,7 +11,6 @@ import {
   Chip,
   TypographyVariant,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useAppDispatch } from "../../store/redux/hooks";
@@ -20,7 +19,7 @@ import { FC } from "react";
 import { fontSize16 } from "../utils/FontSize";
 import { INote } from "../../models/interface/INote";
 import { text } from "../../localization/eng";
-import { deleteNote, setEditNote } from "../../store/reducers/notes/notesSlice";
+import { setEditNote } from "../../store/reducers/notes/notesSlice";
 import { TLink } from "../../models/type/TLink";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
@@ -34,10 +33,6 @@ export const NoteItem: FC<{
 
   const handleEditNote = () => {
     dispatch(setEditNote(note._id));
-  };
-
-  const handleDeleteNote = async () => {
-    dispatch(deleteNote(note._id));
   };
 
   const handleClick = () => {
@@ -137,8 +132,7 @@ export const NoteItem: FC<{
             justifyContent: "flex-end",
             flex: 1,
             mt: 1,
-            pr: 0,
-            px: 1,
+            pr: 2,
           }}
         >
           <IconButton
@@ -151,17 +145,6 @@ export const NoteItem: FC<{
             }}
           >
             <EditSquareIcon />
-          </IconButton>
-          <IconButton
-            color="error"
-            edge="end"
-            aria-label="delete"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteNote();
-            }}
-          >
-            <DeleteIcon />
           </IconButton>
         </Container>
       </CardActions>

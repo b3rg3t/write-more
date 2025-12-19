@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { ITodo } from "../../models/interface/ITodo";
-import { deleteTodo, setEditTodo } from "../../store/reducers/todos/todosSlice";
+import { setEditTodo } from "../../store/reducers/todos/todosSlice";
 import { useAppDispatch } from "../../store/redux/hooks";
 import {
   Card,
@@ -10,8 +10,6 @@ import {
   Typography,
   TypographyVariant,
 } from "@mui/material";
-
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { useUpdateTodoMutation } from "../../store/reducers/api/todoApiSlice";
 import { fontSize16 } from "../utils/FontSize";
@@ -26,10 +24,6 @@ export const TodoItem: FC<{
 
   const handleEditTodo = () => {
     dispatch(setEditTodo(todo._id));
-  };
-
-  const handleDeleteTodo = async () => {
-    dispatch(deleteTodo(todo._id));
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +71,7 @@ export const TodoItem: FC<{
           justifyContent: "flex-end",
           flex: 1,
           pl: 0,
-          pr: 1,
+          pr: 2,
         }}
       >
         <IconButton
@@ -90,17 +84,6 @@ export const TodoItem: FC<{
           }}
         >
           <EditSquareIcon />
-        </IconButton>
-        <IconButton
-          color="error"
-          edge="end"
-          aria-label="delete"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteTodo();
-          }}
-        >
-          <DeleteIcon />
         </IconButton>
       </Container>
     </Card>

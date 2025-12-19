@@ -5,12 +5,14 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  Stack,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
-import { cancelTodo } from "../../store/reducers/todos/todosSlice";
+import { cancelTodo, deleteTodo } from "../../store/reducers/todos/todosSlice";
 import { useGetAllTodosQuery } from "../../store/reducers/api/todoApiSlice";
 import { text } from "../../localization/eng";
 import {
@@ -35,6 +37,12 @@ export const TodoFormModal = () => {
 
   const onClose = () => {
     dispatch(cancelTodo());
+  };
+
+  const handleDeleteTodo = async () => {
+    if (todo) {
+      dispatch(deleteTodo(todo._id));
+    }
   };
 
   const open = !!isNew || !!isEditing;
@@ -62,9 +70,24 @@ export const TodoFormModal = () => {
         }}
       >
         {isNew ? titleNew : titleEdit}
-        <IconButton onClick={onClose} size="small">
-          <CloseIcon />
-        </IconButton>
+        <Stack direction="row" spacing={1}>
+          {todo && (
+            <IconButton
+              color="error"
+              edge="end"
+              aria-label="delete"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteTodo();
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
+          <IconButton onClick={onClose} size="small">
+            <CloseIcon />
+          </IconButton>
+        </Stack>
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
         <TodoForm todo={todo}>

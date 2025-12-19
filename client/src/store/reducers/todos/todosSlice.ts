@@ -31,6 +31,10 @@ export const todosSlice = createSlice({
     },
     deleteTodo: (state, action: PayloadAction<ITodo["_id"] | undefined>) => {
       state.isDeleting = action.payload;
+      if (action.payload === undefined) {
+        state.isNew = false;
+        state.isEditing = undefined;
+      }
     },
   },
 });

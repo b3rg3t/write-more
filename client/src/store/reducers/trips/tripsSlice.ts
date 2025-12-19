@@ -31,6 +31,10 @@ export const tripsSlice = createSlice({
     },
     deleteTrip: (state, action: PayloadAction<ITrip["_id"] | undefined>) => {
       state.isDeleting = action.payload;
+      if (action.payload === undefined) {
+        state.isNew = false;
+        state.isEditing = undefined;
+      }
     },
   },
 });

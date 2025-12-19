@@ -11,14 +11,13 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { FC, useState } from "react";
 import { fontSize16 } from "../utils/FontSize";
 import { ITrip } from "../../models/interface/ITrip";
 import { text } from "../../localization/eng";
-import { deleteTrip, setEditTrip } from "../../store/reducers/trips/tripsSlice";
+import { setEditTrip } from "../../store/reducers/trips/tripsSlice";
 import DoneIcon from "@mui/icons-material/Done";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
@@ -31,10 +30,6 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
 
   const handleEditTrip = () => {
     dispatch(setEditTrip(trip._id));
-  };
-
-  const handleDeleteTrip = async () => {
-    dispatch(deleteTrip(trip._id));
   };
 
   const handleClick = () => {
@@ -113,17 +108,6 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
                 }}
               >
                 <EditSquareIcon />
-              </IconButton>
-              <IconButton
-                color="error"
-                edge="end"
-                aria-label="delete"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteTrip();
-                }}
-              >
-                <DeleteIcon />
               </IconButton>
             </Container>
           </CardActions>

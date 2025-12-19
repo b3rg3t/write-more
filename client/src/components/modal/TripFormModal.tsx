@@ -5,13 +5,16 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  Stack,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   cancelTrip,
+  deleteTrip,
   selectIsEditing,
   selectIsNew,
 } from "../../store/reducers/trips/tripsSlice";
@@ -35,6 +38,12 @@ export const TripFormModal = () => {
 
   const onClose = () => {
     dispatch(cancelTrip());
+  };
+
+  const handleDeleteTrip = async () => {
+    if (trip) {
+      dispatch(deleteTrip(trip._id));
+    }
   };
 
   const open = !!isNew || !!isEditing;
@@ -62,9 +71,24 @@ export const TripFormModal = () => {
         }}
       >
         {isNew ? titleNew : titleEdit}
-        <IconButton onClick={onClose} size="small">
-          <CloseIcon />
-        </IconButton>
+        <Stack direction="row" spacing={1}>
+          {trip && (
+            <IconButton
+              color="error"
+              edge="end"
+              aria-label="delete"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteTrip();
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
+          <IconButton onClick={onClose} size="small">
+            <CloseIcon />
+          </IconButton>
+        </Stack>
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
         <TripForm trip={trip}>
