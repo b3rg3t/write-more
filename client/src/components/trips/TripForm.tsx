@@ -39,15 +39,11 @@ export const TripForm: FC<{
     formState: { errors },
     register,
     reset,
+    setValue,
     control,
-  } = useForm<TBasicTrip>();
-
-  const {
-    trips: { tripsForm },
-  } = text;
-
-  useEffect(() => {
-    reset({
+  } = useForm<TBasicTrip>({
+    mode: "onSubmit",
+    defaultValues: {
       [ETripForm.TITLE]: trip?.title || "",
       [ETripForm.DESCRIPTION]: trip?.description || "",
       [ETripForm.START_DATE]: trip?.startDate
@@ -60,8 +56,35 @@ export const TripForm: FC<{
         trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || [],
       [ETripForm.TODOS]:
         trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || [],
-    });
-  }, [trip, reset]);
+    },
+  });
+
+  const {
+    trips: { tripsForm },
+  } = text;
+
+  useEffect(() => {
+    setValue(ETripForm.TITLE, trip?.title || "");
+    setValue(ETripForm.DESCRIPTION, trip?.description || "");
+    setValue(
+      ETripForm.START_DATE,
+      trip?.startDate
+        ? new Date(trip.startDate).toISOString().split("T")[0]
+        : ""
+    );
+    setValue(
+      ETripForm.END_DATE,
+      trip?.endDate ? new Date(trip.endDate).toISOString().split("T")[0] : ""
+    );
+    setValue(
+      ETripForm.NOTES,
+      trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || []
+    );
+    setValue(
+      ETripForm.TODOS,
+      trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || []
+    );
+  }, [trip]);
 
   useEffect(() => {
     // Focus the title field when the form opens

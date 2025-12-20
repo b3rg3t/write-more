@@ -1,6 +1,4 @@
 import { Typography } from "@mui/material";
-import { TripFormModal } from "../modal/TripFormModal";
-import { DeleteTripModal } from "../modal/DeleteTripModal";
 import { TripList } from "./TripList";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 import { Action } from "../utils/Action";
@@ -23,8 +21,6 @@ export const Trips = () => {
   const { loading, createTrip, noTrips, fetchError } = text.trips.tripsList;
   return (
     <>
-      <TripFormModal />
-      <DeleteTripModal />
       <Typography
         variant="h2"
         fontSize={fontSize16}

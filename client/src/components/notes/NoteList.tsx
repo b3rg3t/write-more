@@ -10,8 +10,6 @@ import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
 import { ListItem, TypographyVariant } from "@mui/material";
 import { INote } from "../../models/interface/INote";
 import { useEffect, useState, FC } from "react";
-import { DeleteNoteModal } from "../modal/DeleteNoteModal";
-import { NoteFormModal } from "../modal/NoteFormModal";
 import {
   useReorderNotesMutation,
   useUpdateTripMutation,
@@ -68,33 +66,28 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip }) => {
   };
 
   return (
-    <>
-      <DeleteNoteModal />
-      <NoteFormModal />
-
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="note-list">
-          {(provided) => (
-            <List dense ref={provided.innerRef} {...provided.droppableProps}>
-              {notesState.map((note, index) => (
-                <Draggable key={note._id} draggableId={note._id} index={index}>
-                  {(provided) => (
-                    <ListItem
-                      ref={provided.innerRef}
-                      sx={{ width: "100%", px: 0 }}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <NoteItem note={note} headingLevel={headingLevel} />
-                    </ListItem>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </List>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="note-list">
+        {(provided) => (
+          <List dense ref={provided.innerRef} {...provided.droppableProps}>
+            {notesState.map((note, index) => (
+              <Draggable key={note._id} draggableId={note._id} index={index}>
+                {(provided) => (
+                  <ListItem
+                    ref={provided.innerRef}
+                    sx={{ width: "100%", px: 0 }}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <NoteItem note={note} headingLevel={headingLevel} />
+                  </ListItem>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </List>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };

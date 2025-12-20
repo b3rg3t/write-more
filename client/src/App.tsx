@@ -16,11 +16,22 @@ import { ERoutes } from "./models/enum/ERoutes";
 import { theme } from "./theme";
 import { Footer } from "./components/layout/Footer";
 import { Header } from "./components/layout/Header";
+import { NoteFormModal } from "./components/modal/NoteFormModal";
+import { TodoFormModal } from "./components/modal/TodoFormModal";
+import { TripFormModal } from "./components/modal/TripFormModal";
+import { DeleteTripModal } from "./components/modal/DeleteTripModal";
+import { DeleteTodoModal } from "./components/modal/DeleteTodoModal";
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Header />
+      <TripFormModal />
+      <DeleteTripModal />
+      <NoteFormModal />
+      <NoteFormModal />
+      <TodoFormModal />
+      <DeleteTodoModal />
       <Container maxWidth="md" sx={{ px: 1, py: 2, pt: 6, pb: 10 }}>
         <Routes>
           <Route path={ERoutes.TRIPS} element={<Trips />} />

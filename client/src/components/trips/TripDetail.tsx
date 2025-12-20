@@ -20,8 +20,7 @@ import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { createTodoForTrip } from "../../store/reducers/todos/todosSlice";
 import { createNoteForTrip } from "../../store/reducers/notes/notesSlice";
 import { setEditTrip } from "../../store/reducers/trips/tripsSlice";
-import { TripFormModal } from "../modal/TripFormModal";
-import { DeleteTripModal } from "../modal/DeleteTripModal";
+
 import { TripDates } from "../utils/TripDates";
 
 export const TripDetail = () => {
@@ -64,8 +63,6 @@ export const TripDetail = () => {
         fetchError: text.trips.tripDetail.notFound,
       }}
     >
-      <TripFormModal />
-      <DeleteTripModal />
       <Container maxWidth="md" sx={{ px: 0 }}>
         <Stack direction="row" justifyContent="end" spacing={2}>
           <Typography fontSize={"small"}>
