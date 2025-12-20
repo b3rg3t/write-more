@@ -1,7 +1,10 @@
-import { Box, Button, Container } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 import { text } from "../../localization/eng";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import StickyNote2Icon from "@mui/icons-material/StickyNote2";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 
 export const Footer = () => {
   const location = useLocation();
@@ -21,7 +24,7 @@ export const Footer = () => {
       <Container sx={{ px: 2 }}>
         <Box
           sx={{
-            my: 0.5,
+            my: 0,
             display: "flex",
             justifyContent: "space-between",
           }}
@@ -32,8 +35,21 @@ export const Footer = () => {
             variant={
               location.pathname === ERoutes.TRIPS ? "contained" : undefined
             }
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            {text.trips.header}
+            <FlightTakeoffIcon />
+            <Typography
+              fontSize={8}
+              color={
+                location.pathname === ERoutes.TRIPS ? "secondary" : "primary"
+              }
+            >
+              {text.trips.header}
+            </Typography>
           </Button>
           <Button
             component={Link}
@@ -41,8 +57,21 @@ export const Footer = () => {
             variant={
               location.pathname === ERoutes.NOTES ? "contained" : undefined
             }
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            {text.notes.header}
+            <StickyNote2Icon />
+            <Typography
+              fontSize={8}
+              color={
+                location.pathname === ERoutes.NOTES ? "secondary" : "primary"
+              }
+            >
+              {text.notes.header}
+            </Typography>
           </Button>
           <Button
             component={Link}
@@ -50,8 +79,21 @@ export const Footer = () => {
             variant={
               location.pathname === ERoutes.TODOS ? "contained" : undefined
             }
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            {text.todos.header}
+            <FormatListBulletedIcon />
+            <Typography
+              fontSize={8}
+              color={
+                location.pathname === ERoutes.TODOS ? "secondary" : "primary"
+              }
+            >
+              {text.todos.header}
+            </Typography>
           </Button>
         </Box>
       </Container>

@@ -14,7 +14,7 @@ import { TodoList } from "../todos/TodoList";
 import { NoteList } from "../notes/NoteList";
 import { fontSize16 } from "../utils/FontSize";
 import { useAppDispatch } from "../../store/redux/hooks";
-import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import FormatListBulletedAddIcon from "@mui/icons-material/FormatListBulletedAdd";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import { createTodoForTrip } from "../../store/reducers/todos/todosSlice";
@@ -136,7 +136,7 @@ export const TripDetail = () => {
             }}
             sx={{ mr: 1 }}
           >
-            <PlaylistAddIcon />
+            <FormatListBulletedAddIcon />
           </IconButton>
         </Stack>
         <TodoList trip={trip} todos={trip?.todos ?? []} headingLevel="h3" />

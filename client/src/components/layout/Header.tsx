@@ -1,6 +1,7 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 import { fontSize16 } from "../utils/FontSize";
 import { text } from "../../localization/eng";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 export const Header = () => {
   return (
@@ -16,15 +17,18 @@ export const Header = () => {
         borderColor: "divider",
       }}
     >
-      <Container maxWidth="md" sx={{ px: 0 }}>
-        <Typography
-          variant="h1"
-          fontSize={fontSize16}
-          fontWeight="bold"
-          sx={{ px: 2, py: 1 }}
-        >
-          {text.appName}
-        </Typography>
+      <Container maxWidth="md" sx={{ px: 1 }}>
+        <Stack direction="row" alignItems="center">
+          <BorderColorIcon sx={{ mr: 1 }} fontSize="small" color="primary" />
+          <Typography
+            variant="h1"
+            fontSize={fontSize16}
+            fontWeight="bold"
+            sx={{ py: 1 }}
+          >
+            {text.appName}
+          </Typography>
+        </Stack>
       </Container>
     </Box>
   );
