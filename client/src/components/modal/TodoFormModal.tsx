@@ -12,7 +12,11 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
-import { cancelTodo, deleteTodo } from "../../store/reducers/todos/todosSlice";
+import {
+  cancelTodo,
+  deleteTodo,
+  selectCreatingTodoForTrip,
+} from "../../store/reducers/todos/todosSlice";
 import { useGetAllTodosQuery } from "../../store/reducers/api/apiSlice";
 import { text } from "../../localization/eng";
 import {
@@ -24,6 +28,7 @@ import { TodoForm } from "../todos/TodoForm";
 export const TodoFormModal = () => {
   const isNew = useAppSelector(selectIsNew);
   const isEditing = useAppSelector(selectIsEditing);
+  const creatingTodoForTrip = useAppSelector(selectCreatingTodoForTrip);
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -45,7 +50,7 @@ export const TodoFormModal = () => {
     }
   };
 
-  const open = !!isNew || !!isEditing;
+  const open = !!isNew || !!isEditing || !!creatingTodoForTrip;
 
   const { titleNew, titleEdit, buttons } = text.todos.todosForm;
 
@@ -69,7 +74,7 @@ export const TodoFormModal = () => {
           py: { xs: 1, sm: 2 },
         }}
       >
-        {isNew ? titleNew : titleEdit}
+        {isNew || creatingTodoForTrip ? titleNew : titleEdit}
         <Stack direction="row" spacing={1}>
           {todo && (
             <IconButton

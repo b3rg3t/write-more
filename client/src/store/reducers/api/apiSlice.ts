@@ -39,4 +39,6 @@ export const {
   useUpdateTripMutation,
   useReorderTripsMutation,
   useDeleteTripMutation,
+  useCreateNoteForTripMutation,
+  useCreateTodoForTripMutation,
 } = apiSlice;

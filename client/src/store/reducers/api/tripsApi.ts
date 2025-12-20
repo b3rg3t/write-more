@@ -1,5 +1,7 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/query";
 import { ITrip } from "../../../models/interface/ITrip";
+import { INote } from "../../../models/interface/INote";
+import { ITodo } from "../../../models/interface/ITodo";
 
 export const tripsEndpoints = (
   builder: EndpointBuilder<any, "Notes" | "Todos" | "Trips", "api">
@@ -58,5 +60,31 @@ export const tripsEndpoints = (
       method: "DELETE",
     }),
     invalidatesTags: ["Trips"],
+  }),
+
+  // Create note for trip
+  createNoteForTrip: builder.mutation<
+    { note: INote; trip: ITrip },
+    { tripId: string; title: string; content: string; links?: any[] }
+  >({
+    query: ({ tripId, ...body }) => ({
+      url: `trips/${tripId}/notes`,
+      method: "POST",
+      body,
+    }),
+    invalidatesTags: ["Notes", "Trips"],
+  }),
+
+  // Create todo for trip
+  createTodoForTrip: builder.mutation<
+    { todo: ITodo; trip: ITrip },
+    { tripId: string; name: string; isCompleted?: boolean }
+  >({
+    query: ({ tripId, ...body }) => ({
+      url: `trips/${tripId}/todos`,
+      method: "POST",
+      body,
+    }),
+    invalidatesTags: ["Todos", "Trips"],
   }),
 });

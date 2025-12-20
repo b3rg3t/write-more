@@ -6,6 +6,8 @@ import {
   updateTrip,
   updateOrder,
   deleteTrip,
+  createTodoForTrip,
+  createNoteForTrip,
 } from "../controller/tripController";
 
 const router = express.Router();
@@ -27,5 +29,11 @@ router.patch("/order", updateOrder);
 
 // Delete a trip
 router.delete("/:id", deleteTrip);
+
+// Create a todo and connect it to a specific trip
+router.post("/:tripId/todos", createTodoForTrip);
+
+// Create a note and connect it to a specific trip
+router.post("/:tripId/notes", createNoteForTrip);
 
 export default router;

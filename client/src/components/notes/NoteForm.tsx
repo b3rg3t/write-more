@@ -6,10 +6,15 @@ import { ENoteForm } from "../../models/enum/ENoteForm";
 import { text } from "../../localization/eng";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { INote } from "../../models/interface/INote";
-import { cancelNote, selectIsNew } from "../../store/reducers/notes/notesSlice";
+import {
+  cancelNote,
+  selectCreatingNoteForTrip,
+  selectIsNew,
+} from "../../store/reducers/notes/notesSlice";
 import {
   useAddNoteMutation,
   useUpdateNoteMutation,
+  useCreateNoteForTripMutation,
 } from "../../store/reducers/api/apiSlice";
 import { LinkForm } from "./links/LinkForm";
 
@@ -18,8 +23,10 @@ export const NoteForm: FC<{
   children: React.ReactNode;
 }> = ({ note, children }) => {
   const isNew = useAppSelector(selectIsNew);
+  const creatingNoteForTrip = useAppSelector(selectCreatingNoteForTrip);
   const [createNote] = useAddNoteMutation();
   const [updateNote] = useUpdateNoteMutation();
+  const [createNoteForTrip] = useCreateNoteForTripMutation();
   const dispatch = useAppDispatch();
   const titleRef = useRef<HTMLInputElement>(null);
 
@@ -56,11 +63,22 @@ export const NoteForm: FC<{
   }, []);
 
   const handlePostNote = async (data: TBasicNote) => {
-    if (isNew) {
+    if (creatingNoteForTrip) {
+      try {
+        await createNoteForTrip({
+          tripId: creatingNoteForTrip,
+          title: data[ENoteForm.TITLE] || "",
+          content: data[ENoteForm.CONTENT] || "",
+          links: data[ENoteForm.LINKS],
+        });
+      } catch (error) {
+        console.error("Error creating note for trip:", error);
+      }
+    } else if (isNew) {
       try {
         createNote({
-          title: data[ENoteForm.TITLE],
-          content: data[ENoteForm.CONTENT],
+          title: data[ENoteForm.TITLE] || "",
+          content: data[ENoteForm.CONTENT] || "",
           links: data[ENoteForm.LINKS],
         });
       } catch (error) {
@@ -70,8 +88,8 @@ export const NoteForm: FC<{
       try {
         updateNote({
           _id: note._id,
-          title: data[ENoteForm.TITLE],
-          content: data[ENoteForm.CONTENT],
+          title: data[ENoteForm.TITLE] || "",
+          content: data[ENoteForm.CONTENT] || "",
           links: data[ENoteForm.LINKS],
         });
       } catch (error) {

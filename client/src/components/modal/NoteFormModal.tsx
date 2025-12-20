@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   cancelNote,
   deleteNote,
+  selectCreatingNoteForTrip,
   selectIsEditing,
   selectIsNew,
 } from "../../store/reducers/notes/notesSlice";
@@ -25,6 +26,7 @@ import { text } from "../../localization/eng";
 export const NoteFormModal = () => {
   const isNew = useAppSelector(selectIsNew);
   const isEditing = useAppSelector(selectIsEditing);
+  const creatingNoteForTrip = useAppSelector(selectCreatingNoteForTrip);
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -46,7 +48,7 @@ export const NoteFormModal = () => {
     }
   };
 
-  const open = !!isNew || !!isEditing;
+  const open = !!isNew || !!isEditing || !!creatingNoteForTrip;
 
   const { titleNew, titleEdit, buttons } = text.notes.notesForm;
 
@@ -70,7 +72,7 @@ export const NoteFormModal = () => {
           py: { xs: 1, sm: 2 },
         }}
       >
-        {isNew ? titleNew : titleEdit}
+        {isNew || creatingNoteForTrip ? titleNew : titleEdit}
         <Stack direction="row" spacing={1}>
           {note && (
             <IconButton

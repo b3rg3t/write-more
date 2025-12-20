@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import { ITrip } from "../models/interfaces/ITrip";
 import STrip from "../models/schemas/STrip";
+import STodo from "../models/schemas/STodos";
+import SNote from "../models/schemas/SNote";
 
 // Get all trips
 export const getTrips = async (req: Request, res: Response) => {
@@ -98,6 +100,82 @@ export const deleteTrip = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Trip not found" });
     }
     res.json({ message: "Trip deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Create a todo and connect it to a trip
+export const createTodoForTrip = async (req: Request, res: Response) => {
+  const { name, isCompleted } = req.body;
+  const tripId = req.params.tripId;
+
+  try {
+    // First, create the todo
+    const highestOrderTodo = await STodo.findOne().sort({ order: -1 });
+    const newOrder = highestOrderTodo ? highestOrderTodo.order + 1 : 0;
+
+    const newTodo = new STodo({ name, isCompleted, order: newOrder });
+    const savedTodo = await newTodo.save();
+
+    // Then, connect the todo to the trip
+    const updatedTrip = await STrip.findByIdAndUpdate(
+      tripId,
+      { $push: { todos: savedTodo._id } },
+      { new: true }
+    )
+      .populate("notes")
+      .populate("todos");
+
+    if (!updatedTrip) {
+      // If trip update fails, we should probably delete the created todo
+      await STodo.findByIdAndDelete(savedTodo._id);
+      return res.status(404).json({ message: "Trip not found" });
+    }
+
+    res.status(201).json({
+      todo: savedTodo,
+      trip: updatedTrip,
+      message: "Todo created and connected to trip successfully",
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Create a note and connect it to a trip
+export const createNoteForTrip = async (req: Request, res: Response) => {
+  const { title, content, links } = req.body;
+  const tripId = req.params.tripId;
+
+  try {
+    // First, create the note
+    const highestOrderNote = await SNote.findOne().sort({ order: -1 });
+    const newOrder = highestOrderNote ? highestOrderNote.order + 1 : 0;
+
+    const newNote = new SNote({ title, content, links, order: newOrder });
+    const savedNote = await newNote.save();
+
+    // Then, connect the note to the trip
+    const updatedTrip = await STrip.findByIdAndUpdate(
+      tripId,
+      { $push: { notes: savedNote._id } },
+      { new: true }
+    )
+      .populate("notes")
+      .populate("todos");
+
+    if (!updatedTrip) {
+      // If trip update fails, we should probably delete the created note
+      await SNote.findByIdAndDelete(savedNote._id);
+      return res.status(404).json({ message: "Trip not found" });
+    }
+
+    res.status(201).json({
+      note: savedNote,
+      trip: updatedTrip,
+      message: "Note created and connected to trip successfully",
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }

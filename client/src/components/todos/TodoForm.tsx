@@ -7,8 +7,13 @@ import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   useAddTodoMutation,
   useUpdateTodoMutation,
+  useCreateTodoForTripMutation,
 } from "../../store/reducers/api/apiSlice";
-import { cancelTodo, selectIsNew } from "../../store/reducers/todos/todosSlice";
+import {
+  cancelTodo,
+  selectCreatingTodoForTrip,
+  selectIsNew,
+} from "../../store/reducers/todos/todosSlice";
 import { FormGroup, TextField } from "@mui/material";
 import { text } from "../../localization/eng";
 
@@ -17,8 +22,10 @@ export const TodoForm: FC<{
   children: React.ReactNode;
 }> = ({ todo, children }) => {
   const isNew = useAppSelector(selectIsNew);
+  const creatingTodoForTrip = useAppSelector(selectCreatingTodoForTrip);
   const [createNote] = useAddTodoMutation();
   const [updateNote] = useUpdateTodoMutation();
+  const [createTodoForTrip] = useCreateTodoForTripMutation();
   const dispatch = useAppDispatch();
   const titleRef = useRef<HTMLInputElement>(null);
   const {
@@ -44,11 +51,21 @@ export const TodoForm: FC<{
   }, [todo, setValue]);
 
   const handlePostNote = async (data: TBasicTodo) => {
-    if (isNew) {
+    if (creatingTodoForTrip) {
+      try {
+        await createTodoForTrip({
+          tripId: creatingTodoForTrip,
+          name: data[ETodoForm.NAME] || "",
+          isCompleted: data[ETodoForm.IS_COMPLETED] || false,
+        });
+      } catch (error) {
+        console.error("Error creating todo for trip:", error);
+      }
+    } else if (isNew) {
       try {
         createNote({
-          name: data[ETodoForm.NAME],
-          isCompleted: data[ETodoForm.IS_COMPLETED],
+          name: data[ETodoForm.NAME] || "",
+          isCompleted: data[ETodoForm.IS_COMPLETED] || false,
         });
       } catch (error) {
         console.error("Error creating note:", error);
@@ -57,8 +74,8 @@ export const TodoForm: FC<{
       try {
         updateNote({
           _id: todo._id,
-          name: data[ETodoForm.NAME],
-          isCompleted: data[ETodoForm.IS_COMPLETED],
+          name: data[ETodoForm.NAME] || "",
+          isCompleted: data[ETodoForm.IS_COMPLETED] || false,
         });
       } catch (error) {
         console.error("Error updating note:", error);
