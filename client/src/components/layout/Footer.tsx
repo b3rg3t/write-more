@@ -39,6 +39,7 @@ export const Footer = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              boxShadow: "none",
             }}
           >
             <FlightTakeoffIcon />
@@ -61,6 +62,7 @@ export const Footer = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              boxShadow: "none",
             }}
           >
             <StickyNote2Icon />
@@ -83,6 +85,7 @@ export const Footer = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              boxShadow: "none",
             }}
           >
             <FormatListBulletedIcon />

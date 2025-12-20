@@ -126,7 +126,7 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
         <Accordion
           expanded={expanded === "panel1"}
           onChange={handleAccordionChange("panel1")}
-          sx={{ mt: 1 }}
+          sx={{ mt: 1, boxShadow: "none" }}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -168,7 +168,7 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
         <Accordion
           expanded={expanded === "panel2"}
           onChange={handleAccordionChange("panel2")}
-          sx={{ mt: 0 }}
+          sx={{ mt: 0, boxShadow: "none" }}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
