@@ -22,6 +22,8 @@ import DoneIcon from "@mui/icons-material/Done";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import StickyNote2Icon from "@mui/icons-material/StickyNote2";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 
 export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
   const dispatch = useAppDispatch();
@@ -133,6 +135,11 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             aria-controls="panel1-content"
             id="panel1-header"
           >
+            <StickyNote2Icon
+              color="secondary"
+              fontSize="small"
+              sx={{ mr: 1 }}
+            />
             <Typography variant="body2">
               {text.notes.header} ({trip.notes.length})
             </Typography>
@@ -176,6 +183,11 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             id="panel2-header"
             sx={{}}
           >
+            <FormatListBulletedIcon
+              color="info"
+              fontSize="small"
+              sx={{ mr: 1 }}
+            />
             <Typography variant="body2">
               {text.todos.header} ({trip.todos.length})
             </Typography>
