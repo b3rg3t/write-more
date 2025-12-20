@@ -171,8 +171,6 @@ export const Footer = () => {
               </Typography>
             </Button>
             <Button
-              component={Link}
-              to={ERoutes.TODOS}
               variant={undefined}
               sx={{
                 display: "flex",
