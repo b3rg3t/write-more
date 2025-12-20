@@ -1,6 +1,7 @@
 import { ButtonProps, Box, Fab } from "@mui/material";
 import { FC } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import { isMobileSafari, isSafari } from "react-device-detect";
 
 interface ActionProps extends Omit<ButtonProps, "onClick"> {
   onClick: () => void;
@@ -14,10 +15,10 @@ export const Action: FC<ActionProps> = ({ onClick }) => {
       position="fixed"
       left={0}
       right={0}
-      bottom={50}
+      bottom={isMobileSafari || isSafari ? 52 : 50}
       display="flex"
       justifyContent="center"
-      zIndex={1300}
+      zIndex={1100}
       sx={{ pointerEvents: "none" }}
     >
       <Fab

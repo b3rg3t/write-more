@@ -103,6 +103,14 @@ export const text = {
       notFound: "Trip not found",
     },
   },
+  footer: {
+    header: "Write More travel app",
+    github: "GitHub b3rg3t",
+    linkedin: "LinkedIn Profile",
+    linkedinUrl: "https://www.linkedin.com/in/david-berg-385530175/",
+    githubUrl: "https://github.com/b3rg3t",
+    madeBy: "Made with ♥ by David Berg",
+  },
   errors: {
     root: "An error occurred",
   },

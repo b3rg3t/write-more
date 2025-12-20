@@ -1,9 +1,14 @@
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography, IconButton } from "@mui/material";
 import { fontSize16 } from "../utils/FontSize";
 import { text } from "../../localization/eng";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+import ShareIcon from "@mui/icons-material/Share";
 
 export const Header = () => {
+  const handleCopyUrl = () => {
+    navigator.clipboard.writeText(window.location.href);
+  };
+
   return (
     <Box
       sx={{
@@ -18,16 +23,29 @@ export const Header = () => {
       }}
     >
       <Container maxWidth="md" sx={{ px: 1 }}>
-        <Stack direction="row" alignItems="center">
-          <BorderColorIcon sx={{ mr: 1 }} fontSize="small" color="primary" />
-          <Typography
-            variant="h1"
-            fontSize={fontSize16}
-            fontWeight="bold"
-            sx={{ py: 1 }}
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Stack direction="row" alignItems="center">
+            <BorderColorIcon sx={{ mr: 1 }} fontSize="small" color="primary" />
+            <Typography
+              variant="h1"
+              fontSize={fontSize16}
+              fontWeight="bold"
+              sx={{ py: 1 }}
+            >
+              {text.appName}
+            </Typography>
+          </Stack>
+          <IconButton
+            color="primary"
+            onClick={handleCopyUrl}
+            aria-label="copy current URL"
           >
-            {text.appName}
-          </Typography>
+            <ShareIcon />
+          </IconButton>
         </Stack>
       </Container>
     </Box>
