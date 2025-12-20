@@ -19,9 +19,10 @@ import {
   selectIsEditing,
   selectIsNew,
 } from "../../store/reducers/notes/notesSlice";
-import { useGetAllNotesQuery } from "../../store/reducers/api/apiSlice";
+import { useGetNoteQuery } from "../../store/reducers/api/apiSlice";
 import { NoteForm } from "../notes/NoteForm";
 import { text } from "../../localization/eng";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export const NoteFormModal = () => {
   const isNew = useAppSelector(selectIsNew);
@@ -30,21 +31,15 @@ export const NoteFormModal = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { note } = useGetAllNotesQuery(undefined, {
-    selectFromResult: ({ data }) => ({
-      note: isEditing
-        ? data?.find((note) => note._id === isEditing)
-        : undefined,
-    }),
-  });
+  const note = useGetNoteQuery(isEditing ?? creatingNoteForTrip ?? skipToken);
 
   const onClose = () => {
     dispatch(cancelNote());
   };
 
   const handleDeleteNote = async () => {
-    if (note) {
-      dispatch(deleteNote(note._id));
+    if (note.data) {
+      dispatch(deleteNote(note.data._id));
     }
   };
 
@@ -93,7 +88,7 @@ export const NoteFormModal = () => {
         </Stack>
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
-        <NoteForm note={note}>
+        <NoteForm note={note.data}>
           <DialogActions sx={{ p: 0 }}>
             <Button onClick={onClose} color="inherit">
               {buttons.cancel}

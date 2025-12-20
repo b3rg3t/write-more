@@ -10,37 +10,35 @@ import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
 import { Container, ListItem, TypographyVariant } from "@mui/material";
 import { INote } from "../../models/interface/INote";
 import { useEffect, useState, FC } from "react";
-import { useParams } from "react-router-dom";
 import { DeleteNoteModal } from "../modal/DeleteNoteModal";
 import { NoteFormModal } from "../modal/NoteFormModal";
 import {
-  useGetTripQuery,
   useReorderNotesMutation,
   useUpdateTripMutation,
 } from "../../store/reducers/api/apiSlice";
+import { ITrip } from "../../models/interface/ITrip";
 
 interface NoteListProps {
   notes: INote[];
   headingLevel?: TypographyVariant;
+  trip?: ITrip;
 }
 
-export const NoteList: FC<NoteListProps> = ({ notes, headingLevel }) => {
-  const { noteId } = useParams<{ noteId: string }>();
+export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip }) => {
   const [reorderNotes, {}] = useReorderNotesMutation();
   const [updateTrip, {}] = useUpdateTripMutation();
-  const { data: trip } = useGetTripQuery(noteId || "");
   const [notesState, setNotes] = useState<INote[]>([]);
 
   useEffect(() => {
     setNotes(notes);
   }, [notes]);
 
-  const handleReorderNotes = async (notes: INote[]) => {
-    if (noteId) {
+  const handleReorderNotes = async (updatedNotes: INote[]) => {
+    if (!!trip) {
       try {
         const response = await updateTrip({
           ...trip,
-          notes: notes.map((n) => n._id) || [],
+          notes: updatedNotes.map((n) => n._id) || [],
           todos:
             trip?.todos?.map((t) => (typeof t === "string" ? t : t._id)) || [],
         });

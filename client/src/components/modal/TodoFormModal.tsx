@@ -17,13 +17,14 @@ import {
   deleteTodo,
   selectCreatingTodoForTrip,
 } from "../../store/reducers/todos/todosSlice";
-import { useGetAllTodosQuery } from "../../store/reducers/api/apiSlice";
+import { useGetTodoQuery } from "../../store/reducers/api/apiSlice";
 import { text } from "../../localization/eng";
 import {
   selectIsEditing,
   selectIsNew,
 } from "../../store/reducers/todos/todosSlice";
 import { TodoForm } from "../todos/TodoForm";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export const TodoFormModal = () => {
   const isNew = useAppSelector(selectIsNew);
@@ -32,21 +33,15 @@ export const TodoFormModal = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { todo } = useGetAllTodosQuery(undefined, {
-    selectFromResult: ({ data }) => ({
-      todo: isEditing
-        ? data?.find((todo) => todo._id === isEditing)
-        : undefined,
-    }),
-  });
+  const todo = useGetTodoQuery(isEditing ?? creatingTodoForTrip ?? skipToken);
 
   const onClose = () => {
     dispatch(cancelTodo());
   };
 
   const handleDeleteTodo = async () => {
-    if (todo) {
-      dispatch(deleteTodo(todo._id));
+    if (todo.data) {
+      dispatch(deleteTodo(todo.data._id));
     }
   };
 
@@ -95,7 +90,7 @@ export const TodoFormModal = () => {
         </Stack>
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
-        <TodoForm todo={todo}>
+        <TodoForm todo={todo.data}>
           <DialogActions sx={{ p: 0 }}>
             <Button onClick={onClose} color="inherit">
               {buttons.cancel}

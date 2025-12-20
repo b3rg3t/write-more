@@ -13,35 +13,30 @@ import CloseIcon from "@mui/icons-material/Close";
 import { text } from "../../localization/eng";
 import {
   useDeleteNoteMutation,
-  useGetAllNotesQuery,
+  useGetNoteQuery,
 } from "../../store/reducers/api/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   deleteNote,
   selectIsDeleting,
 } from "../../store/reducers/notes/notesSlice";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export const DeleteNoteModal = () => {
   const isDeleting = useAppSelector(selectIsDeleting);
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { note } = useGetAllNotesQuery(undefined, {
-    selectFromResult: ({ data }) => ({
-      note: isDeleting
-        ? data?.find((note) => note._id === isDeleting)
-        : undefined,
-    }),
-  });
+  const note = useGetNoteQuery(isDeleting ?? skipToken);
   const [deleteNoteApi] = useDeleteNoteMutation();
 
   const onClose = () => {
     dispatch(deleteNote(undefined));
   };
   const handleConfirm = async () => {
-    if (note) {
+    if (note.data) {
       try {
-        const payload = await deleteNoteApi({ _id: note._id }).unwrap();
+        const payload = await deleteNoteApi({ _id: note.data._id }).unwrap();
         console.log("fulfilled", payload);
         dispatch(deleteNote(undefined));
       } catch (error) {
@@ -82,7 +77,7 @@ export const DeleteNoteModal = () => {
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
         <DialogContentText id="delete-note-dialog-description" sx={{ mb: 2 }}>
-          {confirmation.replace("{title}", note?.title || titleUnknown)}
+          {confirmation.replace("{title}", note?.data?.title || titleUnknown)}
         </DialogContentText>
         <DialogActions>
           <Button onClick={onClose} color="inherit">

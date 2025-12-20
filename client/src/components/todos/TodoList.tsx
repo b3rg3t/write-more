@@ -9,35 +9,33 @@ import {
 } from "@hello-pangea/dnd";
 import { TodoItem } from "./TodoItem";
 import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
-import { useParams } from "react-router-dom";
 import { TodoFormModal } from "../modal/TodoFormModal";
 import { DeleteTodoModal } from "../modal/DeleteTodoModal";
 import {
-  useGetTripQuery,
   useReorderTodosMutation,
   useUpdateTripMutation,
 } from "../../store/reducers/api/apiSlice";
+import { ITrip } from "../../models/interface/ITrip";
 
 interface TodoListProps {
   todos: ITodo[];
   headingLevel?: TypographyVariant;
+  trip?: ITrip;
 }
 
-export const TodoList: FC<TodoListProps> = ({ todos, headingLevel }) => {
-  const { todoId } = useParams<{ todoId: string }>();
+export const TodoList: FC<TodoListProps> = ({ todos, headingLevel, trip }) => {
   const [reorderTodos, {}] = useReorderTodosMutation();
   const [updateTrip, {}] = useUpdateTripMutation();
-  const { data: trip } = useGetTripQuery(todoId || "");
   const [todosState, setTodos] = useState<ITodo[]>([]);
 
-  const handleReorderNotes = async (todos: ITodo[]) => {
-    if (todoId) {
+  const handleReorderNotes = async (updatedTodos: ITodo[]) => {
+    if (!!trip) {
       try {
         const response = await updateTrip({
           ...trip,
           notes:
             trip?.notes?.map((n) => (typeof n === "string" ? n : n._id)) || [],
-          todos: todos.map((t) => t._id),
+          todos: updatedTodos.map((t) => t._id),
         });
         console.log("Reordered todos response:", response);
       } catch (error) {
@@ -45,7 +43,7 @@ export const TodoList: FC<TodoListProps> = ({ todos, headingLevel }) => {
       }
     } else {
       try {
-        const response = await reorderTodos(todos);
+        const response = await reorderTodos(updatedTodos);
         console.log("Reordered todos response:", response);
       } catch (error) {
         console.error("Error reordering todos:", error);

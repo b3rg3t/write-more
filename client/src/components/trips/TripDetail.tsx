@@ -140,7 +140,7 @@ export const TripDetail = () => {
             <PlaylistAddIcon />
           </IconButton>
         </Stack>
-        <TodoList todos={trip?.todos ?? []} headingLevel="h3" />
+        <TodoList trip={trip} todos={trip?.todos ?? []} headingLevel="h3" />
         <Divider sx={{ my: 2 }} />
         <Stack
           direction="row"
@@ -168,7 +168,7 @@ export const TripDetail = () => {
             <NoteAddIcon />
           </IconButton>
         </Stack>
-        <NoteList notes={trip?.notes ?? []} headingLevel="h3" />
+        <NoteList trip={trip} notes={trip?.notes ?? []} headingLevel="h3" />
       </Container>
     </RtkQueryWrapper>
   );

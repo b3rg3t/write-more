@@ -18,9 +18,10 @@ import {
   selectIsEditing,
   selectIsNew,
 } from "../../store/reducers/trips/tripsSlice";
-import { useGetAllTripsQuery } from "../../store/reducers/api/apiSlice";
+import { useGetTripQuery } from "../../store/reducers/api/apiSlice";
 import { TripForm } from "../trips/TripForm";
 import { text } from "../../localization/eng";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export const TripFormModal = () => {
   const isNew = useAppSelector(selectIsNew);
@@ -28,21 +29,15 @@ export const TripFormModal = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { trip } = useGetAllTripsQuery(undefined, {
-    selectFromResult: ({ data }) => ({
-      trip: isEditing
-        ? data?.find((trip) => trip._id === isEditing)
-        : undefined,
-    }),
-  });
+  const trip = useGetTripQuery(isEditing ?? skipToken);
 
   const onClose = () => {
     dispatch(cancelTrip());
   };
 
   const handleDeleteTrip = async () => {
-    if (trip) {
-      dispatch(deleteTrip(trip._id));
+    if (trip.data) {
+      dispatch(deleteTrip(trip.data._id));
     }
   };
 
@@ -91,7 +86,7 @@ export const TripFormModal = () => {
         </Stack>
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
-        <TripForm trip={trip}>
+        <TripForm trip={trip.data}>
           <DialogActions sx={{ p: 0 }}>
             <Button onClick={onClose} color="inherit">
               {buttons.cancel}

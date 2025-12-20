@@ -13,35 +13,30 @@ import CloseIcon from "@mui/icons-material/Close";
 import { text } from "../../localization/eng";
 import {
   useDeleteTripMutation,
-  useGetAllTripsQuery,
+  useGetTripQuery,
 } from "../../store/reducers/api/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   deleteTrip,
   selectIsDeleting,
 } from "../../store/reducers/trips/tripsSlice";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export const DeleteTripModal = () => {
   const isDeleting = useAppSelector(selectIsDeleting);
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { trip } = useGetAllTripsQuery(undefined, {
-    selectFromResult: ({ data }) => ({
-      trip: isDeleting
-        ? data?.find((trip) => trip._id === isDeleting)
-        : undefined,
-    }),
-  });
+  const trip = useGetTripQuery(isDeleting ?? skipToken);
   const [deleteTripApi] = useDeleteTripMutation();
 
   const onClose = () => {
     dispatch(deleteTrip(undefined));
   };
   const handleConfirm = async () => {
-    if (trip) {
+    if (trip.data) {
       try {
-        const payload = await deleteTripApi({ _id: trip._id }).unwrap();
+        const payload = await deleteTripApi({ _id: trip.data._id }).unwrap();
         console.log("fulfilled", payload);
         dispatch(deleteTrip(undefined));
       } catch (error) {
@@ -83,7 +78,7 @@ export const DeleteTripModal = () => {
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
         <DialogContentText id="delete-trip-dialog-description" sx={{ mb: 2 }}>
-          {confirmation.replace("{title}", trip?.title || titleUnknown)}
+          {confirmation.replace("{title}", trip?.data?.title || titleUnknown)}
         </DialogContentText>
         <DialogActions>
           <Button onClick={onClose} color="inherit">

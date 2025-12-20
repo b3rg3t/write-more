@@ -18,30 +18,25 @@ import {
 } from "../../store/reducers/todos/todosSlice";
 import {
   useDeleteTodoMutation,
-  useGetAllTodosQuery,
+  useGetTodoQuery,
 } from "../../store/reducers/api/apiSlice";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export const DeleteTodoModal = () => {
   const isDeleting = useAppSelector(selectIsDeleting);
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { todo } = useGetAllTodosQuery(undefined, {
-    selectFromResult: ({ data }) => ({
-      todo: isDeleting
-        ? data?.find((note) => note._id === isDeleting)
-        : undefined,
-    }),
-  });
+  const todo = useGetTodoQuery(isDeleting ?? skipToken);
   const [deleteTodoApi] = useDeleteTodoMutation();
 
   const onClose = () => {
     dispatch(deleteTodo(undefined));
   };
   const handleConfirm = async () => {
-    if (todo) {
+    if (todo.data) {
       try {
-        const payload = await deleteTodoApi({ _id: todo._id }).unwrap();
+        const payload = await deleteTodoApi({ _id: todo.data._id }).unwrap();
         console.log("fulfilled", payload);
         dispatch(deleteTodo(undefined));
       } catch (error) {
@@ -82,7 +77,7 @@ export const DeleteTodoModal = () => {
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
         <DialogContentText id="delete-note-dialog-description" sx={{ mb: 2 }}>
-          {confirmation.replace("{title}", todo?.name || titleUnknown)}
+          {confirmation.replace("{title}", todo?.data?.name || titleUnknown)}
         </DialogContentText>
         <DialogActions>
           <Button onClick={onClose} color="inherit">
