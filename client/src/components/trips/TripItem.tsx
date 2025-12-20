@@ -115,6 +115,11 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             </Container>
           </CardActions>
         </Stack>
+        <TripDates
+          startDate={trip.startDate}
+          endDate={trip.endDate}
+          styles={{ mt: 0, mb: 1 }}
+        />
         <Container disableGutters>
           {trip.description && (
             <Typography
@@ -230,7 +235,6 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             </Stack>
           </AccordionDetails>
         </Accordion>
-        <TripDates startDate={trip.startDate} endDate={trip.endDate} />
       </CardContent>
     </Card>
   );
