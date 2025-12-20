@@ -4,16 +4,27 @@ import { Chip, Stack } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
+import { StackProps } from "@mui/material";
+import { INote } from "../../models/interface/INote";
+
 export const TripDates: FC<{
-  startDate?: ITrip["startDate"];
-  endDate?: ITrip["endDate"];
-}> = ({ startDate, endDate }) => {
+  startDate?: ITrip["startDate"] | INote["startDate"];
+  endDate?: ITrip["endDate"] | INote["endDate"];
+  styles?: StackProps;
+}> = ({ startDate, endDate, styles }) => {
   if (!startDate && !endDate) {
     return null;
   }
   return (
     (startDate || endDate) && (
-      <Stack direction="row" spacing={1} alignItems="center" mt={1} mb={0}>
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+        mt={1}
+        mb={0}
+        {...styles}
+      >
         {startDate && (
           <Chip
             icon={<CalendarMonthIcon fontSize="small" />}

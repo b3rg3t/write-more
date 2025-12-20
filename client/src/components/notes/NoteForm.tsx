@@ -42,6 +42,12 @@ export const NoteForm: FC<{
       [ENoteForm.TITLE]: note?.title || "",
       [ENoteForm.CONTENT]: note?.content || "",
       [ENoteForm.LINKS]: [],
+      [ENoteForm.START_DATE]: note?.startDate
+        ? new Date(note.startDate).toISOString().split("T")[0]
+        : "",
+      [ENoteForm.END_DATE]: note?.endDate
+        ? new Date(note.endDate).toISOString().split("T")[0]
+        : "",
     },
   });
 
@@ -53,6 +59,16 @@ export const NoteForm: FC<{
     setValue(ENoteForm.TITLE, note?.title || "");
     setValue(ENoteForm.CONTENT, note?.content || "");
     setValue(ENoteForm.LINKS, note?.links || []);
+    setValue(
+      ENoteForm.START_DATE,
+      note?.startDate
+        ? new Date(note.startDate).toISOString().split("T")[0]
+        : ""
+    );
+    setValue(
+      ENoteForm.END_DATE,
+      note?.endDate ? new Date(note.endDate).toISOString().split("T")[0] : ""
+    );
   }, [note, setValue]);
 
   useEffect(() => {
@@ -63,24 +79,25 @@ export const NoteForm: FC<{
   }, []);
 
   const handlePostNote = async (data: TBasicNote) => {
+    const payload = {
+      title: data[ENoteForm.TITLE] || "",
+      content: data[ENoteForm.CONTENT] || "",
+      links: data[ENoteForm.LINKS],
+      startDate: data[ENoteForm.START_DATE] || null,
+      endDate: data[ENoteForm.END_DATE] || null,
+    };
     if (creatingNoteForTrip) {
       try {
         await createNoteForTrip({
           tripId: creatingNoteForTrip,
-          title: data[ENoteForm.TITLE] || "",
-          content: data[ENoteForm.CONTENT] || "",
-          links: data[ENoteForm.LINKS],
+          ...payload,
         });
       } catch (error) {
         console.error("Error creating note for trip:", error);
       }
     } else if (isNew) {
       try {
-        createNote({
-          title: data[ENoteForm.TITLE] || "",
-          content: data[ENoteForm.CONTENT] || "",
-          links: data[ENoteForm.LINKS],
-        });
+        createNote(payload);
       } catch (error) {
         console.error("Error creating note:", error);
       }
@@ -88,9 +105,7 @@ export const NoteForm: FC<{
       try {
         updateNote({
           _id: note._id,
-          title: data[ENoteForm.TITLE] || "",
-          content: data[ENoteForm.CONTENT] || "",
-          links: data[ENoteForm.LINKS],
+          ...payload,
         });
       } catch (error) {
         console.error("Error updating note:", error);
@@ -118,16 +133,11 @@ export const NoteForm: FC<{
           {...register(ENoteForm.TITLE, { required: true })}
           defaultValue={note?.title}
           margin="normal"
-          fullWidth
-          sx={{ mt: 0 }}
-          inputRef={titleRef}
         />
         <TextField
           id={ENoteForm.CONTENT}
           label="Content"
           variant="outlined"
-          multiline
-          minRows={4}
           error={!!errors[ENoteForm.CONTENT]}
           helperText={
             errors[ENoteForm.CONTENT]
@@ -137,8 +147,32 @@ export const NoteForm: FC<{
           {...register(ENoteForm.CONTENT, { required: true })}
           defaultValue={note?.content}
           margin="normal"
-          fullWidth
-          sx={{ mb: 2 }}
+          multiline
+          minRows={3}
+        />
+        <TextField
+          id={ENoteForm.START_DATE}
+          label="Start Date"
+          type="date"
+          {...register(ENoteForm.START_DATE)}
+          defaultValue={
+            note?.startDate
+              ? new Date(note.startDate).toISOString().split("T")[0]
+              : ""
+          }
+          margin="normal"
+        />
+        <TextField
+          id={ENoteForm.END_DATE}
+          label="End Date"
+          type="date"
+          {...register(ENoteForm.END_DATE)}
+          defaultValue={
+            note?.endDate
+              ? new Date(note.endDate).toISOString().split("T")[0]
+              : ""
+          }
+          margin="normal"
         />
         <LinkForm control={control} register={register} errors={errors} />
         {children}

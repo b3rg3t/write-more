@@ -27,6 +27,14 @@ const SNote: Schema = new Schema(
         },
       },
     ],
+    startDate: {
+      type: Date,
+      required: false,
+    },
+    endDate: {
+      type: Date,
+      required: false,
+    },
   },
   {
     timestamps: true,

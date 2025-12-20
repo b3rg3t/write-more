@@ -22,6 +22,7 @@ import { setEditNote } from "../../store/reducers/notes/notesSlice";
 import { TLink } from "../../models/type/TLink";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
+import { TripDates } from "../utils/TripDates";
 
 export const NoteItem: FC<{
   note: INote;
@@ -67,7 +68,7 @@ export const NoteItem: FC<{
           >
             {note.title ? note.title : text.notes.notesForm.titleUnknown}
           </Typography>
-          <Stack direction="column" alignItems="flex-end" spacing={0.5}>
+          <Stack direction="row" alignItems="flex-end" spacing={0.5}>
             <IconButton
               color="primary"
               edge="end"
@@ -82,6 +83,11 @@ export const NoteItem: FC<{
             </IconButton>
           </Stack>
         </Stack>
+        <TripDates
+          startDate={note.startDate}
+          endDate={note.endDate}
+          styles={{ mt: 0, mb: 1 }}
+        />
         <Typography
           variant="body2"
           color="text.secondary"

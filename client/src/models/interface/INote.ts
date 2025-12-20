@@ -6,4 +6,6 @@ export interface INote extends IBase {
   title: string;
   order: number;
   links: TLink[];
+  startDate?: Date | string | null;
+  endDate?: Date | string | null;
 }

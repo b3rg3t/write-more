@@ -6,6 +6,8 @@ export interface INote extends Document {
   content: string;
   order: number;
   links: ILink[];
+  startDate?: Date;
+  endDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
