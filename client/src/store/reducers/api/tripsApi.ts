@@ -17,7 +17,7 @@ export const tripsEndpoints = (
   addTrip: builder.mutation<
     ITrip,
     Partial<
-      Pick<ITrip, "title" | "description"> & {
+      Pick<ITrip, "title" | "description" | "startDate" | "endDate"> & {
         notes: ITrip["_id"][];
         todos: ITrip["_id"][];
       }
@@ -33,7 +33,7 @@ export const tripsEndpoints = (
   updateTrip: builder.mutation<
     ITrip,
     Partial<
-      Pick<ITrip, "_id" | "title" | "description"> & {
+      Pick<ITrip, "_id" | "title" | "description" | "startDate" | "endDate"> & {
         notes: ITrip["_id"][];
         todos: ITrip["_id"][];
       }

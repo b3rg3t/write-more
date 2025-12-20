@@ -31,7 +31,7 @@ export const getTrip = async (req: Request, res: Response) => {
 
 // Create a new trip
 export const createTrip = async (req: Request, res: Response) => {
-  const { title, description, notes, todos } = req.body;
+  const { title, description, startDate, endDate, notes, todos } = req.body;
 
   try {
     // Find the highest order
@@ -41,6 +41,8 @@ export const createTrip = async (req: Request, res: Response) => {
     const newTrip = new STrip({
       title,
       description,
+      startDate,
+      endDate,
       notes,
       todos,
       order: newOrder,
@@ -54,12 +56,12 @@ export const createTrip = async (req: Request, res: Response) => {
 
 // Update a trip
 export const updateTrip = async (req: Request, res: Response) => {
-  const { title, description, notes, todos } = req.body;
+  const { title, description, startDate, endDate, notes, todos } = req.body;
 
   try {
     const updatedTrip = await STrip.findByIdAndUpdate(
       req.params.id,
-      { title, description, notes, todos },
+      { title, description, startDate, endDate, notes, todos },
       { new: true }
     )
       .populate("notes")

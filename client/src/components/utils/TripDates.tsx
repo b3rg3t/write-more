@@ -1,0 +1,35 @@
+import { FC } from "react";
+import { ITrip } from "../../models/interface/ITrip";
+import { Chip, Stack } from "@mui/material";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
+export const TripDates: FC<{
+  startDate?: ITrip["startDate"];
+  endDate?: ITrip["endDate"];
+}> = ({ startDate, endDate }) => {
+  if (!startDate && !endDate) {
+    return null;
+  }
+  return (
+    (startDate || endDate) && (
+      <Stack direction="row" spacing={1} alignItems="center" mt={1} mb={0}>
+        {startDate && (
+          <Chip
+            icon={<CalendarMonthIcon fontSize="small" />}
+            label={`${new Date(startDate).toLocaleDateString()}`}
+          />
+        )}
+        {startDate && endDate && (
+          <ArrowForwardIcon fontSize="small" color="disabled" />
+        )}
+        {endDate && (
+          <Chip
+            icon={<CalendarMonthIcon fontSize="small" />}
+            label={`${new Date(endDate).toLocaleDateString()}`}
+          />
+        )}
+      </Stack>
+    )
+  );
+};

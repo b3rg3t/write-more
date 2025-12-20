@@ -24,6 +24,7 @@ import { ERoutes } from "../../models/enum/ERoutes";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import StickyNote2Icon from "@mui/icons-material/StickyNote2";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import { TripDates } from "../utils/TripDates";
 
 export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
   const dispatch = useAppDispatch();
@@ -229,6 +230,7 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             </Stack>
           </AccordionDetails>
         </Accordion>
+        <TripDates startDate={trip.startDate} endDate={trip.endDate} />
       </CardContent>
     </Card>
   );

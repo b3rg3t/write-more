@@ -3,6 +3,8 @@ import mongoose, { Document } from "mongoose";
 export interface ITrip extends Document {
   title: string;
   description?: string;
+  startDate?: Date;
+  endDate?: Date;
   notes: mongoose.Types.ObjectId[];
   todos: mongoose.Types.ObjectId[];
   order: number;

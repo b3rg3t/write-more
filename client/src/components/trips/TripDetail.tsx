@@ -22,6 +22,7 @@ import { createNoteForTrip } from "../../store/reducers/notes/notesSlice";
 import { setEditTrip } from "../../store/reducers/trips/tripsSlice";
 import { TripFormModal } from "../modal/TripFormModal";
 import { DeleteTripModal } from "../modal/DeleteTripModal";
+import { TripDates } from "../utils/TripDates";
 
 export const TripDetail = () => {
   const { tripId } = useParams<{ tripId: string }>();
@@ -108,6 +109,7 @@ export const TripDetail = () => {
               <EditSquareIcon />
             </IconButton>
           </Stack>
+          <TripDates startDate={trip?.startDate} endDate={trip?.endDate} />
           <Typography sx={{ mt: 1, whiteSpace: "pre-wrap" }}>
             {trip?.description}
           </Typography>

@@ -10,6 +10,12 @@ const STrip: Schema = new Schema(
     description: {
       type: String,
     },
+    startDate: {
+      type: Date,
+    },
+    endDate: {
+      type: Date,
+    },
     notes: [
       {
         type: Schema.Types.ObjectId,

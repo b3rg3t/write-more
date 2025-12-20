@@ -39,35 +39,29 @@ export const TripForm: FC<{
     formState: { errors },
     register,
     reset,
-    setValue,
     control,
-  } = useForm<TBasicTrip>({
-    defaultValues: {
-      [ETripForm.TITLE]: trip?.title || "",
-      [ETripForm.DESCRIPTION]: trip?.description || "",
-      [ETripForm.NOTES]:
-        trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || [],
-      [ETripForm.TODOS]:
-        trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || [],
-    },
-  });
+  } = useForm<TBasicTrip>();
 
   const {
     trips: { tripsForm },
   } = text;
 
   useEffect(() => {
-    setValue(ETripForm.TITLE, trip?.title || "");
-    setValue(ETripForm.DESCRIPTION, trip?.description || "");
-    setValue(
-      ETripForm.NOTES,
-      trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || []
-    );
-    setValue(
-      ETripForm.TODOS,
-      trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || []
-    );
-  }, [trip, setValue]);
+    reset({
+      [ETripForm.TITLE]: trip?.title || "",
+      [ETripForm.DESCRIPTION]: trip?.description || "",
+      [ETripForm.START_DATE]: trip?.startDate
+        ? new Date(trip.startDate).toISOString().split("T")[0]
+        : "",
+      [ETripForm.END_DATE]: trip?.endDate
+        ? new Date(trip.endDate).toISOString().split("T")[0]
+        : "",
+      [ETripForm.NOTES]:
+        trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || [],
+      [ETripForm.TODOS]:
+        trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || [],
+    });
+  }, [trip, reset]);
 
   useEffect(() => {
     // Focus the title field when the form opens
@@ -82,6 +76,12 @@ export const TripForm: FC<{
         createTrip({
           title: data[ETripForm.TITLE],
           description: data[ETripForm.DESCRIPTION],
+          startDate: data[ETripForm.START_DATE]
+            ? new Date(data[ETripForm.START_DATE])
+            : undefined,
+          endDate: data[ETripForm.END_DATE]
+            ? new Date(data[ETripForm.END_DATE])
+            : undefined,
           notes:
             data[ETripForm.NOTES]?.map((n) =>
               typeof n === "string" ? n : n._id
@@ -100,6 +100,12 @@ export const TripForm: FC<{
           _id: trip._id,
           title: data[ETripForm.TITLE],
           description: data[ETripForm.DESCRIPTION],
+          startDate: data[ETripForm.START_DATE]
+            ? new Date(data[ETripForm.START_DATE])
+            : undefined,
+          endDate: data[ETripForm.END_DATE]
+            ? new Date(data[ETripForm.END_DATE])
+            : undefined,
           notes:
             data[ETripForm.NOTES]?.map((n) =>
               typeof n === "string" ? n : n._id
@@ -147,10 +153,29 @@ export const TripForm: FC<{
           minRows={2}
           error={!!errors[ETripForm.DESCRIPTION]}
           {...register(ETripForm.DESCRIPTION)}
-          defaultValue={trip?.description}
           margin="normal"
           fullWidth
           sx={{ mb: 2 }}
+        />
+        <TextField
+          id={ETripForm.START_DATE}
+          label="Start Date"
+          type="date"
+          variant="outlined"
+          error={!!errors[ETripForm.START_DATE]}
+          {...register(ETripForm.START_DATE)}
+          margin="normal"
+          fullWidth
+        />
+        <TextField
+          id={ETripForm.END_DATE}
+          label="End Date"
+          type="date"
+          variant="outlined"
+          error={!!errors[ETripForm.END_DATE]}
+          {...register(ETripForm.END_DATE)}
+          margin="normal"
+          fullWidth
         />
         <FormControl fullWidth margin="normal">
           <InputLabel>{text.notes.header}</InputLabel>
