@@ -18,7 +18,7 @@ import {
   selectIsEditing,
   selectIsNew,
 } from "../../store/reducers/notes/notesSlice";
-import { useGetAllNotesQuery } from "../../store/reducers/api/noteApiSlice";
+import { useGetAllNotesQuery } from "../../store/reducers/api/apiSlice";
 import { NoteForm } from "../notes/NoteForm";
 import { text } from "../../localization/eng";
 

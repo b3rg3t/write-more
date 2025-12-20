@@ -18,7 +18,7 @@ import {
   selectIsEditing,
   selectIsNew,
 } from "../../store/reducers/trips/tripsSlice";
-import { useGetAllTripsQuery } from "../../store/reducers/api/tripApiSlice";
+import { useGetAllTripsQuery } from "../../store/reducers/api/apiSlice";
 import { TripForm } from "../trips/TripForm";
 import { text } from "../../localization/eng";
 

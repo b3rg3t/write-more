@@ -1,19 +1,19 @@
 import { useParams } from "react-router-dom";
-import { useGetNoteQuery } from "../../store/reducers/api/noteApiSlice";
+import { useGetNoteQuery } from "../../store/reducers/api/apiSlice";
 import { NoteItem } from "./NoteItem";
 import { Container } from "@mui/material";
 import { text } from "../../localization/eng";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 
 export const NoteDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const { noteId } = useParams<{ noteId: string }>();
   const {
     data: note,
     isLoading,
     error,
     isUninitialized,
     isFetching,
-  } = useGetNoteQuery(id!);
+  } = useGetNoteQuery(noteId!);
 
   return (
     <RtkQueryWrapper

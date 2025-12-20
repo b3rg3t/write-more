@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   useAddTodoMutation,
   useUpdateTodoMutation,
-} from "../../store/reducers/api/todoApiSlice";
+} from "../../store/reducers/api/apiSlice";
 import { cancelTodo, selectIsNew } from "../../store/reducers/todos/todosSlice";
 import { FormGroup, TextField } from "@mui/material";
 import { text } from "../../localization/eng";

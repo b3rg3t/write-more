@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 import { fontSize16 } from "../utils/FontSize";
 import { text } from "../../localization/eng";
 import { useAppDispatch } from "../../store/redux/hooks";
-import { useGetAllNotesQuery } from "../../store/reducers/api/noteApiSlice";
+import { useGetAllNotesQuery } from "../../store/reducers/api/apiSlice";
 import { useMemo } from "react";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 import { createNewNote } from "../../store/reducers/notes/notesSlice";

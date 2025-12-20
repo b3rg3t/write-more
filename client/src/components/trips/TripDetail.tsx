@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useGetTripQuery } from "../../store/reducers/api/tripApiSlice";
+import { useGetTripQuery } from "../../store/reducers/api/apiSlice";
 import { Card, Container, Divider, Stack, Typography } from "@mui/material";
 import { text } from "../../localization/eng";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
@@ -8,13 +8,13 @@ import { NoteList } from "../notes/NoteList";
 import { fontSize16 } from "../utils/FontSize";
 
 export const TripDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const { tripId } = useParams<{ tripId: string }>();
   const {
     data: trip,
     isLoading,
     error,
     isUninitialized,
-  } = useGetTripQuery(id!);
+  } = useGetTripQuery(tripId!);
 
   return (
     <RtkQueryWrapper

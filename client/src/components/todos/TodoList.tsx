@@ -1,5 +1,4 @@
 import { Container, List, ListItem, TypographyVariant } from "@mui/material";
-import { useReorderTodosMutation } from "../../store/reducers/api/todoApiSlice";
 import { FC, useEffect, useState } from "react";
 import { ITodo } from "../../models/interface/ITodo";
 import {
@@ -11,12 +10,13 @@ import {
 import { TodoItem } from "./TodoItem";
 import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
 import { useParams } from "react-router-dom";
-import {
-  useGetTripQuery,
-  useUpdateTripMutation,
-} from "../../store/reducers/api/tripApiSlice";
 import { TodoFormModal } from "../modal/TodoFormModal";
 import { DeleteTodoModal } from "../modal/DeleteTodoModal";
+import {
+  useGetTripQuery,
+  useReorderTodosMutation,
+  useUpdateTripMutation,
+} from "../../store/reducers/api/apiSlice";
 
 interface TodoListProps {
   todos: ITodo[];
@@ -24,14 +24,14 @@ interface TodoListProps {
 }
 
 export const TodoList: FC<TodoListProps> = ({ todos, headingLevel }) => {
-  const { id } = useParams<{ id: string }>();
+  const { todoId } = useParams<{ todoId: string }>();
   const [reorderTodos, {}] = useReorderTodosMutation();
   const [updateTrip, {}] = useUpdateTripMutation();
-  const { data: trip } = useGetTripQuery(id || "");
+  const { data: trip } = useGetTripQuery(todoId || "");
   const [todosState, setTodos] = useState<ITodo[]>([]);
 
   const handleReorderNotes = async (todos: ITodo[]) => {
-    if (id) {
+    if (todoId) {
       try {
         const response = await updateTrip({
           ...trip,

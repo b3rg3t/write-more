@@ -19,7 +19,7 @@ import {
 import {
   useDeleteTodoMutation,
   useGetAllTodosQuery,
-} from "../../store/reducers/api/todoApiSlice";
+} from "../../store/reducers/api/apiSlice";
 
 export const DeleteTodoModal = () => {
   const isDeleting = useAppSelector(selectIsDeleting);

@@ -36,7 +36,7 @@ export const NoteItem: FC<{
   };
 
   const handleClick = () => {
-    navigate(ERoutes.NOTE_DETAIL.replace(":id", note._id));
+    navigate(ERoutes.NOTE_DETAIL.replace(":noteId", note._id));
   };
 
   const handleLinkClick = (url: TLink["url"]) => {

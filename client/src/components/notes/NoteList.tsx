@@ -8,16 +8,16 @@ import {
 } from "@hello-pangea/dnd";
 import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
 import { Container, ListItem, TypographyVariant } from "@mui/material";
-import { useReorderNotesMutation } from "../../store/reducers/api/noteApiSlice";
 import { INote } from "../../models/interface/INote";
 import { useEffect, useState, FC } from "react";
-import {
-  useGetTripQuery,
-  useUpdateTripMutation,
-} from "../../store/reducers/api/tripApiSlice";
 import { useParams } from "react-router-dom";
 import { DeleteNoteModal } from "../modal/DeleteNoteModal";
 import { NoteFormModal } from "../modal/NoteFormModal";
+import {
+  useGetTripQuery,
+  useReorderNotesMutation,
+  useUpdateTripMutation,
+} from "../../store/reducers/api/apiSlice";
 
 interface NoteListProps {
   notes: INote[];
@@ -25,10 +25,10 @@ interface NoteListProps {
 }
 
 export const NoteList: FC<NoteListProps> = ({ notes, headingLevel }) => {
-  const { id } = useParams<{ id: string }>();
+  const { noteId } = useParams<{ noteId: string }>();
   const [reorderNotes, {}] = useReorderNotesMutation();
   const [updateTrip, {}] = useUpdateTripMutation();
-  const { data: trip } = useGetTripQuery(id || "");
+  const { data: trip } = useGetTripQuery(noteId || "");
   const [notesState, setNotes] = useState<INote[]>([]);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel }) => {
   }, [notes]);
 
   const handleReorderNotes = async (notes: INote[]) => {
-    if (id) {
+    if (noteId) {
       try {
         const response = await updateTrip({
           ...trip,

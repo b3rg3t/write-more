@@ -33,15 +33,15 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
   };
 
   const handleClick = () => {
-    navigate(ERoutes.TRIP_DETAIL.replace(":id", trip._id));
+    navigate(ERoutes.TRIP_DETAIL.replace(":tripId", trip._id));
   };
 
   const handleNoteClick = (noteId: string) => {
-    navigate(ERoutes.NOTE_DETAIL.replace(":id", noteId));
+    navigate(ERoutes.NOTE_DETAIL.replace(":noteId", noteId));
   };
 
   const handleTodoClick = (todoId: string) => {
-    navigate(ERoutes.TODO_DETAIL.replace(":id", todoId));
+    navigate(ERoutes.TODO_DETAIL.replace(":todoId", todoId));
   };
 
   const handleAccordionChange =

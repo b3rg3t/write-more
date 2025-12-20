@@ -14,7 +14,7 @@ import { text } from "../../localization/eng";
 import {
   useDeleteTripMutation,
   useGetAllTripsQuery,
-} from "../../store/reducers/api/tripApiSlice";
+} from "../../store/reducers/api/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   deleteTrip,

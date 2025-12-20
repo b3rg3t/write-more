@@ -13,7 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { cancelTodo, deleteTodo } from "../../store/reducers/todos/todosSlice";
-import { useGetAllTodosQuery } from "../../store/reducers/api/todoApiSlice";
+import { useGetAllTodosQuery } from "../../store/reducers/api/apiSlice";
 import { text } from "../../localization/eng";
 import {
   selectIsEditing,

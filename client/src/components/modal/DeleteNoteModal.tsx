@@ -14,7 +14,7 @@ import { text } from "../../localization/eng";
 import {
   useDeleteNoteMutation,
   useGetAllNotesQuery,
-} from "../../store/reducers/api/noteApiSlice";
+} from "../../store/reducers/api/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   deleteNote,

@@ -8,7 +8,7 @@ import { createNewTrip } from "../../store/reducers/trips/tripsSlice";
 import { text } from "../../localization/eng";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { useMemo } from "react";
-import { useGetAllTripsQuery } from "../../store/reducers/api/tripApiSlice";
+import { useGetAllTripsQuery } from "../../store/reducers/api/apiSlice";
 import { fontSize16 } from "../utils/FontSize";
 
 export const Trips = () => {

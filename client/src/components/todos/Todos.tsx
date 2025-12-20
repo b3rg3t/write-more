@@ -1,7 +1,7 @@
 import { TodoList } from "./TodoList";
 import { Typography } from "@mui/material";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
-import { useGetAllTodosQuery } from "../../store/reducers/api/todoApiSlice";
+import { useGetAllTodosQuery } from "../../store/reducers/api/apiSlice";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { fontSize16 } from "../utils/FontSize";
 import { text } from "../../localization/eng";

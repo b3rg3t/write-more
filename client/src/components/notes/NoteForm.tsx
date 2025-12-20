@@ -10,7 +10,7 @@ import { cancelNote, selectIsNew } from "../../store/reducers/notes/notesSlice";
 import {
   useAddNoteMutation,
   useUpdateNoteMutation,
-} from "../../store/reducers/api/noteApiSlice";
+} from "../../store/reducers/api/apiSlice";
 import { LinkForm } from "./links/LinkForm";
 
 export const NoteForm: FC<{

@@ -11,7 +11,7 @@ import {
   TypographyVariant,
 } from "@mui/material";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
-import { useUpdateTodoMutation } from "../../store/reducers/api/todoApiSlice";
+import { useUpdateTodoMutation } from "../../store/reducers/api/apiSlice";
 import { fontSize16 } from "../utils/FontSize";
 
 export const TodoItem: FC<{

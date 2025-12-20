@@ -17,9 +17,9 @@ import { cancelTrip, selectIsNew } from "../../store/reducers/trips/tripsSlice";
 import {
   useAddTripMutation,
   useUpdateTripMutation,
-} from "../../store/reducers/api/tripApiSlice";
-import { useGetAllNotesQuery } from "../../store/reducers/api/noteApiSlice";
-import { useGetAllTodosQuery } from "../../store/reducers/api/todoApiSlice";
+} from "../../store/reducers/api/apiSlice";
+import { useGetAllNotesQuery } from "../../store/reducers/api/apiSlice";
+import { useGetAllTodosQuery } from "../../store/reducers/api/apiSlice";
 
 export const TripForm: FC<{
   trip?: ITrip;

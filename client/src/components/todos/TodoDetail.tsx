@@ -1,19 +1,19 @@
 import { useParams } from "react-router-dom";
-import { useGetTodoQuery } from "../../store/reducers/api/todoApiSlice";
+import { useGetTodoQuery } from "../../store/reducers/api/apiSlice";
 import { TodoItem } from "./TodoItem";
 import { Container } from "@mui/material";
 import { text } from "../../localization/eng";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 
 export const TodoDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const { todoId } = useParams<{ todoId: string }>();
   const {
     data: todo,
     isLoading,
     error,
     isUninitialized,
     isFetching,
-  } = useGetTodoQuery(id!);
+  } = useGetTodoQuery(todoId!);
 
   return (
     <RtkQueryWrapper

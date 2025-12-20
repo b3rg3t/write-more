@@ -3,19 +3,15 @@ import { EStoreKeys } from "../../models/enum/EStoreKeys";
 import { storeMiddleware } from "../storeMiddlewate";
 
 import { notesSlice } from "../reducers/notes/notesSlice";
-import { noteApiSlice } from "../reducers/api/noteApiSlice";
-import { todoApiSlice } from "../reducers/api/todoApiSlice";
+import { apiSlice } from "../reducers/api/apiSlice";
 import { todosSlice } from "../reducers/todos/todosSlice";
-import { tripApiSlice } from "../reducers/api/tripApiSlice";
 import { tripsSlice } from "../reducers/trips/tripsSlice";
 
 const rootReducer = combineReducers({
   [EStoreKeys.NOTES]: notesSlice.reducer,
   [EStoreKeys.TODOS]: todosSlice.reducer,
   [EStoreKeys.TRIPS]: tripsSlice.reducer,
-  [noteApiSlice.reducerPath]: noteApiSlice.reducer,
-  [todoApiSlice.reducerPath]: todoApiSlice.reducer,
-  [tripApiSlice.reducerPath]: tripApiSlice.reducer,
+  [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
 export const setupStore = () => {
@@ -24,9 +20,7 @@ export const setupStore = () => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
         .concat(storeMiddleware)
-        .concat(noteApiSlice.middleware)
-        .concat(todoApiSlice.middleware)
-        .concat(tripApiSlice.middleware),
+        .concat(apiSlice.middleware),
   });
 };
 
