@@ -1,4 +1,4 @@
-import { List, ListItem, TypographyVariant } from "@mui/material";
+import { List, ListItem, Typography, TypographyVariant } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { ITodo } from "../../models/interface/ITodo";
 import {
@@ -14,6 +14,7 @@ import {
   useUpdateTripMutation,
 } from "../../store/reducers/api/apiSlice";
 import { ITrip } from "../../models/interface/ITrip";
+import { text } from "../../localization/eng";
 
 interface TodoListProps {
   todos: ITodo[];
@@ -64,6 +65,13 @@ export const TodoList: FC<TodoListProps> = ({ todos, headingLevel, trip }) => {
     setTodos(todos);
   }, [todos]);
 
+  if (todosState.length === 0) {
+    return (
+      <Typography variant={"body1"}>
+        {text.todos.todosList.noTodosAvailable}
+      </Typography>
+    );
+  }
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="note-list">

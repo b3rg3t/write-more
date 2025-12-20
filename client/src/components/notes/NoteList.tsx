@@ -7,7 +7,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { reordersHelper } from "../../store/reducers/utils/reorderHelper";
-import { ListItem, TypographyVariant } from "@mui/material";
+import { ListItem, Typography, TypographyVariant } from "@mui/material";
 import { INote } from "../../models/interface/INote";
 import { useEffect, useState, FC } from "react";
 import {
@@ -15,6 +15,7 @@ import {
   useUpdateTripMutation,
 } from "../../store/reducers/api/apiSlice";
 import { ITrip } from "../../models/interface/ITrip";
+import { text } from "../../localization/eng";
 
 interface NoteListProps {
   notes: INote[];
@@ -65,6 +66,13 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip }) => {
     setNotes(reordered);
   };
 
+  if (notesState.length === 0) {
+    return (
+      <Typography variant={"body1"}>
+        {text.notes.notesList.noNotesAvailable}
+      </Typography>
+    );
+  }
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="note-list">

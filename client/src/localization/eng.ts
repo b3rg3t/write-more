@@ -31,6 +31,7 @@ export const text = {
       createNote: "Create Note",
       fetchError: "Failed to load notes. Please try again.",
       createTodo: "Create Todo",
+      noNotesAvailable: "No notes available.",
     },
     noteDetail: {
       loading: "Loading...",
@@ -63,6 +64,7 @@ export const text = {
       noTodos: "Create a new todo to get started!",
       createTodo: "Create Todo",
       fetchError: "Failed to load todos. Please try again.",
+      noTodosAvailable: "No todos available.",
     },
     todoDetail: {
       loading: "Loading...",
