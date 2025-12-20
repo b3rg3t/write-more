@@ -1,13 +1,12 @@
 import { TodoList } from "./TodoList";
-import { Typography } from "@mui/material";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 import { useGetAllTodosQuery } from "../../store/reducers/api/apiSlice";
 import { useAppDispatch } from "../../store/redux/hooks";
-import { fontSize16 } from "../utils/FontSize";
 import { text } from "../../localization/eng";
 import { Action } from "../utils/Action";
 import { createNewTodo } from "../../store/reducers/todos/todosSlice";
 import { useMemo } from "react";
+import { PageHeader } from "../layout/PageHeader";
 
 export const Todos = () => {
   const { data, isLoading, isUninitialized, isFetching, error } =
@@ -20,16 +19,10 @@ export const Todos = () => {
 
   const { header } = text.todos;
   const { loading, createTodo, noTodos, fetchError } = text.todos.todosList;
+
   return (
     <>
-      <Typography
-        variant="h2"
-        fontSize={fontSize16}
-        fontWeight="bold"
-        sx={{ px: 2 }}
-      >
-        {header}
-      </Typography>
+      <PageHeader title={header} amount={data ? data.length : 0} />
       <RtkQueryWrapper
         isLoading={isLoading || isUninitialized}
         data={data}

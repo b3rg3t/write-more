@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import { TripList } from "./TripList";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 import { Action } from "../utils/Action";
@@ -7,7 +6,7 @@ import { text } from "../../localization/eng";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { useMemo } from "react";
 import { useGetAllTripsQuery } from "../../store/reducers/api/apiSlice";
-import { fontSize16 } from "../utils/FontSize";
+import { PageHeader } from "../layout/PageHeader";
 
 export const Trips = () => {
   const { data, isLoading, isUninitialized, isFetching, error } =
@@ -21,14 +20,7 @@ export const Trips = () => {
   const { loading, createTrip, noTrips, fetchError } = text.trips.tripsList;
   return (
     <>
-      <Typography
-        variant="h2"
-        fontSize={fontSize16}
-        fontWeight="bold"
-        sx={{ px: 2 }}
-      >
-        {header}
-      </Typography>
+      <PageHeader title={header} amount={data ? data.length : 0} />
       <RtkQueryWrapper
         isLoading={isLoading || isUninitialized}
         data={data}
