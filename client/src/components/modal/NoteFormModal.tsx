@@ -31,15 +31,19 @@ export const NoteFormModal = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const note = useGetNoteQuery(isEditing ?? creatingNoteForTrip ?? skipToken);
+  const note1 = useGetNoteQuery(isEditing ?? skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const note = isEditing ? note1.data : undefined;
 
   const onClose = () => {
     dispatch(cancelNote());
   };
 
   const handleDeleteNote = async () => {
-    if (note.data) {
-      dispatch(deleteNote(note.data._id));
+    if (note) {
+      dispatch(deleteNote(note._id));
     }
   };
 
@@ -88,7 +92,7 @@ export const NoteFormModal = () => {
         </Stack>
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
-        <NoteForm note={note.data}>
+        <NoteForm note={note}>
           <DialogActions sx={{ p: 0 }}>
             <Button onClick={onClose} color="inherit">
               {buttons.cancel}

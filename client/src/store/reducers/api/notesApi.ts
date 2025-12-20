@@ -26,7 +26,7 @@ export const notesEndpoints = (
       method: "PUT",
       body,
     }),
-    invalidatesTags: ["Notes"],
+    invalidatesTags: ["Notes", "Trips"],
   }),
   reorderNotes: builder.mutation<INote[], Pick<INote, "_id" | "order">[]>({
     query: (body) => ({
@@ -41,6 +41,6 @@ export const notesEndpoints = (
       url: `notes/${body._id}`,
       method: "DELETE",
     }),
-    invalidatesTags: ["Notes"],
+    invalidatesTags: ["Notes", "Trips"],
   }),
 });

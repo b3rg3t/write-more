@@ -70,8 +70,7 @@ const App = () => {
         <Container sx={{ px: 2 }}>
           <Box
             sx={{
-              mt: 1,
-              mb: 1,
+              my: 0.5,
               display: "flex",
               justifyContent: "space-between",
             }}
@@ -82,7 +81,6 @@ const App = () => {
               variant={
                 location.pathname === ERoutes.TRIPS ? "contained" : undefined
               }
-              sx={{ mr: 1 }}
             >
               {text.trips.header}
             </Button>
@@ -92,7 +90,6 @@ const App = () => {
               variant={
                 location.pathname === ERoutes.NOTES ? "contained" : undefined
               }
-              sx={{ mr: 1 }}
             >
               {text.notes.header}
             </Button>

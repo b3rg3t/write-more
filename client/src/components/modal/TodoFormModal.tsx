@@ -33,15 +33,18 @@ export const TodoFormModal = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const todo = useGetTodoQuery(isEditing ?? creatingTodoForTrip ?? skipToken);
+  const todo1 = useGetTodoQuery(isEditing ?? skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
 
+  const todo = isEditing ? todo1.data : undefined;
   const onClose = () => {
     dispatch(cancelTodo());
   };
 
   const handleDeleteTodo = async () => {
-    if (todo.data) {
-      dispatch(deleteTodo(todo.data._id));
+    if (todo) {
+      dispatch(deleteTodo(todo._id));
     }
   };
 
@@ -90,7 +93,7 @@ export const TodoFormModal = () => {
         </Stack>
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
-        <TodoForm todo={todo.data}>
+        <TodoForm todo={todo}>
           <DialogActions sx={{ p: 0 }}>
             <Button onClick={onClose} color="inherit">
               {buttons.cancel}

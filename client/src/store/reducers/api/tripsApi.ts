@@ -72,7 +72,7 @@ export const tripsEndpoints = (
       method: "POST",
       body,
     }),
-    invalidatesTags: ["Notes", "Trips"],
+    invalidatesTags: ["Trips"],
   }),
 
   // Create todo for trip
@@ -85,6 +85,6 @@ export const tripsEndpoints = (
       method: "POST",
       body,
     }),
-    invalidatesTags: ["Todos", "Trips"],
+    invalidatesTags: ["Trips"],
   }),
 });

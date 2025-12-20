@@ -26,7 +26,7 @@ export const todosEndpoints = (
       method: "PUT",
       body,
     }),
-    invalidatesTags: ["Todos"],
+    invalidatesTags: ["Todos", "Trips"],
   }),
   reorderTodos: builder.mutation<ITodo[], Pick<ITodo, "_id" | "order">[]>({
     query: (body) => ({
@@ -41,6 +41,6 @@ export const todosEndpoints = (
       url: `todos/${body._id}`,
       method: "DELETE",
     }),
-    invalidatesTags: ["Todos"],
+    invalidatesTags: ["Trips"],
   }),
 });
