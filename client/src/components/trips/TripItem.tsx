@@ -76,7 +76,14 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             variant="h3"
             component="div"
             fontSize={fontSize16}
-            sx={{ color: "text.primary", fontWeight: 600 }}
+            sx={{
+              color: "text.primary",
+              fontWeight: 600,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxWidth: "100%",
+            }}
           >
             {trip.title ? trip.title : text.trips.tripsForm.titleUnknown}
           </Typography>
@@ -125,7 +132,16 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             <Typography
               variant="body2"
               color="text.secondary"
-              sx={{ mt: 1, whiteSpace: "pre-wrap" }}
+              sx={{
+                mt: 1,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "-webkit-box",
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: "vertical",
+                maxWidth: "100%",
+                whiteSpace: "normal",
+              }}
             >
               {trip.description}
             </Typography>
