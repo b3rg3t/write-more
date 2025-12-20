@@ -66,53 +66,52 @@ export const TripDetail = () => {
       <TripFormModal />
       <DeleteTripModal />
       <Container maxWidth="md" sx={{ px: 0 }}>
-        <Stack direction="row" justifyContent="end" spacing={2} sx={{ px: 2 }}>
+        <Stack direction="row" justifyContent="end" spacing={2}>
           <Typography fontSize={"small"}>
             {trip?.createdAt &&
               `Created at: ${new Date(trip.createdAt).toLocaleDateString()}`}
           </Typography>
         </Stack>
-        <Container disableGutters sx={{ px: 1 }}>
-          <Card
-            variant="outlined"
-            sx={{
-              boxShadow: 2,
-              borderRadius: 2,
-              display: "flex",
-              flexDirection: "column",
-              px: 2,
-              pb: 2,
-            }}
+
+        <Card
+          variant="outlined"
+          sx={{
+            boxShadow: 2,
+            borderRadius: 2,
+            display: "flex",
+            flexDirection: "column",
+            px: 2,
+            pb: 2,
+          }}
+        >
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
+            <Typography
+              variant="h2"
+              fontSize={fontSize16}
+              sx={{ fontWeight: 600, mt: 1 }}
             >
-              <Typography
-                variant="h2"
-                fontSize={fontSize16}
-                sx={{ fontWeight: 600, mt: 1 }}
-              >
-                {trip?.title}
-              </Typography>
-              <IconButton
-                color="primary"
-                edge="end"
-                aria-label="edit"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleEditTrip();
-                }}
-              >
-                <EditSquareIcon />
-              </IconButton>
-            </Stack>
-            <Typography sx={{ mt: 1, whiteSpace: "pre-wrap" }}>
-              {trip?.description}
+              {trip?.title}
             </Typography>
-          </Card>
-        </Container>
+            <IconButton
+              color="primary"
+              edge="end"
+              aria-label="edit"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEditTrip();
+              }}
+            >
+              <EditSquareIcon />
+            </IconButton>
+          </Stack>
+          <Typography sx={{ mt: 1, whiteSpace: "pre-wrap" }}>
+            {trip?.description}
+          </Typography>
+        </Card>
         <Divider sx={{ my: 2 }} />
         <Stack
           direction="row"

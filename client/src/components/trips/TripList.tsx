@@ -1,4 +1,4 @@
-import { Container, List, ListItem } from "@mui/material";
+import { List, ListItem } from "@mui/material";
 import { useReorderTripsMutation } from "../../store/reducers/api/apiSlice";
 import { FC, useEffect, useState } from "react";
 import { ITrip } from "../../models/interface/ITrip";
@@ -44,35 +44,33 @@ export const TripList: FC<TripListProps> = ({ trips }) => {
   }, [trips]);
 
   return (
-    <Container disableGutters maxWidth="md" sx={{ px: 0 }}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="trip-list">
-          {(provided) => (
-            <List
-              dense
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              sx={{ pt: 1 }}
-            >
-              {tripsState.map((trip, index) => (
-                <Draggable key={trip._id} draggableId={trip._id} index={index}>
-                  {(provided) => (
-                    <ListItem
-                      ref={provided.innerRef}
-                      sx={{ width: "100%", px: 1 }}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <TripItem trip={trip} />
-                    </ListItem>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </List>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </Container>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="trip-list">
+        {(provided) => (
+          <List
+            dense
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            sx={{ pt: 1 }}
+          >
+            {tripsState.map((trip, index) => (
+              <Draggable key={trip._id} draggableId={trip._id} index={index}>
+                {(provided) => (
+                  <ListItem
+                    ref={provided.innerRef}
+                    sx={{ width: "100%", px: 0 }}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <TripItem trip={trip} />
+                  </ListItem>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </List>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };

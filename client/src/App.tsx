@@ -21,7 +21,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Header />
-      <Container maxWidth="md" sx={{ px: 0, py: 2, pt: 6, pb: 10 }}>
+      <Container maxWidth="md" sx={{ px: 1, py: 2, pt: 6, pb: 10 }}>
         <Routes>
           <Route path={ERoutes.TRIPS} element={<Trips />} />
           <Route path={ERoutes.NOTES} element={<Notes />} />
