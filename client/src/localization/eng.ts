@@ -105,8 +105,8 @@ export const text = {
   },
   footer: {
     header: "Write More travel app",
-    github: "GitHub b3rg3t",
-    linkedin: "LinkedIn Profile",
+    github: "Github b3rg3t",
+    linkedin: "LinkedIn profile",
     linkedinUrl: "https://www.linkedin.com/in/david-berg-385530175/",
     githubUrl: "https://github.com/b3rg3t",
     madeBy: "Made with ♥ by David Berg",
