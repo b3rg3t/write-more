@@ -55,7 +55,7 @@ export const NoteItem: FC<{
       }}
       onClick={handleClick}
     >
-      <CardContent sx={{ px: 1, pt: 1, pb: 0 }}>
+      <CardContent sx={{ px: 1, pt: 0.5, pb: 0 }}>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -69,15 +69,24 @@ export const NoteItem: FC<{
             {note.title ? note.title : text.notes.notesForm.titleUnknown}
           </Typography>
           <Stack direction="column" alignItems="flex-end" spacing={0.5}>
-            <Typography variant="caption" color="text.secondary">
-              {toLocalTime(note.updatedAt)}
-            </Typography>
+            <IconButton
+              color="primary"
+              edge="end"
+              aria-label="edit"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEditNote();
+              }}
+              sx={{ pr: 0.5 }}
+            >
+              <EditSquareIcon />
+            </IconButton>
           </Stack>
         </Stack>
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ mt: 1, whiteSpace: "pre-wrap" }}
+          sx={{ mt: 0, whiteSpace: "pre-wrap" }}
         >
           {note.content}
         </Typography>
@@ -86,11 +95,13 @@ export const NoteItem: FC<{
       <CardActions
         sx={{
           display: "flex",
+          flexDirection: "column",
           justifyContent: "between",
           alignItems: "end",
           flex: 1,
           px: 0,
           pt: 0,
+          pb: 1,
         }}
       >
         {note.links && (
@@ -103,6 +114,7 @@ export const NoteItem: FC<{
               mt: 1,
               pr: 0,
               pl: 1,
+              pb: 0,
             }}
           >
             <List
@@ -110,7 +122,10 @@ export const NoteItem: FC<{
               sx={{ p: 0, display: "flex", flexWrap: "wrap", gap: 1 }}
             >
               {note.links.map((link, index) => (
-                <ListItem key={link.url + index} sx={{ p: 0, display: "flex" }}>
+                <ListItem
+                  key={link.url + index}
+                  sx={{ p: 0, display: "flex", width: "auto" }}
+                >
                   <Chip
                     icon={<OpenInNewIcon fontSize="small" />}
                     label={link.name}
@@ -125,28 +140,6 @@ export const NoteItem: FC<{
             </List>
           </Container>
         )}
-        <Container
-          disableGutters
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            flex: 1,
-            mt: 1,
-            pr: 2,
-          }}
-        >
-          <IconButton
-            color="primary"
-            edge="end"
-            aria-label="edit"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEditNote();
-            }}
-          >
-            <EditSquareIcon />
-          </IconButton>
-        </Container>
       </CardActions>
     </Card>
   );
