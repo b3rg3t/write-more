@@ -37,25 +37,18 @@ export const TripForm: FC<{
   const {
     handleSubmit,
     formState: { errors },
-    register,
     reset,
     setValue,
     control,
   } = useForm<TBasicTrip>({
     mode: "onSubmit",
     defaultValues: {
-      [ETripForm.TITLE]: trip?.title || "",
-      [ETripForm.DESCRIPTION]: trip?.description || "",
-      [ETripForm.START_DATE]: trip?.startDate
-        ? new Date(trip.startDate).toISOString().split("T")[0]
-        : "",
-      [ETripForm.END_DATE]: trip?.endDate
-        ? new Date(trip.endDate).toISOString().split("T")[0]
-        : "",
-      [ETripForm.NOTES]:
-        trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || [],
-      [ETripForm.TODOS]:
-        trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || [],
+      [ETripForm.TITLE]: "",
+      [ETripForm.DESCRIPTION]: "",
+      [ETripForm.START_DATE]: "",
+      [ETripForm.END_DATE]: "",
+      [ETripForm.NOTES]: [],
+      [ETripForm.TODOS]: [],
     },
   });
 
@@ -64,27 +57,32 @@ export const TripForm: FC<{
   } = text;
 
   useEffect(() => {
-    setValue(ETripForm.TITLE, trip?.title || "");
-    setValue(ETripForm.DESCRIPTION, trip?.description || "");
-    setValue(
-      ETripForm.START_DATE,
-      trip?.startDate
-        ? new Date(trip.startDate).toISOString().split("T")[0]
-        : ""
-    );
-    setValue(
-      ETripForm.END_DATE,
-      trip?.endDate ? new Date(trip.endDate).toISOString().split("T")[0] : ""
-    );
-    setValue(
-      ETripForm.NOTES,
-      trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || []
-    );
-    setValue(
-      ETripForm.TODOS,
-      trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || []
-    );
-  }, [trip]);
+    if (!trip || isNew) {
+      reset();
+      return;
+    } else {
+      setValue(ETripForm.TITLE, trip?.title || "");
+      setValue(ETripForm.DESCRIPTION, trip?.description || "");
+      setValue(
+        ETripForm.START_DATE,
+        trip?.startDate
+          ? new Date(trip.startDate).toISOString().split("T")[0]
+          : ""
+      );
+      setValue(
+        ETripForm.END_DATE,
+        trip?.endDate ? new Date(trip.endDate).toISOString().split("T")[0] : ""
+      );
+      setValue(
+        ETripForm.NOTES,
+        trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || []
+      );
+      setValue(
+        ETripForm.TODOS,
+        trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || []
+      );
+    }
+  }, [trip, isNew]);
 
   useEffect(() => {
     // Focus the title field when the form opens
@@ -153,52 +151,80 @@ export const TripForm: FC<{
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
       <FormGroup sx={{ width: "100%", px: 0, pb: 0, pt: 1 }}>
-        <TextField
-          id={ETripForm.TITLE}
-          label="Title"
-          variant="outlined"
-          error={!!errors[ETripForm.TITLE]}
-          helperText={
-            errors[ETripForm.TITLE] ? tripsForm.helperText.titleRequired : ""
-          }
-          {...register(ETripForm.TITLE, { required: true })}
-          defaultValue={trip?.title}
-          margin="normal"
-          fullWidth
-          sx={{ mt: 0 }}
-          inputRef={titleRef}
+        <Controller
+          name={ETripForm.TITLE}
+          control={control}
+          rules={{ required: tripsForm.helperText.titleRequired }}
+          render={({ field }) => (
+            <TextField
+              id={ETripForm.TITLE}
+              label="Title"
+              variant="outlined"
+              {...field}
+              error={!!errors[ETripForm.TITLE]}
+              helperText={
+                errors[ETripForm.TITLE]
+                  ? tripsForm.helperText.titleRequired
+                  : ""
+              }
+              margin="normal"
+              fullWidth
+              sx={{ mt: 0 }}
+              inputRef={titleRef}
+            />
+          )}
         />
-        <TextField
-          id={ETripForm.DESCRIPTION}
-          label="Description"
-          variant="outlined"
-          multiline
-          minRows={2}
-          error={!!errors[ETripForm.DESCRIPTION]}
-          {...register(ETripForm.DESCRIPTION)}
-          margin="normal"
-          fullWidth
-          sx={{ mb: 2 }}
+        <Controller
+          name={ETripForm.DESCRIPTION}
+          control={control}
+          render={({ field }) => (
+            <TextField
+              id={ETripForm.DESCRIPTION}
+              label="Description"
+              variant="outlined"
+              multiline
+              minRows={2}
+              {...field}
+              error={!!errors[ETripForm.DESCRIPTION]}
+              margin="normal"
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+          )}
         />
-        <TextField
-          id={ETripForm.START_DATE}
-          label="Start Date"
-          type="date"
-          variant="outlined"
-          error={!!errors[ETripForm.START_DATE]}
-          {...register(ETripForm.START_DATE)}
-          margin="normal"
-          fullWidth
+        <Controller
+          name={ETripForm.START_DATE}
+          control={control}
+          render={({ field }) => (
+            <TextField
+              id={ETripForm.START_DATE}
+              label="Start Date"
+              type="date"
+              variant="outlined"
+              {...field}
+              InputLabelProps={{ shrink: true }}
+              error={!!errors[ETripForm.START_DATE]}
+              margin="normal"
+              fullWidth
+            />
+          )}
         />
-        <TextField
-          id={ETripForm.END_DATE}
-          label="End Date"
-          type="date"
-          variant="outlined"
-          error={!!errors[ETripForm.END_DATE]}
-          {...register(ETripForm.END_DATE)}
-          margin="normal"
-          fullWidth
+        <Controller
+          name={ETripForm.END_DATE}
+          control={control}
+          render={({ field }) => (
+            <TextField
+              id={ETripForm.END_DATE}
+              label="End Date"
+              type="date"
+              variant="outlined"
+              {...field}
+              InputLabelProps={{ shrink: true }}
+              error={!!errors[ETripForm.END_DATE]}
+              margin="normal"
+              fullWidth
+            />
+          )}
         />
         <FormControl fullWidth margin="normal">
           <InputLabel>{text.notes.header}</InputLabel>

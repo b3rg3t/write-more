@@ -2,7 +2,7 @@ import { FC, useEffect, useRef } from "react";
 import { ITodo } from "../../models/interface/ITodo";
 import { ETodoForm } from "../../models/enum/ETodoForm";
 import { TBasicTodo } from "../../models/type/TBasicTodo";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import {
   useAddTodoMutation,
@@ -31,13 +31,13 @@ export const TodoForm: FC<{
   const {
     handleSubmit,
     formState: { errors },
-    register,
+    control,
     reset,
     setValue,
   } = useForm<TBasicTodo>({
     defaultValues: {
-      [ETodoForm.NAME]: todo?.name || "",
-      [ETodoForm.IS_COMPLETED]: todo?.isCompleted || false,
+      [ETodoForm.NAME]: "",
+      [ETodoForm.IS_COMPLETED]: false,
     },
   });
 
@@ -46,9 +46,14 @@ export const TodoForm: FC<{
   } = text;
 
   useEffect(() => {
-    setValue(ETodoForm.NAME, todo?.name || "");
-    setValue(ETodoForm.IS_COMPLETED, todo?.isCompleted || false);
-  }, [todo, setValue]);
+    if (!todo || isNew) {
+      reset();
+      return;
+    } else {
+      setValue(ETodoForm.NAME, todo?.name || "");
+      setValue(ETodoForm.IS_COMPLETED, todo?.isCompleted || false);
+    }
+  }, [todo, isNew, creatingTodoForTrip]);
 
   const handlePostNote = async (data: TBasicTodo) => {
     if (creatingTodoForTrip) {
@@ -99,20 +104,26 @@ export const TodoForm: FC<{
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
       <FormGroup sx={{ width: "100%", px: 0, pb: 0, pt: 1 }}>
-        <TextField
-          id={ETodoForm.NAME}
-          label="Name"
-          variant="outlined"
-          error={!!errors[ETodoForm.NAME]}
-          helperText={
-            errors[ETodoForm.NAME] ? todosForm.helperText.nameRequired : ""
-          }
-          {...register(ETodoForm.NAME, { required: true })}
-          defaultValue={todo?.name}
-          margin="normal"
-          fullWidth
-          sx={{ mt: 0, mb: 4 }}
-          inputRef={titleRef}
+        <Controller
+          name={ETodoForm.NAME}
+          control={control}
+          rules={{ required: todosForm.helperText.nameRequired }}
+          render={({ field }) => (
+            <TextField
+              id={ETodoForm.NAME}
+              label="Name"
+              variant="outlined"
+              error={!!errors[ETodoForm.NAME]}
+              helperText={
+                errors[ETodoForm.NAME] ? todosForm.helperText.nameRequired : ""
+              }
+              {...field}
+              margin="normal"
+              fullWidth
+              sx={{ mt: 0, mb: 4 }}
+              inputRef={titleRef}
+            />
+          )}
         />
         {children}
       </FormGroup>
