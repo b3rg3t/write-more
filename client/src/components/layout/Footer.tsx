@@ -1,14 +1,9 @@
 import {
-  Avatar,
   Box,
   Button,
   Container,
   Drawer,
   IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Typography,
 } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
@@ -20,13 +15,31 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { isMobileSafari, isSafari } from "react-device-detect";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
 import { useState } from "react";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import GitHubIcon from "@mui/icons-material/GitHub";
 import CloseIcon from "@mui/icons-material/Close";
+import { About } from "./About";
 
 export const Footer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return (
+      <Container>
+        <Container
+          sx={{
+            py: 2,
+            textAlign: "center",
+            borderRadius: 1,
+            backgroundColor: "background.paper",
+          }}
+        >
+          <About />
+        </Container>
+      </Container>
+    );
+  }
 
   return (
     <>
@@ -42,42 +55,7 @@ export const Footer = () => {
           >
             <CloseIcon />
           </IconButton>
-          <Typography sx={{ fontWeight: 600, mb: 2 }} variant="h2">
-            {text.footer.header}
-          </Typography>
-          <Typography sx={{ pb: 2 }} variant="body1">
-            {text.footer.madeBy}
-          </Typography>
-          <List dense>
-            <ListItem
-              component="a"
-              href={text.footer.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ textDecoration: "none", color: "inherit" }}
-            >
-              <ListItemAvatar>
-                <Avatar>
-                  <LinkedInIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={text.footer.linkedin} />
-            </ListItem>
-            <ListItem
-              component="a"
-              href={text.footer.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ textDecoration: "none", color: "inherit" }}
-            >
-              <ListItemAvatar>
-                <Avatar>
-                  <GitHubIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={text.footer.github} />
-            </ListItem>
-          </List>
+          <About />
         </Box>
       </Drawer>
       <Box
@@ -182,7 +160,7 @@ export const Footer = () => {
             >
               <InfoOutlineIcon />
               <Typography fontSize={8} color={"primary"}>
-                {text.todos.header}
+                {text.footer.about}
               </Typography>
             </Button>
           </Box>

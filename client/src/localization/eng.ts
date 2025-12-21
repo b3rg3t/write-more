@@ -109,7 +109,8 @@ export const text = {
     linkedin: "LinkedIn profile",
     linkedinUrl: "https://www.linkedin.com/in/david-berg-385530175/",
     githubUrl: "https://github.com/b3rg3t",
-    madeBy: "Made with ♥ by David Berg",
+    madeBy: "Made with ♥ by David Berg.",
+    about: "About",
   },
   user: {
     header: "Users",
