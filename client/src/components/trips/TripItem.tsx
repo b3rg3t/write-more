@@ -24,6 +24,7 @@ import { ERoutes } from "../../models/enum/ERoutes";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import StickyNote2Icon from "@mui/icons-material/StickyNote2";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import PeopleIcon from "@mui/icons-material/People";
 import { TripDates } from "../utils/TripDates";
 
 export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
@@ -62,11 +63,12 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
         borderRadius: 2,
         width: "100%",
         mb: 0,
+        pb: 0,
         cursor: "pointer",
       }}
       onClick={handleClick}
     >
-      <CardContent sx={{ px: 1, pt: 1, pb: 0 }}>
+      <CardContent sx={{ px: 1, pt: 1, pb: 0, "&:last-child": { pb: 1.5 } }}>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -127,6 +129,7 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
           endDate={trip.endDate}
           styles={{ mt: 0, mb: 1 }}
         />
+
         <Container disableGutters>
           {trip.description && (
             <Typography
@@ -250,6 +253,25 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             )}
           </AccordionDetails>
         </Accordion>
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ mb: 0, mt: 1 }}
+        >
+          <Stack direction="row" alignItems="center" spacing={0.5}>
+            <PeopleIcon fontSize="small" color="action" />
+            <Typography variant="caption" color="text.secondary">
+              {trip.users.length} {trip.users.length === 1 ? "user" : "users"}
+            </Typography>
+          </Stack>
+          {trip.createdBy && typeof trip.createdBy === "object" && (
+            <Typography variant="caption" color="text.secondary">
+              • Created by @{trip.createdBy.username}
+            </Typography>
+          )}
+        </Stack>
       </CardContent>
     </Card>
   );

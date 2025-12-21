@@ -11,6 +11,6 @@ export interface ITrip extends IBase {
   notes: INote[];
   todos: ITodo[];
   users: IUser[] | string[];
-  createdBy: IUser | string;
+  createdBy: IUser;
   order: number;
 }

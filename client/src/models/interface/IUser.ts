@@ -4,4 +4,6 @@ export interface IUser extends Omit<IBase, "__v" | "updatedAt"> {
   username: string;
   email: string;
   password: string;
+  firstName?: string;
+  lastName?: string;
 }

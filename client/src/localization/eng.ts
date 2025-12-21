@@ -101,6 +101,7 @@ export const text = {
     tripDetail: {
       loading: "Loading trip",
       notFound: "Trip not found",
+      connectedUsers: "Connected users",
     },
   },
   footer: {

@@ -19,13 +19,13 @@ export const About = () => {
       <Typography sx={{ pb: 2 }} variant="body1">
         {text.footer.madeBy}
       </Typography>
-      <List dense>
+      <List dense sx={{ display: "flex", flexDirection: "row" }}>
         <ListItem
           component="a"
           href={text.footer.linkedinUrl}
           target="_blank"
           rel="noopener noreferrer"
-          sx={{ textDecoration: "none", color: "inherit" }}
+          sx={{ textDecoration: "none", color: "white" }}
         >
           <ListItemAvatar>
             <Avatar>
@@ -39,7 +39,7 @@ export const About = () => {
           href={text.footer.githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          sx={{ textDecoration: "none", color: "inherit" }}
+          sx={{ textDecoration: "none", color: "white" }}
         >
           <ListItemAvatar>
             <Avatar>

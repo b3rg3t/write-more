@@ -64,13 +64,22 @@ export const TripDetail = () => {
       }}
     >
       <Container maxWidth="md" sx={{ px: 0 }}>
-        <Stack direction="row" justifyContent="end" spacing={2}>
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Typography fontSize={"small"}>
+            {trip?.createdBy && `@${trip.createdBy.username}`}
+          </Typography>
           <Typography fontSize={"small"}>
             {trip?.createdAt &&
-              `Created at: ${new Date(trip.createdAt).toLocaleDateString()}`}
+              new Date(trip.createdAt).toLocaleString(undefined, {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })}
           </Typography>
         </Stack>
-
         <Card
           variant="outlined"
           sx={{
@@ -111,6 +120,43 @@ export const TripDetail = () => {
             {trip?.description}
           </Typography>
         </Card>
+        {trip?.users && trip.users.length > 0 && (
+          <Card variant="outlined" sx={{ mt: 1, p: 2 }}>
+            <Typography fontSize={fontSize16} fontWeight="bold" sx={{ mb: 1 }}>
+              {text.trips.tripDetail.connectedUsers}
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+              {trip.users.map((user, index) => {
+                if (typeof user === "string") {
+                  return (
+                    <Typography key={index} fontSize={"small"}>
+                      {user}
+                    </Typography>
+                  );
+                }
+                const displayName =
+                  user.firstName && user.lastName
+                    ? `${user.firstName} ${user.lastName}`
+                    : `@${user.username}`;
+                return (
+                  <Typography
+                    key={user._id}
+                    fontSize={"small"}
+                    sx={{
+                      px: 1.5,
+                      py: 0.5,
+                      backgroundColor: "primary.light",
+                      borderRadius: 2,
+                      color: "primary.contrastText",
+                    }}
+                  >
+                    {`@${user.username}, ${displayName}`}
+                  </Typography>
+                );
+              })}
+            </Stack>
+          </Card>
+        )}
         <Divider sx={{ my: 2 }} />
         <Stack
           direction="row"
