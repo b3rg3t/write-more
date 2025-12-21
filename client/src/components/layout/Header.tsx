@@ -6,9 +6,12 @@ import ShareIcon from "@mui/icons-material/Share";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
+import { useAppDispatch } from "../../store/redux/hooks";
+import { apiSlice } from "../../store/reducers/api/apiSlice";
 
 export const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const isAuthenticated = !!localStorage.getItem("token");
 
   const handleCopyUrl = () => {
@@ -18,6 +21,7 @@ export const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    dispatch(apiSlice.util.resetApiState());
     navigate(ERoutes.AUTH);
   };
 

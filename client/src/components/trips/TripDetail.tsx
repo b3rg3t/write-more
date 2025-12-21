@@ -122,9 +122,6 @@ export const TripDetail = () => {
         </Card>
         {trip?.users && trip.users.length > 0 && (
           <Card variant="outlined" sx={{ mt: 1, p: 2 }}>
-            <Typography fontSize={fontSize16} fontWeight="bold" sx={{ mb: 1 }}>
-              {text.trips.tripDetail.connectedUsers}
-            </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
               {trip.users.map((user, index) => {
                 if (typeof user === "string") {
