@@ -1,9 +1,7 @@
-import { EndpointBuilder } from "@reduxjs/toolkit/query";
+import { TEndpointBuilderType } from "../../../models/type/TEndpointBuilderType";
 import { INote } from "../../../models/interface/INote";
 
-export const notesEndpoints = (
-  builder: EndpointBuilder<any, "Notes" | "Todos" | "Trips", "api">
-) => ({
+export const notesEndpoints = (builder: TEndpointBuilderType) => ({
   getAllNotes: builder.query<INote[], void>({
     query: () => "notes",
     providesTags: ["Notes"],

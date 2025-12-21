@@ -3,15 +3,17 @@ import { API_BASE_URL } from "./util";
 import { notesEndpoints } from "./notesApi";
 import { todosEndpoints } from "./todosApi";
 import { tripsEndpoints } from "./tripsApi";
+import { usersEndpoints } from "./usersApi";
 
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
-  tagTypes: ["Notes", "Todos", "Trips"],
+  tagTypes: ["Notes", "Todos", "Trips", "Users"],
   endpoints: (builder) => ({
     ...notesEndpoints(builder),
     ...todosEndpoints(builder),
     ...tripsEndpoints(builder),
+    ...usersEndpoints(builder),
   }),
 });
 
@@ -41,4 +43,7 @@ export const {
   useDeleteTripMutation,
   useCreateNoteForTripMutation,
   useCreateTodoForTripMutation,
+
+  // Users hooks
+  useAddUserMutation,
 } = apiSlice;

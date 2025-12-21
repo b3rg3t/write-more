@@ -1,9 +1,7 @@
-import { EndpointBuilder } from "@reduxjs/toolkit/query";
 import { ITodo } from "../../../models/interface/ITodo";
+import { TEndpointBuilderType } from "../../../models/type/TEndpointBuilderType";
 
-export const todosEndpoints = (
-  builder: EndpointBuilder<any, "Notes" | "Todos" | "Trips", "api">
-) => ({
+export const todosEndpoints = (builder: TEndpointBuilderType) => ({
   getAllTodos: builder.query<ITodo[], void>({
     query: () => "todos",
     providesTags: ["Todos"],

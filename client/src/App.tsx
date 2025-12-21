@@ -21,6 +21,7 @@ import { TodoFormModal } from "./components/modal/TodoFormModal";
 import { TripFormModal } from "./components/modal/TripFormModal";
 import { DeleteTripModal } from "./components/modal/DeleteTripModal";
 import { DeleteTodoModal } from "./components/modal/DeleteTodoModal";
+import { UserForm } from "./components/user/UserForm";
 
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const App = () => {
           <Route path={ERoutes.TRIPS} element={<Trips />} />
           <Route path={ERoutes.NOTES} element={<Notes />} />
           <Route path={ERoutes.TODOS} element={<Todos />} />
+          <Route path={ERoutes.USERS} element={<UserForm />} />
           <Route path={ERoutes.TRIP_DETAIL} element={<TripDetail />} />
           <Route path={ERoutes.NOTE_DETAIL} element={<NoteDetail />} />
           <Route path={ERoutes.TODO_DETAIL} element={<TodoDetail />} />

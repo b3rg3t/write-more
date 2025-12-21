@@ -111,6 +111,25 @@ export const text = {
     githubUrl: "https://github.com/b3rg3t",
     madeBy: "Made with ♥ by David Berg",
   },
+  user: {
+    form: {
+      title: "Create New User",
+      username: "Username",
+      email: "Email",
+      password: "Password",
+      cancel: "Cancel",
+      create: "Create",
+      error: "Failed to create user",
+      helperText: {
+        usernameRequired: "Username is required",
+        emailRequired: "Email is required",
+        passwordRequired: "Password is required",
+      },
+      buttons: {
+        submit: "Submit",
+      },
+    },
+  },
   errors: {
     root: "An error occurred",
   },

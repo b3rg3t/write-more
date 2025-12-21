@@ -6,6 +6,7 @@ import cors from "cors";
 import notesRouter from "./src/routes/notes";
 import todosRouter from "./src/routes/todos";
 import tripsRouter from "./src/routes/trips";
+import usersRouter from "./src/routes/users";
 
 // Load environment variables from config.env
 dotenv.config({ path: ".env" });
@@ -105,5 +106,6 @@ app.use(
 app.use("/api/notes", notesRouter);
 app.use("/api/todos", todosRouter);
 app.use("/api/trips", tripsRouter);
+app.use("/api/users", usersRouter);
 
 export default app;
