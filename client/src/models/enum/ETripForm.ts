@@ -5,4 +5,5 @@ export enum ETripForm {
   END_DATE = "endDate",
   NOTES = "notes",
   TODOS = "todos",
+  USERS = "users",
 }

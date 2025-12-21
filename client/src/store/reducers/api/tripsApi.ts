@@ -15,7 +15,10 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
   addTrip: builder.mutation<
     ITrip,
     Partial<
-      Pick<ITrip, "title" | "description" | "startDate" | "endDate"> & {
+      Pick<
+        ITrip,
+        "title" | "description" | "startDate" | "endDate" | "users"
+      > & {
         notes: ITrip["_id"][];
         todos: ITrip["_id"][];
       }
@@ -31,7 +34,10 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
   updateTrip: builder.mutation<
     ITrip,
     Partial<
-      Pick<ITrip, "_id" | "title" | "description" | "startDate" | "endDate"> & {
+      Pick<
+        ITrip,
+        "_id" | "title" | "description" | "startDate" | "endDate" | "users"
+      > & {
         notes: ITrip["_id"][];
         todos: ITrip["_id"][];
       }

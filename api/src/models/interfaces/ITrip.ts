@@ -7,6 +7,8 @@ export interface ITrip extends Document {
   endDate?: Date;
   notes: mongoose.Types.ObjectId[];
   todos: mongoose.Types.ObjectId[];
+  users: mongoose.Types.ObjectId[];
+  createdBy: mongoose.Types.ObjectId;
   order: number;
   createdAt: Date;
   updatedAt: Date;

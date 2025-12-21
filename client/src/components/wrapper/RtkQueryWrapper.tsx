@@ -69,6 +69,7 @@ export const RtkQueryWrapper: FC<IRtkQueryWrapperProps> = ({
       <Alert
         severity="info"
         action={<Button onClick={onCreate}>{createMessage}</Button>}
+        sx={{ mt: 1 }}
       >
         {noData}
       </Alert>

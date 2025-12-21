@@ -28,6 +28,18 @@ const STrip: Schema = new Schema(
         ref: "Todo",
       },
     ],
+    users: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+    ],
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     order: {
       type: Number,
       default: 0,

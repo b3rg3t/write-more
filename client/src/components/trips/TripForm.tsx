@@ -20,6 +20,7 @@ import {
 } from "../../store/reducers/api/apiSlice";
 import { useGetAllNotesQuery } from "../../store/reducers/api/apiSlice";
 import { useGetAllTodosQuery } from "../../store/reducers/api/apiSlice";
+import { useGetAllUsersQuery } from "../../store/reducers/api/apiSlice";
 
 export const TripForm: FC<{
   trip?: ITrip;
@@ -33,6 +34,7 @@ export const TripForm: FC<{
 
   const { data: notes } = useGetAllNotesQuery();
   const { data: todos } = useGetAllTodosQuery();
+  const { data: users } = useGetAllUsersQuery();
 
   const {
     handleSubmit,
@@ -49,6 +51,7 @@ export const TripForm: FC<{
       [ETripForm.END_DATE]: "",
       [ETripForm.NOTES]: [],
       [ETripForm.TODOS]: [],
+      [ETripForm.USERS]: [],
     },
   });
 
@@ -81,6 +84,10 @@ export const TripForm: FC<{
         ETripForm.TODOS,
         trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || []
       );
+      setValue(
+        ETripForm.USERS,
+        trip?.users.map((u) => (typeof u === "string" ? u : u._id)) || []
+      );
     }
   }, [trip, isNew]);
 
@@ -111,6 +118,10 @@ export const TripForm: FC<{
             data[ETripForm.TODOS]?.map((t) =>
               typeof t === "string" ? t : t._id
             ) || [],
+          users:
+            data[ETripForm.USERS]?.map((u) =>
+              typeof u === "string" ? u : u._id
+            ) || [],
         });
       } catch (error) {
         console.error("Error creating trip:", error);
@@ -134,6 +145,10 @@ export const TripForm: FC<{
           todos:
             data[ETripForm.TODOS]?.map((t) =>
               typeof t === "string" ? t : t._id
+            ) || [],
+          users:
+            data[ETripForm.USERS]?.map((u) =>
+              typeof u === "string" ? u : u._id
             ) || [],
         });
       } catch (error) {
@@ -262,6 +277,29 @@ export const TripForm: FC<{
                 {todos?.map((todo) => (
                   <MenuItem key={todo._id} value={todo._id}>
                     {todo.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+        </FormControl>
+        <FormControl fullWidth margin="normal">
+          <InputLabel>{text.user.header}</InputLabel>
+          <Controller
+            name={ETripForm.USERS}
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                multiple
+                label="Users"
+                value={field.value || []}
+              >
+                {users?.map((user) => (
+                  <MenuItem key={user._id} value={user._id}>
+                    {user.firstName && user.lastName
+                      ? `${user.firstName} ${user.lastName} (@${user.username})`
+                      : user.username}
                   </MenuItem>
                 ))}
               </Select>
