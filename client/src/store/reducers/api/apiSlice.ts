@@ -46,4 +46,5 @@ export const {
 
   // Users hooks
   useAddUserMutation,
+  useGetAllUsersQuery,
 } = apiSlice;

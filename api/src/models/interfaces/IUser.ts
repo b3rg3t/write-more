@@ -1,8 +1,10 @@
+import { EUserRole } from "../enums/EUserRole";
+
 export interface IUser {
   username: string;
   email: string;
   password: string;
-  role: "user" | "admin";
+  role: EUserRole;
   firstName?: string;
   lastName?: string;
   avatarUrl?: string;

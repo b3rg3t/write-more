@@ -1,4 +1,4 @@
-import { Chip, Stack, Typography } from "@mui/material";
+import { Chip, Stack, StackProps, Typography } from "@mui/material";
 import { fontSize16 } from "../utils/FontSize";
 import { FC } from "react";
 
@@ -6,13 +6,15 @@ export const PageHeader: FC<{
   title: string;
   subtitle?: string;
   amount?: number;
-}> = ({ title, subtitle, amount = 0 }) => {
+  styles?: StackProps;
+}> = ({ title, subtitle, amount = 0, styles }) => {
   return (
     <Stack
       direction="row"
       justifyContent={"space-between"}
       alignItems={"end"}
       spacing={0.5}
+      {...styles}
     >
       <Stack spacing={0.5}>
         <Typography

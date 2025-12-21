@@ -112,6 +112,7 @@ export const text = {
     madeBy: "Made with ♥ by David Berg",
   },
   user: {
+    header: "Users",
     form: {
       title: "Create New User",
       username: "Username",
@@ -128,6 +129,12 @@ export const text = {
       buttons: {
         submit: "Submit",
       },
+    },
+    usersList: {
+      loading: "Loading users...",
+      noUsers: "No users found",
+      createUser: "Create a new user",
+      fetchError: "Failed to fetch users",
     },
   },
   errors: {
