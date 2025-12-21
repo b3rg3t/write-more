@@ -7,6 +7,7 @@ import notesRouter from "./src/routes/notes";
 import todosRouter from "./src/routes/todos";
 import tripsRouter from "./src/routes/trips";
 import usersRouter from "./src/routes/users";
+import authRouter from "./src/routes/auth";
 
 // Load environment variables from config.env
 dotenv.config({ path: ".env" });
@@ -103,6 +104,7 @@ app.use(
 );
 
 // Routes
+app.use("/api/auth", authRouter);
 app.use("/api/notes", notesRouter);
 app.use("/api/todos", todosRouter);
 app.use("/api/trips", tripsRouter);

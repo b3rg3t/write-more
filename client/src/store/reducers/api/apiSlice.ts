@@ -4,16 +4,27 @@ import { notesEndpoints } from "./notesApi";
 import { todosEndpoints } from "./todosApi";
 import { tripsEndpoints } from "./tripsApi";
 import { usersEndpoints } from "./usersApi";
+import { authEndpoints } from "./authApi";
 
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
-  tagTypes: ["Notes", "Todos", "Trips", "Users"],
+  baseQuery: fetchBaseQuery({
+    baseUrl: API_BASE_URL,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+  tagTypes: ["Notes", "Todos", "Trips", "Users", "Auth"],
   endpoints: (builder) => ({
-    ...notesEndpoints(builder),
-    ...todosEndpoints(builder),
-    ...tripsEndpoints(builder),
-    ...usersEndpoints(builder),
+    ...notesEndpoints(builder as any),
+    ...todosEndpoints(builder as any),
+    ...tripsEndpoints(builder as any),
+    ...usersEndpoints(builder as any),
+    ...authEndpoints(builder as any),
   }),
 });
 
@@ -47,4 +58,9 @@ export const {
   // Users hooks
   useAddUserMutation,
   useGetAllUsersQuery,
+
+  // Auth hooks
+  useSignupMutation,
+  useSigninMutation,
+  useGetCurrentUserQuery,
 } = apiSlice;

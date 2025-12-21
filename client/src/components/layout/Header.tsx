@@ -3,10 +3,22 @@ import { fontSize16 } from "../utils/FontSize";
 import { text } from "../../localization/eng";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import ShareIcon from "@mui/icons-material/Share";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
+import { ERoutes } from "../../models/enum/ERoutes";
 
 export const Header = () => {
+  const navigate = useNavigate();
+  const isAuthenticated = !!localStorage.getItem("token");
+
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(window.location.href);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate(ERoutes.AUTH);
   };
 
   return (
@@ -39,13 +51,25 @@ export const Header = () => {
               {text.appName}
             </Typography>
           </Stack>
-          <IconButton
-            color="primary"
-            onClick={handleCopyUrl}
-            aria-label="copy current URL"
-          >
-            <ShareIcon />
-          </IconButton>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <IconButton
+              color="primary"
+              onClick={handleCopyUrl}
+              aria-label="copy current URL"
+            >
+              <ShareIcon />
+            </IconButton>
+            {isAuthenticated && (
+              <IconButton
+                color="primary"
+                onClick={handleLogout}
+                aria-label="logout"
+                size="small"
+              >
+                <LogoutIcon />
+              </IconButton>
+            )}
+          </Stack>
         </Stack>
       </Container>
     </Box>

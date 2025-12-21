@@ -22,8 +22,17 @@ import { TripFormModal } from "./components/modal/TripFormModal";
 import { DeleteTripModal } from "./components/modal/DeleteTripModal";
 import { DeleteTodoModal } from "./components/modal/DeleteTodoModal";
 import { Users } from "./components/user/Users";
+import { AuthPage } from "./components/user/AuthPage";
+import { ProtectedRoute } from "./components/wrapper/ProtectedRoute";
+import { useNavigate } from "react-router-dom";
 
 const App = () => {
+  const navigate = useNavigate();
+
+  const handleAuthSuccess = () => {
+    navigate(ERoutes.TRIPS);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Header />
@@ -35,13 +44,66 @@ const App = () => {
       <DeleteTodoModal />
       <Container maxWidth="md" sx={{ px: 1, py: 2, pt: 6, pb: 10 }}>
         <Routes>
-          <Route path={ERoutes.TRIPS} element={<Trips />} />
-          <Route path={ERoutes.NOTES} element={<Notes />} />
-          <Route path={ERoutes.TODOS} element={<Todos />} />
-          <Route path={ERoutes.USERS} element={<Users />} />
-          <Route path={ERoutes.TRIP_DETAIL} element={<TripDetail />} />
-          <Route path={ERoutes.NOTE_DETAIL} element={<NoteDetail />} />
-          <Route path={ERoutes.TODO_DETAIL} element={<TodoDetail />} />
+          <Route
+            path={ERoutes.AUTH}
+            element={<AuthPage onSuccess={handleAuthSuccess} />}
+          />
+          <Route
+            path={ERoutes.TRIPS}
+            element={
+              <ProtectedRoute>
+                <Trips />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ERoutes.NOTES}
+            element={
+              <ProtectedRoute>
+                <Notes />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ERoutes.TODOS}
+            element={
+              <ProtectedRoute>
+                <Todos />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ERoutes.USERS}
+            element={
+              <ProtectedRoute>
+                <Users />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ERoutes.TRIP_DETAIL}
+            element={
+              <ProtectedRoute>
+                <TripDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ERoutes.NOTE_DETAIL}
+            element={
+              <ProtectedRoute>
+                <NoteDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ERoutes.TODO_DETAIL}
+            element={
+              <ProtectedRoute>
+                <TodoDetail />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Container>
       <Footer />
