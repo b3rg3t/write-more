@@ -148,56 +148,9 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
           )}
         </Container>
         <Accordion
-          expanded={expanded === "panel1"}
-          onChange={handleAccordionChange("panel1")}
-          sx={{ mt: 1, boxShadow: "none" }}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1-content"
-            id="panel1-header"
-          >
-            <StickyNote2Icon
-              color="secondary"
-              fontSize="small"
-              sx={{ mr: 1 }}
-            />
-            <Typography variant="body2">
-              {text.notes.header} ({trip.notes.length})
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails sx={{ px: 1, pb: 1 }}>
-            {trip.notes.length > 0 && (
-              <Container disableGutters sx={{ mt: 1 }}>
-                <Stack
-                  direction="row"
-                  spacing={0}
-                  flexWrap="wrap"
-                  sx={{ gap: 0.5 }}
-                >
-                  {trip.notes.map((note) => (
-                    <Chip
-                      key={note._id}
-                      label={note.title}
-                      size="small"
-                      variant="outlined"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleNoteClick(note._id);
-                      }}
-                      sx={{ cursor: "pointer" }}
-                    />
-                  ))}
-                </Stack>
-              </Container>
-            )}
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion
           expanded={expanded === "panel2"}
           onChange={handleAccordionChange("panel2")}
-          sx={{ mt: 0, boxShadow: "none" }}
+          sx={{ mt: 1, boxShadow: "none" }}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -249,6 +202,52 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
                 />
               ))}
             </Stack>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={expanded === "panel1"}
+          onChange={handleAccordionChange("panel1")}
+          sx={{ boxShadow: "none" }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <StickyNote2Icon
+              color="secondary"
+              fontSize="small"
+              sx={{ mr: 1 }}
+            />
+            <Typography variant="body2">
+              {text.notes.header} ({trip.notes.length})
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ px: 1, pb: 1 }}>
+            {trip.notes.length > 0 && (
+              <Container disableGutters sx={{ mt: 1 }}>
+                <Stack
+                  direction="row"
+                  spacing={0}
+                  flexWrap="wrap"
+                  sx={{ gap: 0.5 }}
+                >
+                  {trip.notes.map((note) => (
+                    <Chip
+                      key={note._id}
+                      label={note.title}
+                      size="small"
+                      variant="outlined"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleNoteClick(note._id);
+                      }}
+                      sx={{ cursor: "pointer" }}
+                    />
+                  ))}
+                </Stack>
+              </Container>
+            )}
           </AccordionDetails>
         </Accordion>
       </CardContent>

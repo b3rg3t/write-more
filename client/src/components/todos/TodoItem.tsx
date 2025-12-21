@@ -44,7 +44,7 @@ export const TodoItem: FC<{
         width: "100%",
         mb: 0,
         display: "flex",
-        alignItems: "center",
+        alignItems: "start",
       }}
     >
       <Checkbox
@@ -59,7 +59,8 @@ export const TodoItem: FC<{
         sx={{
           color: "text.primary",
           textDecoration: isChecked ? "line-through" : undefined,
-          py: 1,
+          pb: 1,
+          pt: 1.5,
         }}
       >
         {todo.name}

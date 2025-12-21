@@ -85,7 +85,7 @@ export const TripDetail = () => {
           <Stack
             direction="row"
             justifyContent="space-between"
-            alignItems="center"
+            alignItems="start"
           >
             <Typography
               variant="h2"

@@ -59,16 +59,16 @@ export const NoteItem: FC<{
         <Stack
           direction="row"
           justifyContent="space-between"
-          alignItems="center"
+          alignItems="start"
         >
           <Typography
             variant={headingLevel}
             fontSize={fontSize16}
-            sx={{ fontWeight: 600, color: "text.primary" }}
+            sx={{ fontWeight: 600, color: "text.primary", my: 1 }}
           >
             {note.title ? note.title : text.notes.notesForm.titleUnknown}
           </Typography>
-          <Stack direction="row" alignItems="flex-end" spacing={0.5}>
+          <Stack direction="column" alignItems="start" spacing={0.5}>
             <IconButton
               color="primary"
               edge="end"
