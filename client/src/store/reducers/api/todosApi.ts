@@ -39,6 +39,6 @@ export const todosEndpoints = (builder: TEndpointBuilderType) => ({
       url: `todos/${body._id}`,
       method: "DELETE",
     }),
-    invalidatesTags: ["Trips"],
+    invalidatesTags: ["Trips", "Todos"],
   }),
 });
