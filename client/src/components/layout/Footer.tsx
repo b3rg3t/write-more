@@ -26,17 +26,23 @@ export const Footer = () => {
 
   if (!token) {
     return (
-      <Container>
-        <Container
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Box
           sx={{
-            py: 2,
             textAlign: "center",
+            py: 1,
             borderRadius: 1,
             backgroundColor: "background.paper",
+            maxWidth: 400,
           }}
         >
           <About />
-        </Container>
+        </Box>
       </Container>
     );
   }

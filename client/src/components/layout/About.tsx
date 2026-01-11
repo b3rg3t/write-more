@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   List,
   ListItem,
   ListItemAvatar,
@@ -25,7 +26,7 @@ export const About = () => {
           href={text.footer.linkedinUrl}
           target="_blank"
           rel="noopener noreferrer"
-          sx={{ textDecoration: "none", color: "white" }}
+          sx={{ textDecoration: "none", color: "primary.main" }}
         >
           <ListItemAvatar>
             <Avatar>
@@ -39,7 +40,7 @@ export const About = () => {
           href={text.footer.githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          sx={{ textDecoration: "none", color: "white" }}
+          sx={{ textDecoration: "none", color: "primary.main" }}
         >
           <ListItemAvatar>
             <Avatar>

@@ -3,20 +3,15 @@ import { fontSize16 } from "./components/utils/FontSize";
 
 export const theme = createTheme({
   palette: {
-    mode: "dark",
     primary: {
       main: "#09378dff", // Bright cyan for a futuristic glow
     },
     secondary: {
       main: "#ff4081", // Vibrant pink for accents
     },
-    background: {
-      default: "#0a0a0a", // Deep black for space-like feel
-      paper: "#1a1a1a", // Slightly lighter for cards/modals
-    },
     text: {
-      primary: "#ffffff",
-      secondary: "#b3b3b3",
+      primary: "#131313ff",
+      secondary: "#2e2e2eff",
     },
     error: {
       main: "#862a2aff",
@@ -46,52 +41,20 @@ export const theme = createTheme({
       fontSize: fontSize16,
       color: "#09378dff",
     },
+    h4: {
+      fontSize: fontSize16,
+      color: "#09378dff",
+    },
+    h5: {
+      fontSize: fontSize16,
+      color: "#09378dff",
+    },
+    h6: {
+      fontSize: fontSize16,
+      color: "#09378dff",
+    },
     body1: {
-      color: "#b3b3b3",
-    },
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: "12px",
-          textTransform: "none",
-          fontWeight: 600,
-          boxShadow: "0 1px 2px rgba(255, 255, 255, 0.3)",
-          "&:hover": {
-            boxShadow: "0 2px 4px rgba(0, 229, 255, 0.5)",
-          },
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          "& .MuiOutlinedInput-root": {
-            borderRadius: "12px",
-            backgroundColor: "#1a1a1a",
-            "& fieldset": {
-              borderColor: "#333",
-            },
-            "&:hover fieldset": {
-              borderColor: "#00e5ff",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "#00e5ff",
-            },
-          },
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: "none",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
-          backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
-        },
-      },
+      color: "#0e0d0dff",
     },
   },
 });

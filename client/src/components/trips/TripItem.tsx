@@ -79,7 +79,6 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
             component="div"
             fontSize={fontSize16}
             sx={{
-              color: "text.primary",
               fontWeight: 600,
               whiteSpace: "nowrap",
               overflow: "hidden",
@@ -189,7 +188,6 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
                           ? "line-through"
                           : undefined,
                         py: 0.5,
-                        color: "white",
                       }}
                     >
                       {todo.name}

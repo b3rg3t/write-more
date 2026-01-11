@@ -57,7 +57,6 @@ export const TodoItem: FC<{
         variant={headingLevel}
         fontSize={fontSize16}
         sx={{
-          color: "text.primary",
           textDecoration: isChecked ? "line-through" : undefined,
           pb: 1,
           pt: 1.5,

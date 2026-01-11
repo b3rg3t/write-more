@@ -31,9 +31,7 @@ export const TripDates: FC<{
             label={`${new Date(startDate).toLocaleDateString()}`}
           />
         )}
-        {startDate && endDate && (
-          <ArrowForwardIcon fontSize="small" color="disabled" />
-        )}
+        {startDate && endDate && <ArrowForwardIcon fontSize="small" />}
         {endDate && (
           <Chip
             icon={<CalendarMonthIcon fontSize="small" />}

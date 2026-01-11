@@ -64,7 +64,7 @@ export const NoteItem: FC<{
           <Typography
             variant={headingLevel}
             fontSize={fontSize16}
-            sx={{ fontWeight: 600, color: "text.primary", my: 1 }}
+            sx={{ fontWeight: 600, my: 1 }}
           >
             {note.title ? note.title : text.notes.notesForm.titleUnknown}
           </Typography>

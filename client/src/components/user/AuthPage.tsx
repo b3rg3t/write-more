@@ -11,7 +11,7 @@ export const AuthPage: FC<AuthPageProps> = ({ onSuccess }) => {
   const [showSignin, setShowSignin] = useState(true);
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 0 }}>
       {showSignin ? (
         <SigninForm
           onSuccess={onSuccess}
