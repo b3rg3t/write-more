@@ -12,7 +12,10 @@
     "noEmit": false,
     "resolveJsonModule": true,
     "rootDir": ".",
-    "outDir": "./dist" /* Skip type checking all .d.ts files. */
+    "outDir": "./dist",
+    "sourceMap": true,
+    "inlineSourceMap": false,
+    "inlineSources": false /* Skip type checking all .d.ts files. */
   },
   "include": ["./**/*.ts"],
   "exclude": ["node_modules"]

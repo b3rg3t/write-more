@@ -7,6 +7,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "nodemon index.ts",
+    "dev:debug": "nodemon --exec node --inspect=9229 -r ts-node/register index.ts",
+    "debug": "node --inspect=9229 -r ts-node/register index.ts",
     "dev:all": "concurrently \"npm run dev --prefix api\" \"npm run dev --prefix client\"",
     "build:all": "npm run build --prefix api && npm run build --prefix client",
     "start:all": "npm run start --prefix api"

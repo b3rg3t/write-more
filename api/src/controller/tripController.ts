@@ -204,9 +204,7 @@ export const createTodoForTrip = async (req: Request, res: Response) => {
       tripId,
       { $push: { todos: savedTodo._id } },
       { new: true }
-    )
-      .populate("notes")
-      .populate("todos");
+    ).populate("todos");
 
     if (!updatedTrip) {
       // If trip update fails, we should probably delete the created todo
@@ -226,7 +224,7 @@ export const createTodoForTrip = async (req: Request, res: Response) => {
 
 // Create a note and connect it to a trip
 export const createNoteForTrip = async (req: Request, res: Response) => {
-  const { title, content, links } = req.body;
+  const { title, content, links, startDate, endDate } = req.body;
   const tripId = req.params.tripId;
 
   try {
@@ -234,7 +232,14 @@ export const createNoteForTrip = async (req: Request, res: Response) => {
     const highestOrderNote = await SNote.findOne().sort({ order: -1 });
     const newOrder = highestOrderNote ? highestOrderNote.order + 1 : 0;
 
-    const newNote = new SNote({ title, content, links, order: newOrder });
+    const newNote = new SNote({
+      title,
+      content,
+      links,
+      order: newOrder,
+      startDate,
+      endDate,
+    });
     const savedNote = await newNote.save();
 
     // Then, connect the note to the trip
@@ -242,9 +247,7 @@ export const createNoteForTrip = async (req: Request, res: Response) => {
       tripId,
       { $push: { notes: savedNote._id } },
       { new: true }
-    )
-      .populate("notes")
-      .populate("todos");
+    ).populate("notes");
 
     if (!updatedTrip) {
       // If trip update fails, we should probably delete the created note
