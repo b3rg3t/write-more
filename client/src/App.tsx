@@ -21,6 +21,7 @@ import { TodoFormModal } from "./components/modal/TodoFormModal";
 import { TripFormModal } from "./components/modal/TripFormModal";
 import { DeleteTripModal } from "./components/modal/DeleteTripModal";
 import { DeleteTodoModal } from "./components/modal/DeleteTodoModal";
+import { DeleteNoteModal } from "./components/modal/DeleteNoteModal";
 import { Users } from "./components/user/Users";
 import { AuthPage } from "./components/user/AuthPage";
 import { ProtectedRoute } from "./components/wrapper/ProtectedRoute";
@@ -39,7 +40,7 @@ const App = () => {
       <TripFormModal />
       <DeleteTripModal />
       <NoteFormModal />
-      <NoteFormModal />
+      <DeleteNoteModal />
       <TodoFormModal />
       <DeleteTodoModal />
       <Container maxWidth="md" sx={{ px: 1, py: 2, pt: 6, pb: 10 }}>
