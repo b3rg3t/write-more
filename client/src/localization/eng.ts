@@ -70,6 +70,13 @@ export const text = {
       loading: "Loading...",
       notFound: "Todo not found",
     },
+    deleteTodo: {
+      title: "Delete Todo",
+      titleUnknown: "Unknown Todo",
+      confirmation:
+        "Are you sure you want to delete '{title}'? This action cannot be undone.",
+      buttons: { confirm: "Delete", cancel: "Cancel" },
+    },
   },
   trips: {
     header: "Trips",

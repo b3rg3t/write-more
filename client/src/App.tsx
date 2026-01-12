@@ -19,9 +19,7 @@ import { Header } from "./components/layout/Header";
 import { NoteFormModal } from "./components/modal/NoteFormModal";
 import { TodoFormModal } from "./components/modal/TodoFormModal";
 import { TripFormModal } from "./components/modal/TripFormModal";
-import { DeleteTripModal } from "./components/modal/DeleteTripModal";
-import { DeleteTodoModal } from "./components/modal/DeleteTodoModal";
-import { DeleteNoteModal } from "./components/modal/DeleteNoteModal";
+import { DeleteModal } from "./components/modal/DeleteModal";
 import { Users } from "./components/user/Users";
 import { AuthPage } from "./components/user/AuthPage";
 import { ProtectedRoute } from "./components/wrapper/ProtectedRoute";
@@ -38,11 +36,11 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Header />
       <TripFormModal />
-      <DeleteTripModal />
+      <DeleteModal resourceType="trip" />
       <NoteFormModal />
-      <DeleteNoteModal />
+      <DeleteModal resourceType="note" />
       <TodoFormModal />
-      <DeleteTodoModal />
+      <DeleteModal resourceType="todo" />
       <Container maxWidth="md" sx={{ px: 1, py: 2, pt: 6, pb: 10 }}>
         <Routes>
           <Route
