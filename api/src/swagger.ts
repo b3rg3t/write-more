@@ -1,5 +1,18 @@
 import swaggerJSDoc from "swagger-jsdoc";
 
+const requestBodyWithSample = (example: Record<string, unknown>) => ({
+  required: true,
+  content: {
+    "application/json": {
+      schema: {
+        type: "object",
+        additionalProperties: true,
+      },
+      example,
+    },
+  },
+});
+
 const swaggerOptions: swaggerJSDoc.Options = {
   definition: {
     openapi: "3.0.0",
@@ -43,17 +56,12 @@ const swaggerOptions: swaggerJSDoc.Options = {
         post: {
           tags: ["Auth"],
           summary: "Create a new account",
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            email: "new-user@example.com",
+            password: "StrongPassword123!",
+            firstName: "Alex",
+            lastName: "Walker",
+          }),
           responses: {
             "200": { description: "Signup successful" },
           },
@@ -63,17 +71,10 @@ const swaggerOptions: swaggerJSDoc.Options = {
         post: {
           tags: ["Auth"],
           summary: "Sign in and receive token",
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            email: "new-user@example.com",
+            password: "StrongPassword123!",
+          }),
           responses: {
             "200": { description: "Signin successful" },
           },
@@ -101,17 +102,11 @@ const swaggerOptions: swaggerJSDoc.Options = {
           tags: ["Notes"],
           summary: "Create note",
           security: [{ bearerAuth: [] }],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            title: "Packing checklist",
+            text: "Passport, charger, power bank.",
+            tripId: "6617f2dd2f8f25d189f74c42",
+          }),
           responses: { "200": { description: "Note created" } },
         },
       },
@@ -142,17 +137,11 @@ const swaggerOptions: swaggerJSDoc.Options = {
               schema: { type: "string" },
             },
           ],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            title: "Updated packing checklist",
+            text: "Passport, charger, adapter.",
+            isPinned: true,
+          }),
           responses: { "200": { description: "Note updated" } },
         },
         delete: {
@@ -175,17 +164,9 @@ const swaggerOptions: swaggerJSDoc.Options = {
           tags: ["Notes"],
           summary: "Update note order",
           security: [{ bearerAuth: [] }],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            noteIds: ["6617f2dd2f8f25d189f74c42", "6617f2dd2f8f25d189f74c43"],
+          }),
           responses: { "200": { description: "Note order updated" } },
         },
       },
@@ -200,17 +181,11 @@ const swaggerOptions: swaggerJSDoc.Options = {
           tags: ["Todos"],
           summary: "Create todo",
           security: [{ bearerAuth: [] }],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            title: "Book airport transfer",
+            isDone: false,
+            tripId: "6617f2dd2f8f25d189f74c42",
+          }),
           responses: { "200": { description: "Todo created" } },
         },
       },
@@ -241,17 +216,10 @@ const swaggerOptions: swaggerJSDoc.Options = {
               schema: { type: "string" },
             },
           ],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            title: "Book shuttle transfer",
+            isDone: true,
+          }),
           responses: { "200": { description: "Todo updated" } },
         },
         delete: {
@@ -274,17 +242,9 @@ const swaggerOptions: swaggerJSDoc.Options = {
           tags: ["Todos"],
           summary: "Update todo order",
           security: [{ bearerAuth: [] }],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            todoIds: ["6617f2dd2f8f25d189f74c52", "6617f2dd2f8f25d189f74c53"],
+          }),
           responses: { "200": { description: "Todo order updated" } },
         },
       },
@@ -299,17 +259,11 @@ const swaggerOptions: swaggerJSDoc.Options = {
           tags: ["Trips"],
           summary: "Create trip",
           security: [{ bearerAuth: [] }],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            title: "Tokyo Spring Trip",
+            startDate: "2026-04-20",
+            endDate: "2026-04-30",
+          }),
           responses: { "200": { description: "Trip created" } },
         },
       },
@@ -325,17 +279,9 @@ const swaggerOptions: swaggerJSDoc.Options = {
         patch: {
           tags: ["Trips"],
           summary: "Update trip order",
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            tripIds: ["6617f2dd2f8f25d189f74d10", "6617f2dd2f8f25d189f74d11"],
+          }),
           responses: { "200": { description: "Trip order updated" } },
         },
       },
@@ -366,17 +312,11 @@ const swaggerOptions: swaggerJSDoc.Options = {
               schema: { type: "string" },
             },
           ],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            title: "Tokyo Spring Trip (Updated)",
+            endDate: "2026-05-01",
+            description: "Extended by one day.",
+          }),
           responses: { "200": { description: "Trip updated" } },
         },
         delete: {
@@ -407,17 +347,10 @@ const swaggerOptions: swaggerJSDoc.Options = {
               schema: { type: "string" },
             },
           ],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            title: "Buy JR pass",
+            isDone: false,
+          }),
           responses: { "200": { description: "Trip todo created" } },
         },
       },
@@ -434,17 +367,10 @@ const swaggerOptions: swaggerJSDoc.Options = {
               schema: { type: "string" },
             },
           ],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            title: "Hotel check-in",
+            text: "Check-in starts at 15:00.",
+          }),
           responses: { "200": { description: "Trip note created" } },
         },
       },
@@ -461,17 +387,9 @@ const swaggerOptions: swaggerJSDoc.Options = {
               schema: { type: "string" },
             },
           ],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            userId: "6617f2dd2f8f25d189f74e20",
+          }),
           responses: { "200": { description: "User added to trip" } },
         },
       },
@@ -506,17 +424,11 @@ const swaggerOptions: swaggerJSDoc.Options = {
         post: {
           tags: ["Users"],
           summary: "Create user",
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            email: "friend@example.com",
+            password: "AnotherStrongPass123!",
+            role: "USER",
+          }),
           responses: { "200": { description: "User created" } },
         },
       },
@@ -545,17 +457,11 @@ const swaggerOptions: swaggerJSDoc.Options = {
               schema: { type: "string" },
             },
           ],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  additionalProperties: true,
-                },
-              },
-            },
-          },
+          requestBody: requestBodyWithSample({
+            firstName: "Taylor",
+            lastName: "Morgan",
+            role: "ADMIN",
+          }),
           responses: { "200": { description: "User updated" } },
         },
         delete: {
