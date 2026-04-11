@@ -2,12 +2,14 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
 
 import notesRouter from "./src/routes/notes";
 import todosRouter from "./src/routes/todos";
 import tripsRouter from "./src/routes/trips";
 import usersRouter from "./src/routes/users";
 import authRouter from "./src/routes/auth";
+import swaggerSpec from "./src/swagger";
 
 // Load environment variables from config.env
 dotenv.config({ path: ".env" });
@@ -15,6 +17,7 @@ dotenv.config({ path: ".env" });
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.ATLAS_URI || "";
+const isDevMode = process.env.NODE_ENV !== "production";
 
 // Middleware
 app.use(express.json());
@@ -23,7 +26,7 @@ app.use(express.json());
 const connectWithRetry = async (
   uri: string,
   retries: number = 5,
-  delay: number = 1000
+  delay: number = 1000,
 ) => {
   for (let i = 0; i < retries; i++) {
     try {
@@ -33,7 +36,7 @@ const connectWithRetry = async (
     } catch (err) {
       console.error(
         `Failed to connect to MongoDB (attempt ${i + 1}/${retries}):`,
-        err
+        err,
       );
       if (i < retries - 1) {
         await new Promise((resolve) => setTimeout(resolve, delay));
@@ -93,6 +96,14 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
+if (isDevMode) {
+  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.get("/api/docs.json", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerSpec);
+  });
+}
+
 // CORS configuration
 app.use(
   cors({
@@ -100,7 +111,7 @@ app.use(
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-  })
+  }),
 );
 
 // Routes
