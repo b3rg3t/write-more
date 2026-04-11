@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { ILink } from "./ILink";
 
 export interface INote extends Document {
@@ -6,6 +6,7 @@ export interface INote extends Document {
   content: string;
   order: number;
   links: ILink[];
+  users: mongoose.Types.ObjectId[];
   startDate?: Date;
   endDate?: Date;
   createdAt: Date;

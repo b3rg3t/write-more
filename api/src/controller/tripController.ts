@@ -79,6 +79,10 @@ export const createTrip = async (req: AuthRequest, res: Response) => {
   const userId = req.userId;
 
   try {
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     // Find the highest order
     const highestOrderTrip = await STrip.findOne().sort({ order: -1 });
     const newOrder = highestOrderTrip ? highestOrderTrip.order + 1 : 0;
@@ -128,7 +132,7 @@ export const updateTrip = async (req: AuthRequest, res: Response) => {
     const updatedTrip = await STrip.findByIdAndUpdate(
       req.params.id,
       { title, description, startDate, endDate, notes, todos },
-      { new: true }
+      { new: true },
     )
       .populate("notes")
       .populate("todos")
@@ -153,8 +157,8 @@ export const updateOrder = async (req: Request, res: Response) => {
       STrip.findByIdAndUpdate(
         update._id,
         { order: update.order },
-        { new: true }
-      )
+        { new: true },
+      ),
     );
     const updatedTrips = await Promise.all(promises);
     res.json(updatedTrips);
@@ -187,23 +191,38 @@ export const deleteTrip = async (req: AuthRequest, res: Response) => {
 };
 
 // Create a todo and connect it to a trip
-export const createTodoForTrip = async (req: Request, res: Response) => {
+export const createTodoForTrip = async (req: AuthRequest, res: Response) => {
   const { name, isCompleted } = req.body;
   const tripId = req.params.tripId;
+  const userId = req.userId;
 
   try {
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     // First, create the todo
     const highestOrderTodo = await STodo.findOne().sort({ order: -1 });
     const newOrder = highestOrderTodo ? highestOrderTodo.order + 1 : 0;
 
-    const newTodo = new STodo({ name, isCompleted, order: newOrder });
+    const newTodo = new STodo({
+      name,
+      isCompleted,
+      order: newOrder,
+      users: [userId],
+    });
     const savedTodo = await newTodo.save();
 
     // Then, connect the todo to the trip
     const updatedTrip = await STrip.findByIdAndUpdate(
       tripId,
-      { $push: { todos: savedTodo._id } },
-      { new: true }
+      {
+        $addToSet: {
+          todos: savedTodo._id,
+          users: userId,
+        },
+      },
+      { new: true },
     ).populate("todos");
 
     if (!updatedTrip) {
@@ -223,11 +242,16 @@ export const createTodoForTrip = async (req: Request, res: Response) => {
 };
 
 // Create a note and connect it to a trip
-export const createNoteForTrip = async (req: Request, res: Response) => {
+export const createNoteForTrip = async (req: AuthRequest, res: Response) => {
   const { title, content, links, startDate, endDate } = req.body;
   const tripId = req.params.tripId;
+  const userId = req.userId;
 
   try {
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     // First, create the note
     const highestOrderNote = await SNote.findOne().sort({ order: -1 });
     const newOrder = highestOrderNote ? highestOrderNote.order + 1 : 0;
@@ -237,6 +261,7 @@ export const createNoteForTrip = async (req: Request, res: Response) => {
       content,
       links,
       order: newOrder,
+      users: [userId],
       startDate,
       endDate,
     });
@@ -245,8 +270,13 @@ export const createNoteForTrip = async (req: Request, res: Response) => {
     // Then, connect the note to the trip
     const updatedTrip = await STrip.findByIdAndUpdate(
       tripId,
-      { $push: { notes: savedNote._id } },
-      { new: true }
+      {
+        $addToSet: {
+          notes: savedNote._id,
+          users: userId,
+        },
+      },
+      { new: true },
     ).populate("notes");
 
     if (!updatedTrip) {
@@ -318,7 +348,7 @@ export const removeUserFromTrip = async (req: AuthRequest, res: Response) => {
     }
 
     trip.users = trip.users.filter(
-      (userId) => userId.toString() !== userIdToRemove
+      (userId) => userId.toString() !== userIdToRemove,
     );
     await trip.save();
 

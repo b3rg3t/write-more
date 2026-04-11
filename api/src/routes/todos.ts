@@ -7,8 +7,11 @@ import {
   updateAll,
   updateTodo,
 } from "../controller/todoController";
+import { authenticate } from "../middleware/authenticate";
 
 const router = express.Router();
+
+router.use(authenticate);
 
 // Get all notes
 router.get("/", getTodos);

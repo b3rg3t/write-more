@@ -38,10 +38,10 @@ router.patch("/order", updateOrder);
 router.delete("/:id", authenticate, deleteTrip);
 
 // Create a todo and connect it to a specific trip
-router.post("/:tripId/todos", createTodoForTrip);
+router.post("/:tripId/todos", authenticate, createTodoForTrip);
 
 // Create a note and connect it to a specific trip
-router.post("/:tripId/notes", createNoteForTrip);
+router.post("/:tripId/notes", authenticate, createNoteForTrip);
 
 // Add user to trip
 router.post("/:id/users", authenticate, addUserToTrip);

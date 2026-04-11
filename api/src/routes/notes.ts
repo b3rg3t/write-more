@@ -7,8 +7,11 @@ import {
   updateOrder,
   deleteNote,
 } from "../controller/noteController";
+import { authenticate } from "../middleware/authenticate";
 
 const router = express.Router();
+
+router.use(authenticate);
 
 // Get all notes
 router.get("/", getNotes);

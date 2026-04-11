@@ -27,6 +27,12 @@ const SNote: Schema = new Schema(
         },
       },
     ],
+    users: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     startDate: {
       type: Date,
       required: false,
@@ -38,7 +44,7 @@ const SNote: Schema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export default mongoose.model<INote>("Note", SNote, "my_notes");

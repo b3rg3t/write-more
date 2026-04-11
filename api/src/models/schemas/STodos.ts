@@ -15,10 +15,16 @@ const STodo: Schema = new Schema(
       type: Number,
       default: 0,
     },
+    users: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export default mongoose.model<ITodo>("Todo", STodo, "my_todos");
