@@ -8,19 +8,19 @@ import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { apiSlice } from "../../store/reducers/api/apiSlice";
+import { clearCredentials, TOKEN_STORAGE_KEY } from "../../util/authCredentials";
 
 export const Header = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isAuthenticated = !!localStorage.getItem("token");
+  const isAuthenticated = !!localStorage.getItem(TOKEN_STORAGE_KEY);
 
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(window.location.href);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    clearCredentials();
     dispatch(apiSlice.util.resetApiState());
     navigate(ERoutes.AUTH);
   };

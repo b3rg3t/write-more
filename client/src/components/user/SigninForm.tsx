@@ -10,6 +10,10 @@ import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSigninMutation } from "../../store/reducers/api/apiSlice";
 import { text } from "../../localization/eng";
+import {
+  TOKEN_STORAGE_KEY,
+  USER_STORAGE_KEY,
+} from "../../util/authCredentials";
 
 interface SigninFormData {
   email: string;
@@ -42,8 +46,8 @@ export const SigninForm: FC<SigninFormProps> = ({
       const response = await signin(data).unwrap();
 
       // Store token in localStorage
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
+      localStorage.setItem(TOKEN_STORAGE_KEY, response.token);
+      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(response.user));
 
       console.log("Signin successful:", response);
 
