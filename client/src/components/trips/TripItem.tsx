@@ -110,7 +110,7 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
               }}
             >
               <IconButton
-                color="primary"
+                color="info"
                 edge="end"
                 aria-label="edit"
                 onClick={(e) => {
