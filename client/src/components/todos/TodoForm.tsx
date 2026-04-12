@@ -19,8 +19,9 @@ import { text } from "../../localization/eng";
 
 export const TodoForm: FC<{
   todo?: ITodo;
-  children: React.ReactNode;
-}> = ({ todo, children }) => {
+  children?: React.ReactNode;
+  formId?: string;
+}> = ({ todo, children, formId }) => {
   const isNew = useAppSelector(selectIsNew);
   const creatingTodoForTrip = useAppSelector(selectCreatingTodoForTrip);
   const [createNote] = useAddTodoMutation();
@@ -102,7 +103,11 @@ export const TodoForm: FC<{
   }, []);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+    <form
+      id={formId}
+      onSubmit={handleSubmit(onSubmit)}
+      style={{ width: "100%" }}
+    >
       <FormGroup sx={{ width: "100%", px: 0, pb: 0, pt: 1 }}>
         <Controller
           name={ETodoForm.NAME}

@@ -85,18 +85,35 @@ export const TripFormModal = () => {
           </IconButton>
         </Stack>
       </DialogTitle>
-      <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
-        <TripForm trip={trip.data}>
-          <DialogActions sx={{ p: 0 }}>
-            <Button onClick={onClose} color="inherit">
-              {buttons.cancel}
-            </Button>
-            <Button type="submit" variant="contained">
-              {buttons.submit}
-            </Button>
-          </DialogActions>
-        </TripForm>
+      <DialogContent
+        sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
+      >
+        <TripForm trip={trip.data} formId="trip-form" />
       </DialogContent>
+      <DialogActions
+        disableSpacing
+        sx={{
+          flexDirection: isMobile ? "column-reverse" : "row",
+          alignItems: isMobile ? "stretch" : "center",
+          gap: 1,
+          px: { xs: 1, sm: 3 },
+          py: { xs: 1, sm: 2 },
+          borderTop: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        <Button onClick={onClose} color="inherit" fullWidth={isMobile}>
+          {buttons.cancel}
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth={isMobile}
+          form="trip-form"
+        >
+          {buttons.submit}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

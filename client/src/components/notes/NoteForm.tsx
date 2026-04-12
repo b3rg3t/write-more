@@ -20,8 +20,9 @@ import { LinkForm } from "./links/LinkForm";
 
 export const NoteForm: FC<{
   note?: INote;
-  children: React.ReactNode;
-}> = ({ note, children }) => {
+  children?: React.ReactNode;
+  formId?: string;
+}> = ({ note, children, formId }) => {
   const isNew = useAppSelector(selectIsNew);
   const creatingNoteForTrip = useAppSelector(selectCreatingNoteForTrip);
   const [createNote] = useAddNoteMutation();
@@ -63,11 +64,11 @@ export const NoteForm: FC<{
         ENoteForm.START_DATE,
         note?.startDate
           ? new Date(note.startDate).toISOString().split("T")[0]
-          : ""
+          : "",
       );
       setValue(
         ENoteForm.END_DATE,
-        note?.endDate ? new Date(note.endDate).toISOString().split("T")[0] : ""
+        note?.endDate ? new Date(note.endDate).toISOString().split("T")[0] : "",
       );
     }
   }, [note, isNew, creatingNoteForTrip]);
@@ -121,7 +122,11 @@ export const NoteForm: FC<{
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+    <form
+      id={formId}
+      onSubmit={handleSubmit(onSubmit)}
+      style={{ width: "100%" }}
+    >
       <FormGroup sx={{ width: "100%", px: 0, pb: 0, pt: 1 }}>
         <Controller
           name={ENoteForm.TITLE}

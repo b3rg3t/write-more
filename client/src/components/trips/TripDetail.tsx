@@ -97,6 +97,7 @@ export const TripDetail = () => {
             flexDirection: "column",
             px: 2,
             pb: 2,
+            pt: 1,
           }}
         >
           <Stack
@@ -135,12 +136,7 @@ export const TripDetail = () => {
               alignItems="center"
               justifyContent="space-between"
             >
-              <Typography
-                variant="h3"
-                fontSize={fontSize16}
-                fontWeight="bold"
-                // sx={{ px: 2 }}
-              >
+              <Typography variant="h3" fontSize={fontSize16} fontWeight="bold">
                 {text.users.header}
               </Typography>
               <IconButton
@@ -151,7 +147,6 @@ export const TripDetail = () => {
                   e.stopPropagation();
                   handleAddUser();
                 }}
-                sx={{ mr: 1 }}
               >
                 <GroupAddIcon />
               </IconButton>

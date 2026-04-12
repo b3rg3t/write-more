@@ -50,18 +50,18 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
     resourceType === "note"
       ? selectIsDeletingNote
       : resourceType === "todo"
-      ? selectIsDeletingTodo
-      : selectIsDeletingTrip
+        ? selectIsDeletingTodo
+        : selectIsDeletingTrip,
   );
 
   const noteQuery = useGetNoteQuery(
-    resourceType === "note" && isDeleting ? isDeleting : skipToken
+    resourceType === "note" && isDeleting ? isDeleting : skipToken,
   );
   const todoQuery = useGetTodoQuery(
-    resourceType === "todo" && isDeleting ? isDeleting : skipToken
+    resourceType === "todo" && isDeleting ? isDeleting : skipToken,
   );
   const tripQuery = useGetTripQuery(
-    resourceType === "trip" && isDeleting ? isDeleting : skipToken
+    resourceType === "trip" && isDeleting ? isDeleting : skipToken,
   );
 
   const [deleteNoteApi] = useDeleteNoteMutation();
@@ -72,8 +72,8 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
     resourceType === "note"
       ? noteQuery.data
       : resourceType === "todo"
-      ? todoQuery.data
-      : tripQuery.data;
+        ? todoQuery.data
+        : tripQuery.data;
 
   const onClose = () => {
     if (resourceType === "note") {
@@ -110,8 +110,8 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
     resourceType === "note"
       ? text.notes.deleteNote
       : resourceType === "todo"
-      ? text.todos.deleteTodo
-      : text.trips.deleteTrip;
+        ? text.todos.deleteTodo
+        : text.trips.deleteTrip;
 
   const { title, titleUnknown, confirmation, buttons } = textConfig;
 
@@ -147,19 +147,37 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
+      <DialogContent
+        sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
+      >
         <DialogContentText id="delete-dialog-description" sx={{ mb: 2 }}>
           {confirmation.replace("{title}", resourceTitle || titleUnknown)}
         </DialogContentText>
-        <DialogActions>
-          <Button onClick={onClose} color="inherit">
-            {buttons.cancel}
-          </Button>
-          <Button onClick={handleConfirm} color="error" variant="contained">
-            {buttons.confirm}
-          </Button>
-        </DialogActions>
       </DialogContent>
+      <DialogActions
+        disableSpacing
+        sx={{
+          flexDirection: isMobile ? "column-reverse" : "row",
+          alignItems: isMobile ? "stretch" : "center",
+          gap: 1,
+          px: { xs: 1, sm: 3 },
+          py: { xs: 1, sm: 2 },
+          borderTop: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        <Button onClick={onClose} color="inherit" fullWidth={isMobile}>
+          {buttons.cancel}
+        </Button>
+        <Button
+          onClick={handleConfirm}
+          color="error"
+          variant="contained"
+          fullWidth={isMobile}
+        >
+          {buttons.confirm}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

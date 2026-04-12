@@ -92,18 +92,35 @@ export const TodoFormModal = () => {
           </IconButton>
         </Stack>
       </DialogTitle>
-      <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
-        <TodoForm todo={todo}>
-          <DialogActions sx={{ p: 0 }}>
-            <Button onClick={onClose} color="inherit">
-              {buttons.cancel}
-            </Button>
-            <Button type="submit" variant="contained">
-              {buttons.submit}
-            </Button>
-          </DialogActions>
-        </TodoForm>
+      <DialogContent
+        sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
+      >
+        <TodoForm todo={todo} formId="todo-form" />
       </DialogContent>
+      <DialogActions
+        disableSpacing
+        sx={{
+          flexDirection: isMobile ? "column-reverse" : "row",
+          alignItems: isMobile ? "stretch" : "center",
+          gap: 1,
+          px: { xs: 1, sm: 3 },
+          py: { xs: 1, sm: 2 },
+          borderTop: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        <Button onClick={onClose} color="inherit" fullWidth={isMobile}>
+          {buttons.cancel}
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth={isMobile}
+          form="todo-form"
+        >
+          {buttons.submit}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

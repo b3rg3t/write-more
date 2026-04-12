@@ -24,8 +24,9 @@ import { useGetAllUsersQuery } from "../../store/reducers/api/apiSlice";
 
 export const TripForm: FC<{
   trip?: ITrip;
-  children: React.ReactNode;
-}> = ({ trip, children }) => {
+  children?: React.ReactNode;
+  formId?: string;
+}> = ({ trip, children, formId }) => {
   const isNew = useAppSelector(selectIsNew);
   const [createTrip] = useAddTripMutation();
   const [updateTrip] = useUpdateTripMutation();
@@ -70,23 +71,23 @@ export const TripForm: FC<{
         ETripForm.START_DATE,
         trip?.startDate
           ? new Date(trip.startDate).toISOString().split("T")[0]
-          : ""
+          : "",
       );
       setValue(
         ETripForm.END_DATE,
-        trip?.endDate ? new Date(trip.endDate).toISOString().split("T")[0] : ""
+        trip?.endDate ? new Date(trip.endDate).toISOString().split("T")[0] : "",
       );
       setValue(
         ETripForm.NOTES,
-        trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || []
+        trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || [],
       );
       setValue(
         ETripForm.TODOS,
-        trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || []
+        trip?.todos.map((t) => (typeof t === "string" ? t : t._id)) || [],
       );
       setValue(
         ETripForm.USERS,
-        trip?.users.map((u) => (typeof u === "string" ? u : u._id)) || []
+        trip?.users.map((u) => (typeof u === "string" ? u : u._id)) || [],
       );
     }
   }, [trip, isNew]);
@@ -112,15 +113,15 @@ export const TripForm: FC<{
             : undefined,
           notes:
             data[ETripForm.NOTES]?.map((n) =>
-              typeof n === "string" ? n : n._id
+              typeof n === "string" ? n : n._id,
             ) || [],
           todos:
             data[ETripForm.TODOS]?.map((t) =>
-              typeof t === "string" ? t : t._id
+              typeof t === "string" ? t : t._id,
             ) || [],
           users:
             data[ETripForm.USERS]?.map((u) =>
-              typeof u === "string" ? u : u._id
+              typeof u === "string" ? u : u._id,
             ) || [],
         });
       } catch (error) {
@@ -140,15 +141,15 @@ export const TripForm: FC<{
             : undefined,
           notes:
             data[ETripForm.NOTES]?.map((n) =>
-              typeof n === "string" ? n : n._id
+              typeof n === "string" ? n : n._id,
             ) || [],
           todos:
             data[ETripForm.TODOS]?.map((t) =>
-              typeof t === "string" ? t : t._id
+              typeof t === "string" ? t : t._id,
             ) || [],
           users:
             data[ETripForm.USERS]?.map((u) =>
-              typeof u === "string" ? u : u._id
+              typeof u === "string" ? u : u._id,
             ) || [],
         });
       } catch (error) {
@@ -164,7 +165,11 @@ export const TripForm: FC<{
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+    <form
+      id={formId}
+      onSubmit={handleSubmit(onSubmit)}
+      style={{ width: "100%" }}
+    >
       <FormGroup sx={{ width: "100%", px: 0, pb: 0, pt: 1 }}>
         <Controller
           name={ETripForm.TITLE}

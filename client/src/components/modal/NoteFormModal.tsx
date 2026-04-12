@@ -91,18 +91,35 @@ export const NoteFormModal = () => {
           </IconButton>
         </Stack>
       </DialogTitle>
-      <DialogContent sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 } }}>
-        <NoteForm note={note}>
-          <DialogActions sx={{ p: 0 }}>
-            <Button onClick={onClose} color="inherit">
-              {buttons.cancel}
-            </Button>
-            <Button type="submit" variant="contained">
-              {buttons.submit}
-            </Button>
-          </DialogActions>
-        </NoteForm>
+      <DialogContent
+        sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
+      >
+        <NoteForm note={note} formId="note-form" />
       </DialogContent>
+      <DialogActions
+        disableSpacing
+        sx={{
+          flexDirection: isMobile ? "column-reverse" : "row",
+          alignItems: isMobile ? "stretch" : "center",
+          gap: 1,
+          px: { xs: 1, sm: 3 },
+          py: { xs: 1, sm: 2 },
+          borderTop: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        <Button onClick={onClose} color="inherit" fullWidth={isMobile}>
+          {buttons.cancel}
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth={isMobile}
+          form="note-form"
+        >
+          {buttons.submit}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
