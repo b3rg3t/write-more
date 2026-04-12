@@ -173,18 +173,6 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
           <Alert severity="error">
             Failed to load resource. Please try again.
           </Alert>
-        ) : noteQuery.isLoading ||
-          noteQuery.isFetching ||
-          noteQuery.isUninitialized ||
-          todoQuery.isLoading ||
-          todoQuery.isFetching ||
-          todoQuery.isUninitialized ||
-          tripQuery.isLoading ||
-          tripQuery.isFetching ||
-          tripQuery.isUninitialized ? (
-          <Stack alignItems="center" py={2}>
-            <CircularProgress size={24} />
-          </Stack>
         ) : (
           <DialogContentText id="delete-dialog-description" sx={{ mb: 2 }}>
             {confirmation.replace("{title}", resourceTitle || titleUnknown)}
