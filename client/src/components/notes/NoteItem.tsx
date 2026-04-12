@@ -17,6 +17,7 @@ import { useAppDispatch } from "../../store/redux/hooks";
 import { FC } from "react";
 import { fontSize16 } from "../utils/FontSize";
 import { INote } from "../../models/interface/INote";
+import { IComment } from "../../models/interface/IComment";
 import { text } from "../../localization/eng";
 import { setEditNote } from "../../store/reducers/notes/notesSlice";
 import { TLink } from "../../models/type/TLink";
@@ -146,7 +147,12 @@ export const NoteItem: FC<{
             </List>
           </Container>
         )}
-        <NoteComments note={note} />
+        <NoteComments
+          noteId={note._id}
+          comments={(note.commentIds ?? []).filter(
+            (c): c is IComment => typeof c !== "string",
+          )}
+        />
       </CardActions>
     </Card>
   );

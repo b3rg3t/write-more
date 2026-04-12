@@ -1,7 +1,6 @@
 import {
   Button,
   Box,
-  CircularProgress,
   Divider,
   FormGroup,
   IconButton,
@@ -9,10 +8,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FC, MouseEvent, useMemo, useState } from "react";
+import { FC, MouseEvent, useState } from "react";
 import { text } from "../../localization/eng";
 import { IComment } from "../../models/interface/IComment";
-import { INote } from "../../models/interface/INote";
 import SendIcon from "@mui/icons-material/Send";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import EditIcon from "@mui/icons-material/Edit";
@@ -23,20 +21,19 @@ import {
   useCreateCommentForNoteMutation,
   useDeleteCommentMutation,
   useGetCurrentUserQuery,
-  useGetCommentsQuery,
   useUpdateCommentMutation,
 } from "../../store/reducers/api/apiSlice";
 
-export const NoteComments: FC<{ note: INote }> = ({ note }) => {
+interface INoteCommentsProps {
+  noteId: string;
+  comments: IComment[];
+}
+
+export const NoteComments: FC<INoteCommentsProps> = ({ noteId, comments }) => {
   const [newComment, setNewComment] = useState("");
   const [isCommentFormVisible, setIsCommentFormVisible] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState("");
-  const {
-    data: fetchedComments,
-    isLoading: isLoadingComments,
-    error: commentsError,
-  } = useGetCommentsQuery(note._id);
   const { data: currentUserResponse } = useGetCurrentUserQuery();
   const [createCommentForNote, { isLoading: isCreatingComment }] =
     useCreateCommentForNoteMutation();
@@ -44,16 +41,6 @@ export const NoteComments: FC<{ note: INote }> = ({ note }) => {
     useUpdateCommentMutation();
   const [deleteComment, { isLoading: isDeletingComment }] =
     useDeleteCommentMutation();
-
-  const comments = useMemo(() => {
-    if (fetchedComments) {
-      return fetchedComments;
-    }
-
-    return (note.commentIds || []).filter(
-      (comment): comment is IComment => typeof comment !== "string",
-    );
-  }, [fetchedComments, note.commentIds]);
 
   const handleCreateComment = async () => {
     const content = newComment.trim();
@@ -64,7 +51,7 @@ export const NoteComments: FC<{ note: INote }> = ({ note }) => {
 
     try {
       await createCommentForNote({
-        noteId: note._id,
+        noteId,
         content,
       }).unwrap();
       setNewComment("");
@@ -189,18 +176,7 @@ export const NoteComments: FC<{ note: INote }> = ({ note }) => {
           </Stack>
         </FormGroup>
       )}
-      {isLoadingComments ? (
-        <Stack direction="row" spacing={1} alignItems="center">
-          <CircularProgress size={16} />
-          <Typography variant="body2" color="text.secondary">
-            {commentTexts.loading}
-          </Typography>
-        </Stack>
-      ) : commentsError ? (
-        <Typography variant="body2" color="error">
-          {commentTexts.error}
-        </Typography>
-      ) : comments.length === 0 ? (
+      {comments.length === 0 ? (
         <></>
       ) : (
         <Stack spacing={1}>
