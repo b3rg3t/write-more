@@ -24,6 +24,7 @@ import { Users } from "./components/user/Users";
 import { AuthPage } from "./components/user/AuthPage";
 import { ProtectedRoute } from "./components/wrapper/ProtectedRoute";
 import { useNavigate } from "react-router-dom";
+import { UpdatePrompt } from "./components/utils/UpdatePrompt";
 
 const App = () => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <UpdatePrompt />
       <Header />
       <TripFormModal />
       <DeleteModal resourceType="trip" />

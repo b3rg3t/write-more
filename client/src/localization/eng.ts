@@ -175,6 +175,11 @@ export const text = {
       },
     },
   },
+  updatePrompt: {
+    message: "A new version is available.",
+    reload: "Reload",
+    dismiss: "Dismiss",
+  },
   errors: {
     root: "An error occurred",
   },

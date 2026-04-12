@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa";
 
 const manifestConfig: Partial<VitePWAOptions> = {
-  registerType: "autoUpdate",
+  registerType: "prompt",
   includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
   manifest: {
     name: "Write More",
