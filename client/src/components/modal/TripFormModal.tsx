@@ -98,7 +98,8 @@ export const TripFormModal = () => {
       >
         {trip.error ? (
           <Alert severity="error">Failed to load trip. Please try again.</Alert>
-        ) : trip.isLoading || trip.isFetching || trip.isUninitialized ? (
+        ) : !isNew &&
+          (trip.isLoading || trip.isFetching || trip.isUninitialized) ? (
           <Stack
             sx={{
               display: "flex",
