@@ -205,7 +205,7 @@ export const text = {
       firstName: "First name",
       lastName: "Last name",
       password: "New password",
-      edit: "Change user",
+      edit: "Edit user",
       cancelEdit: "Cancel",
       submit: "Save Changes",
       saving: "Saving...",
