@@ -25,6 +25,7 @@ import { AuthPage } from "./components/user/AuthPage";
 import { ProtectedRoute } from "./components/wrapper/ProtectedRoute";
 import { useNavigate } from "react-router-dom";
 import { UpdatePrompt } from "./components/utils/UpdatePrompt";
+import { AddUserToTripModal } from "./components/modal/AddUserToTripModal";
 
 const App = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const App = () => {
       <Header />
       <TripFormModal />
       <DeleteModal resourceType="trip" />
+      <AddUserToTripModal />
       <NoteFormModal />
       <DeleteModal resourceType="note" />
       <TodoFormModal />

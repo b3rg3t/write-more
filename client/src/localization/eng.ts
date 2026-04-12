@@ -109,6 +109,16 @@ export const text = {
       loading: "Loading trip",
       notFound: "Trip not found",
     },
+    addUser: {
+      title: "Add User to Trip",
+      loading: "Loading users...",
+      noUsers: "No users found.",
+      fetchError: "Failed to load users.",
+      close: "Close",
+    },
+  },
+  users: {
+    header: "Users",
   },
   footer: {
     header: "Write More travel app",

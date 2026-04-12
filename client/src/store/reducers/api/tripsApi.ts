@@ -91,4 +91,14 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
     }),
     invalidatesTags: ["Trips"],
   }),
+
+  // Add user to trip
+  addUserToTrip: builder.mutation<ITrip, { tripId: string; userId: string }>({
+    query: ({ tripId, userId }) => ({
+      url: `trips/${tripId}/users`,
+      method: "POST",
+      body: { userId },
+    }),
+    invalidatesTags: ["Trips"],
+  }),
 });

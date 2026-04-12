@@ -1,3 +1,4 @@
+import { tripUsersSlice } from "../reducers/trips/tripUsersSlice";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { EStoreKeys } from "../../models/enum/EStoreKeys";
 import { storeMiddleware } from "../storeMiddlewate";
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   [EStoreKeys.NOTES]: notesSlice.reducer,
   [EStoreKeys.TODOS]: todosSlice.reducer,
   [EStoreKeys.TRIPS]: tripsSlice.reducer,
+  [EStoreKeys.TRIP_USERS]: tripUsersSlice.reducer,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 

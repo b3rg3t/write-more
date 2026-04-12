@@ -83,6 +83,7 @@ export const {
   useDeleteTripMutation,
   useCreateNoteForTripMutation,
   useCreateTodoForTripMutation,
+  useAddUserToTripMutation,
 
   // Users hooks
   useAddUserMutation,

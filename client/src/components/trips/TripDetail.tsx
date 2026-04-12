@@ -17,9 +17,11 @@ import { useAppDispatch } from "../../store/redux/hooks";
 import FormatListBulletedAddIcon from "@mui/icons-material/FormatListBulletedAdd";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { createTodoForTrip } from "../../store/reducers/todos/todosSlice";
 import { createNoteForTrip } from "../../store/reducers/notes/notesSlice";
 import { setEditTrip } from "../../store/reducers/trips/tripsSlice";
+import { setAddUserToTrip } from "../../store/reducers/trips/tripUsersSlice";
 
 import { TripDates } from "../utils/TripDates";
 
@@ -48,6 +50,12 @@ export const TripDetail = () => {
   const handleEditTrip = () => {
     if (trip) {
       dispatch(setEditTrip(trip._id));
+    }
+  };
+
+  const handleAddUser = () => {
+    if (trip) {
+      dispatch(setAddUserToTrip(trip._id));
     }
   };
 
@@ -121,7 +129,33 @@ export const TripDetail = () => {
           </Typography>
         </Card>
         {trip?.users && trip.users.length > 0 && (
-          <Card variant="outlined" sx={{ mt: 1, p: 2 }}>
+          <Card variant="outlined" sx={{ mt: 1, p: 2, pt: 1 }}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography
+                variant="h3"
+                fontSize={fontSize16}
+                fontWeight="bold"
+                // sx={{ px: 2 }}
+              >
+                {text.users.header}
+              </Typography>
+              <IconButton
+                color="info"
+                edge="end"
+                aria-label="add user"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAddUser();
+                }}
+                sx={{ mr: 1 }}
+              >
+                <GroupAddIcon />
+              </IconButton>
+            </Stack>
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
               {trip.users.map((user, index) => {
                 if (typeof user === "string") {
