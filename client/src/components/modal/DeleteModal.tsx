@@ -10,7 +10,6 @@ import {
   useTheme,
   CircularProgress,
   Alert,
-  Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { text } from "../../localization/eng";
