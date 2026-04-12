@@ -91,7 +91,6 @@ export const TripDetail = () => {
         <Card
           variant="outlined"
           sx={{
-            boxShadow: 2,
             borderRadius: 2,
             display: "flex",
             flexDirection: "column",
