@@ -1,7 +1,9 @@
 import {
+  Button,
   Box,
   CircularProgress,
   Divider,
+  FormGroup,
   IconButton,
   Stack,
   TextField,
@@ -12,6 +14,7 @@ import { text } from "../../localization/eng";
 import { IComment } from "../../models/interface/IComment";
 import { INote } from "../../models/interface/INote";
 import SendIcon from "@mui/icons-material/Send";
+import AddCommentIcon from "@mui/icons-material/AddComment";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
@@ -26,6 +29,7 @@ import {
 
 export const NoteComments: FC<{ note: INote }> = ({ note }) => {
   const [newComment, setNewComment] = useState("");
+  const [isCommentFormVisible, setIsCommentFormVisible] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState("");
   const {
@@ -64,6 +68,7 @@ export const NoteComments: FC<{ note: INote }> = ({ note }) => {
         content,
       }).unwrap();
       setNewComment("");
+      setIsCommentFormVisible(false);
     } catch (error) {
       console.error("Failed to create comment:", error);
     }
@@ -71,6 +76,17 @@ export const NoteComments: FC<{ note: INote }> = ({ note }) => {
 
   const handleContainerClick = (event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
+  };
+
+  const handleOpenCommentForm = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setIsCommentFormVisible(true);
+  };
+
+  const handleCloseCommentForm = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setIsCommentFormVisible(false);
+    setNewComment("");
   };
 
   const handleEditCommentStart = (comment: IComment) => {
@@ -116,42 +132,63 @@ export const NoteComments: FC<{ note: INote }> = ({ note }) => {
   const currentUserId = currentUserResponse?.user?._id;
 
   return (
-    <Box onClick={handleContainerClick} sx={{ mt: 2, mr: 1 }}>
-      <Divider sx={{ mb: 1 }} />
-      <Typography
-        variant="subtitle2"
-        sx={{ mb: 1, fontWeight: 600, color: "text.primary" }}
-      >
-        {commentTexts.title}
-      </Typography>
-      <Stack direction="row" spacing={1} sx={{ mb: 1.5 }}>
-        <TextField
-          fullWidth
+    <Box onClick={handleContainerClick} sx={{ mt: 1, mr: 1 }}>
+      <Divider sx={{ mb: 1 }} />{" "}
+      {!isCommentFormVisible ? (
+        <Button
+          variant="outlined"
           size="small"
-          placeholder={commentTexts.placeholder}
-          value={newComment}
-          onChange={(event) => setNewComment(event.target.value)}
-          onClick={handleContainerClick}
-          onKeyDown={(event) => {
-            event.stopPropagation();
-            if (event.key === "Enter" && !event.shiftKey) {
-              event.preventDefault();
-              void handleCreateComment();
-            }
-          }}
-        />
-        <IconButton
-          color="primary"
-          edge="end"
-          aria-label={commentTexts.submit}
-          disabled={isCreatingComment || !newComment.trim()}
-          onClick={() => void handleCreateComment()}
-          sx={{ pr: 0.5 }}
+          onClick={handleOpenCommentForm}
+          startIcon={<AddCommentIcon fontSize="small" />}
+          sx={{ my: 1, textTransform: "none" }}
         >
-          <SendIcon />
-        </IconButton>
-      </Stack>
-
+          {commentTexts.add}
+        </Button>
+      ) : (
+        <FormGroup sx={{ width: "100%", px: 0, pb: 0, pt: 1 }}>
+          <Stack direction="row" spacing={1} sx={{ mb: 1.5 }}>
+            <TextField
+              fullWidth
+              autoFocus
+              label={commentTexts.title}
+              size="small"
+              placeholder={commentTexts.placeholder}
+              value={newComment}
+              onChange={(event) => setNewComment(event.target.value)}
+              onClick={handleContainerClick}
+              onKeyDown={(event) => {
+                event.stopPropagation();
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  void handleCreateComment();
+                }
+              }}
+            />
+            <IconButton
+              size="small"
+              color="primary"
+              edge="end"
+              aria-label={commentTexts.submit}
+              disabled={isCreatingComment || !newComment.trim()}
+              onClick={() => void handleCreateComment()}
+              sx={{ pr: 0.5 }}
+            >
+              <SendIcon />
+            </IconButton>
+            <IconButton
+              size="small"
+              color="inherit"
+              edge="end"
+              aria-label={commentTexts.cancel}
+              disabled={isCreatingComment}
+              onClick={handleCloseCommentForm}
+              sx={{ pr: 0.5 }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Stack>
+        </FormGroup>
+      )}
       {isLoadingComments ? (
         <Stack direction="row" spacing={1} alignItems="center">
           <CircularProgress size={16} />
@@ -164,9 +201,7 @@ export const NoteComments: FC<{ note: INote }> = ({ note }) => {
           {commentTexts.error}
         </Typography>
       ) : comments.length === 0 ? (
-        <Typography variant="body2" color="text.secondary">
-          {commentTexts.empty}
-        </Typography>
+        <></>
       ) : (
         <Stack spacing={1}>
           {comments.map((comment) => (

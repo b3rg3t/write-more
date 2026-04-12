@@ -25,7 +25,8 @@ export const text = {
       created: "Created",
       updated: "Updated",
       comments: {
-        title: "Comments",
+        title: "Comment",
+        add: "Add comment",
         loading: "Loading comments...",
         empty: "No comments yet",
         placeholder: "Write a comment",
