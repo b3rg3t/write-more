@@ -38,6 +38,7 @@ export const TripDetail = () => {
     isLoading,
     error,
     isUninitialized,
+    isFetching,
   } = useGetTripQuery(tripId!);
 
   const handleCreateTodo = () => {
@@ -76,6 +77,7 @@ export const TripDetail = () => {
     <RtkQueryWrapper
       isLoading={isLoading || isUninitialized}
       data={trip ? [trip] : []}
+      isFetching={isFetching}
       error={error}
       texts={{
         loading: text.trips.tripDetail.loading,
