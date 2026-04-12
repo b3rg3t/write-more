@@ -75,7 +75,7 @@ export const TodoItem: FC<{
         }}
       >
         <IconButton
-          color="primary"
+          color="info"
           edge="end"
           aria-label="edit"
           onClick={(e) => {

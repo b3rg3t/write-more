@@ -18,16 +18,21 @@ import FormatListBulletedAddIcon from "@mui/icons-material/FormatListBulletedAdd
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { createTodoForTrip } from "../../store/reducers/todos/todosSlice";
 import { createNoteForTrip } from "../../store/reducers/notes/notesSlice";
 import { setEditTrip } from "../../store/reducers/trips/tripsSlice";
 import { setAddUserToTrip } from "../../store/reducers/trips/tripUsersSlice";
 
 import { TripDates } from "../utils/TripDates";
+import { useState } from "react";
 
 export const TripDetail = () => {
   const { tripId } = useParams<{ tripId: string }>();
   const dispatch = useAppDispatch();
+  const [showTodos, setShowTodos] = useState(true);
+  const [showNotes, setShowNotes] = useState(true);
   const {
     data: trip,
     isLoading,
@@ -57,6 +62,14 @@ export const TripDetail = () => {
     if (trip) {
       dispatch(setAddUserToTrip(trip._id));
     }
+  };
+
+  const handleToggleTodoVisibility = () => {
+    setShowTodos((prev) => !prev);
+  };
+
+  const handleToggleNoteVisibility = () => {
+    setShowNotes((prev) => !prev);
   };
 
   return (
@@ -188,14 +201,29 @@ export const TripDetail = () => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography
-            variant="h3"
-            fontSize={fontSize16}
-            fontWeight="bold"
-            sx={{ px: 2 }}
-          >
-            {text.todos.header}
-          </Typography>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography
+              variant="h3"
+              fontSize={fontSize16}
+              fontWeight="bold"
+              sx={{ pl: 2 }}
+            >
+              {text.todos.header}
+            </Typography>
+            <IconButton
+              size="small"
+              color="info"
+              edge="end"
+              aria-label="toggle todo visibility"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToggleTodoVisibility();
+              }}
+              sx={{ ml: 0 }}
+            >
+              {showTodos ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </IconButton>
+          </Stack>
           <IconButton
             color="info"
             edge="end"
@@ -209,21 +237,38 @@ export const TripDetail = () => {
             <FormatListBulletedAddIcon />
           </IconButton>
         </Stack>
-        <TodoList trip={trip} todos={trip?.todos ?? []} headingLevel="h3" />
+        {showTodos && (
+          <TodoList trip={trip} todos={trip?.todos ?? []} headingLevel="h3" />
+        )}
         <Divider sx={{ my: 2 }} />
         <Stack
           direction="row"
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography
-            variant="h3"
-            fontSize={fontSize16}
-            fontWeight="bold"
-            sx={{ px: 2 }}
-          >
-            {text.notes.header}
-          </Typography>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography
+              variant="h3"
+              fontSize={fontSize16}
+              fontWeight="bold"
+              sx={{ pl: 2 }}
+            >
+              {text.notes.header}
+            </Typography>
+            <IconButton
+              size="small"
+              color="secondary"
+              edge="end"
+              aria-label="toggle note visibility"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToggleNoteVisibility();
+              }}
+              sx={{ ml: 0 }}
+            >
+              {showNotes ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </IconButton>
+          </Stack>
           <IconButton
             color="secondary"
             edge="end"
@@ -237,7 +282,9 @@ export const TripDetail = () => {
             <NoteAddIcon />
           </IconButton>
         </Stack>
-        <NoteList trip={trip} notes={trip?.notes ?? []} headingLevel="h3" />
+        {showNotes && (
+          <NoteList trip={trip} notes={trip?.notes ?? []} headingLevel="h3" />
+        )}
       </Container>
     </RtkQueryWrapper>
   );

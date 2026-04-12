@@ -71,7 +71,7 @@ export const NoteItem: FC<{
           </Typography>
           <Stack direction="column" alignItems="start" spacing={0.5}>
             <IconButton
-              color="primary"
+              color="info"
               edge="end"
               aria-label="edit"
               onClick={(e) => {
