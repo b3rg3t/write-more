@@ -120,7 +120,7 @@ export const NoteComments: FC<INoteCommentsProps> = ({ noteId, comments }) => {
 
   return (
     <Box onClick={handleContainerClick} sx={{ mt: 1, mr: 1 }}>
-      <Divider sx={{ mb: 1 }} />{" "}
+      <Divider />
       {!isCommentFormVisible ? (
         <Button
           variant="outlined"
