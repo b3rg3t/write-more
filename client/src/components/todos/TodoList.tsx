@@ -55,7 +55,7 @@ export const TodoList: FC<TodoListProps> = ({ todos, headingLevel, trip }) => {
     const reordered = reordersHelper(
       todos,
       result.source.index,
-      result.destination.index
+      result.destination.index,
     );
     handleReorderNotes(reordered);
     setTodos(reordered);
@@ -65,7 +65,7 @@ export const TodoList: FC<TodoListProps> = ({ todos, headingLevel, trip }) => {
     setTodos(todos);
   }, [todos]);
 
-  if (todosState.length === 0) {
+  if (todosState.length === 0 && todos.length === 0) {
     return (
       <Typography variant={"body1"}>
         {text.todos.todosList.noTodosAvailable}

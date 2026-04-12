@@ -60,13 +60,13 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip }) => {
     const reordered = reordersHelper(
       notes,
       result.source.index,
-      result.destination.index
+      result.destination.index,
     );
     handleReorderNotes(reordered);
     setNotes(reordered);
   };
 
-  if (notesState.length === 0) {
+  if (notesState.length === 0 && notes.length === 0) {
     return (
       <Typography variant={"body1"}>
         {text.notes.notesList.noNotesAvailable}
