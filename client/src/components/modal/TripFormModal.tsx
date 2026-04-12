@@ -8,6 +8,8 @@ import {
   Stack,
   useMediaQuery,
   useTheme,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -41,6 +43,11 @@ export const TripFormModal = () => {
     }
   };
 
+  const isButtonDisabled = !!(
+    trip.error ||
+    (isEditing && (trip.isLoading || trip.isFetching || trip.isUninitialized))
+  );
+
   const open = !!isNew || !!isEditing;
 
   const { titleNew, titleEdit, buttons } = text.trips.tripsForm;
@@ -67,11 +74,12 @@ export const TripFormModal = () => {
       >
         {isNew ? titleNew : titleEdit}
         <Stack direction="row" spacing={1}>
-          {trip && (
+          {trip.data && (
             <IconButton
               color="error"
               edge="end"
               aria-label="delete"
+              disabled={isButtonDisabled}
               onClick={(e) => {
                 e.stopPropagation();
                 handleDeleteTrip();
@@ -88,7 +96,22 @@ export const TripFormModal = () => {
       <DialogContent
         sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
       >
-        <TripForm trip={trip.data} formId="trip-form" />
+        {trip.error ? (
+          <Alert severity="error">Failed to load trip. Please try again.</Alert>
+        ) : trip.isLoading || trip.isFetching || trip.isUninitialized ? (
+          <Stack
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              py: 4,
+            }}
+          >
+            <CircularProgress />
+          </Stack>
+        ) : (
+          <TripForm trip={trip.data} formId="trip-form" />
+        )}
       </DialogContent>
       <DialogActions
         disableSpacing
@@ -110,6 +133,7 @@ export const TripFormModal = () => {
           variant="contained"
           fullWidth={isMobile}
           form="trip-form"
+          disabled={isButtonDisabled}
         >
           {buttons.submit}
         </Button>

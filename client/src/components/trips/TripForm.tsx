@@ -5,6 +5,8 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import { FC, useEffect, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -33,9 +35,21 @@ export const TripForm: FC<{
   const dispatch = useAppDispatch();
   const titleRef = useRef<HTMLInputElement>(null);
 
-  const { data: notes } = useGetAllNotesQuery();
-  const { data: todos } = useGetAllTodosQuery();
-  const { data: users } = useGetAllUsersQuery();
+  const {
+    data: notes,
+    isLoading: notesLoading,
+    error: notesError,
+  } = useGetAllNotesQuery();
+  const {
+    data: todos,
+    isLoading: todosLoading,
+    error: todosError,
+  } = useGetAllTodosQuery();
+  const {
+    data: users,
+    isLoading: usersLoading,
+    error: usersError,
+  } = useGetAllUsersQuery();
 
   const {
     handleSubmit,
@@ -171,6 +185,14 @@ export const TripForm: FC<{
       style={{ width: "100%" }}
     >
       <FormGroup sx={{ width: "100%", px: 0, pb: 0, pt: 1 }}>
+        {(notesError || todosError || usersError) && (
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            {notesError && "Failed to load notes. "}
+            {todosError && "Failed to load todos. "}
+            {usersError && "Failed to load users. "}
+            Some options may be unavailable.
+          </Alert>
+        )}
         <Controller
           name={ETripForm.TITLE}
           control={control}
@@ -246,7 +268,7 @@ export const TripForm: FC<{
             />
           )}
         />
-        <FormControl fullWidth margin="normal">
+        <FormControl fullWidth margin="normal" disabled={notesLoading}>
           <InputLabel>{text.notes.header}</InputLabel>
           <Controller
             name={ETripForm.NOTES}
@@ -258,6 +280,11 @@ export const TripForm: FC<{
                 label="Notes"
                 value={field.value || []}
               >
+                {notesLoading && (
+                  <MenuItem disabled>
+                    <CircularProgress size={20} />
+                  </MenuItem>
+                )}
                 {notes?.map((note) => (
                   <MenuItem key={note._id} value={note._id}>
                     {note.title}
@@ -267,7 +294,7 @@ export const TripForm: FC<{
             )}
           />
         </FormControl>
-        <FormControl fullWidth margin="normal">
+        <FormControl fullWidth margin="normal" disabled={todosLoading}>
           <InputLabel>{text.todos.header}</InputLabel>
           <Controller
             name={ETripForm.TODOS}
@@ -279,6 +306,11 @@ export const TripForm: FC<{
                 label="Todos"
                 value={field.value || []}
               >
+                {todosLoading && (
+                  <MenuItem disabled>
+                    <CircularProgress size={20} />
+                  </MenuItem>
+                )}
                 {todos?.map((todo) => (
                   <MenuItem key={todo._id} value={todo._id}>
                     {todo.name}
@@ -288,7 +320,7 @@ export const TripForm: FC<{
             )}
           />
         </FormControl>
-        <FormControl fullWidth margin="normal">
+        <FormControl fullWidth margin="normal" disabled={usersLoading}>
           <InputLabel>{text.user.header}</InputLabel>
           <Controller
             name={ETripForm.USERS}
@@ -300,6 +332,11 @@ export const TripForm: FC<{
                 label="Users"
                 value={field.value || []}
               >
+                {usersLoading && (
+                  <MenuItem disabled>
+                    <CircularProgress size={20} />
+                  </MenuItem>
+                )}
                 {users?.map((user) => (
                   <MenuItem key={user._id} value={user._id}>
                     {user.firstName && user.lastName

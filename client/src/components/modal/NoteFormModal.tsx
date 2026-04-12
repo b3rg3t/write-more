@@ -8,6 +8,8 @@ import {
   Stack,
   useMediaQuery,
   useTheme,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -47,6 +49,12 @@ export const NoteFormModal = () => {
     }
   };
 
+  const isButtonDisabled = !!(
+    note1.error ||
+    (isEditing &&
+      (note1.isLoading || note1.isFetching || note1.isUninitialized))
+  );
+
   const open = !!isNew || !!isEditing || !!creatingNoteForTrip;
 
   const { titleNew, titleEdit, buttons } = text.notes.notesForm;
@@ -78,6 +86,7 @@ export const NoteFormModal = () => {
               color="error"
               edge="end"
               aria-label="delete"
+              disabled={isButtonDisabled}
               onClick={(e) => {
                 e.stopPropagation();
                 handleDeleteNote();
@@ -94,7 +103,16 @@ export const NoteFormModal = () => {
       <DialogContent
         sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
       >
-        <NoteForm note={note} formId="note-form" />
+        {note1.error ? (
+          <Alert severity="error">Failed to load note. Please try again.</Alert>
+        ) : isEditing &&
+          (note1.isLoading || note1.isFetching || note1.isUninitialized) ? (
+          <Stack alignItems="center" py={4}>
+            <CircularProgress />
+          </Stack>
+        ) : (
+          <NoteForm note={note} formId="note-form" />
+        )}
       </DialogContent>
       <DialogActions
         disableSpacing
@@ -116,6 +134,7 @@ export const NoteFormModal = () => {
           variant="contained"
           fullWidth={isMobile}
           form="note-form"
+          disabled={isButtonDisabled}
         >
           {buttons.submit}
         </Button>

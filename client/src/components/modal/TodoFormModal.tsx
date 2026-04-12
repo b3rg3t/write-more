@@ -8,6 +8,8 @@ import {
   Stack,
   useMediaQuery,
   useTheme,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -48,6 +50,12 @@ export const TodoFormModal = () => {
     }
   };
 
+  const isButtonDisabled = !!(
+    todo1.error ||
+    (isEditing &&
+      (todo1.isLoading || todo1.isFetching || todo1.isUninitialized))
+  );
+
   const open = !!isNew || !!isEditing || !!creatingTodoForTrip;
 
   const { titleNew, titleEdit, buttons } = text.todos.todosForm;
@@ -79,6 +87,7 @@ export const TodoFormModal = () => {
               color="error"
               edge="end"
               aria-label="delete"
+              disabled={isButtonDisabled}
               onClick={(e) => {
                 e.stopPropagation();
                 handleDeleteTodo();
@@ -95,7 +104,16 @@ export const TodoFormModal = () => {
       <DialogContent
         sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
       >
-        <TodoForm todo={todo} formId="todo-form" />
+        {todo1.error ? (
+          <Alert severity="error">Failed to load todo. Please try again.</Alert>
+        ) : isEditing &&
+          (todo1.isLoading || todo1.isFetching || todo1.isUninitialized) ? (
+          <Stack alignItems="center" py={4}>
+            <CircularProgress />
+          </Stack>
+        ) : (
+          <TodoForm todo={todo} formId="todo-form" />
+        )}
       </DialogContent>
       <DialogActions
         disableSpacing
@@ -117,6 +135,7 @@ export const TodoFormModal = () => {
           variant="contained"
           fullWidth={isMobile}
           form="todo-form"
+          disabled={isButtonDisabled}
         >
           {buttons.submit}
         </Button>

@@ -8,6 +8,9 @@ import {
   IconButton,
   useMediaQuery,
   useTheme,
+  CircularProgress,
+  Alert,
+  Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { text } from "../../localization/eng";
@@ -64,9 +67,18 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
     resourceType === "trip" && isDeleting ? isDeleting : skipToken,
   );
 
-  const [deleteNoteApi] = useDeleteNoteMutation();
-  const [deleteTodoApi] = useDeleteTodoMutation();
-  const [deleteTripApi] = useDeleteTripMutation();
+  const [deleteNoteApi, { isLoading: isDeletingNoteApi }] =
+    useDeleteNoteMutation();
+  const [deleteTodoApi, { isLoading: isDeletingTodoApi }] =
+    useDeleteTodoMutation();
+  const [deleteTripApi, { isLoading: isDeletingTripApi }] =
+    useDeleteTripMutation();
+
+  const isOperationLoading: boolean = !!(
+    isDeletingNoteApi ||
+    isDeletingTodoApi ||
+    isDeletingTripApi
+  );
 
   const resource =
     resourceType === "note"
@@ -74,6 +86,13 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
       : resourceType === "todo"
         ? todoQuery.data
         : tripQuery.data;
+
+  const resourceError =
+    resourceType === "note"
+      ? noteQuery.error
+      : resourceType === "todo"
+        ? todoQuery.error
+        : tripQuery.error;
 
   const onClose = () => {
     if (resourceType === "note") {
@@ -150,9 +169,27 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
       <DialogContent
         sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
       >
-        <DialogContentText id="delete-dialog-description" sx={{ mb: 2 }}>
-          {confirmation.replace("{title}", resourceTitle || titleUnknown)}
-        </DialogContentText>
+        {resourceError ? (
+          <Alert severity="error">
+            Failed to load resource. Please try again.
+          </Alert>
+        ) : noteQuery.isLoading ||
+          noteQuery.isFetching ||
+          noteQuery.isUninitialized ||
+          todoQuery.isLoading ||
+          todoQuery.isFetching ||
+          todoQuery.isUninitialized ||
+          tripQuery.isLoading ||
+          tripQuery.isFetching ||
+          tripQuery.isUninitialized ? (
+          <Stack alignItems="center" py={2}>
+            <CircularProgress size={24} />
+          </Stack>
+        ) : (
+          <DialogContentText id="delete-dialog-description" sx={{ mb: 2 }}>
+            {confirmation.replace("{title}", resourceTitle || titleUnknown)}
+          </DialogContentText>
+        )}
       </DialogContent>
       <DialogActions
         disableSpacing
@@ -166,7 +203,12 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
           borderColor: "divider",
         }}
       >
-        <Button onClick={onClose} color="inherit" fullWidth={isMobile}>
+        <Button
+          onClick={onClose}
+          color="inherit"
+          fullWidth={isMobile}
+          disabled={isOperationLoading}
+        >
           {buttons.cancel}
         </Button>
         <Button
@@ -174,8 +216,13 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
           color="error"
           variant="contained"
           fullWidth={isMobile}
+          disabled={isOperationLoading}
         >
-          {buttons.confirm}
+          {isOperationLoading ? (
+            <CircularProgress size={20} />
+          ) : (
+            buttons.confirm
+          )}
         </Button>
       </DialogActions>
     </Dialog>
