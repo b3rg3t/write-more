@@ -99,4 +99,5 @@ export const {
   useSignupMutation,
   useSigninMutation,
   useGetCurrentUserQuery,
+  useUpdateProfileMutation,
 } = apiSlice;

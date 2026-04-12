@@ -22,6 +22,7 @@ import { TripFormModal } from "./components/modal/TripFormModal";
 import { DeleteModal } from "./components/modal/DeleteModal";
 import { Users } from "./components/user/Users";
 import { AuthPage } from "./components/user/AuthPage";
+import { ProfilePage } from "./components/user/ProfilePage";
 import { ProtectedRoute } from "./components/wrapper/ProtectedRoute";
 import { useNavigate } from "react-router-dom";
 import { UpdatePrompt } from "./components/utils/UpdatePrompt";
@@ -80,6 +81,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Users />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ERoutes.PROFILE}
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             }
           />

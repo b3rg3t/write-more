@@ -4,6 +4,7 @@ import { text } from "../../localization/eng";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import ShareIcon from "@mui/icons-material/Share";
 import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 import { useAppDispatch } from "../../store/redux/hooks";
@@ -26,6 +27,10 @@ export const Header = () => {
     clearCredentials();
     dispatch(apiSlice.util.resetApiState());
     navigate(ERoutes.AUTH);
+  };
+
+  const handleOpenProfile = () => {
+    navigate(ERoutes.PROFILE);
   };
 
   return (
@@ -66,6 +71,16 @@ export const Header = () => {
             >
               <ShareIcon />
             </IconButton>
+            {isAuthenticated && (
+              <IconButton
+                color="primary"
+                onClick={handleOpenProfile}
+                aria-label={text.user.profile.open}
+                size="small"
+              >
+                <AccountCircleIcon />
+              </IconButton>
+            )}
             {isAuthenticated && (
               <IconButton
                 color="primary"

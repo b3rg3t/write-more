@@ -38,6 +38,12 @@ export interface CurrentUserResponse {
   };
 }
 
+export interface UpdateProfileRequest {
+  firstName?: string;
+  lastName?: string;
+  password?: string;
+}
+
 export const authEndpoints = (builder: TEndpointBuilderType) => ({
   signup: builder.mutation<AuthResponse, SignupRequest>({
     query: (body: SignupRequest) => ({
@@ -57,6 +63,16 @@ export const authEndpoints = (builder: TEndpointBuilderType) => ({
     query: () => ({
       url: "auth/me",
       method: "GET",
+    }),
+  }),
+  updateProfile: builder.mutation<
+    { message: string; user: CurrentUserResponse["user"] },
+    UpdateProfileRequest
+  >({
+    query: (body: UpdateProfileRequest) => ({
+      url: "auth/profile",
+      method: "PUT",
+      body,
     }),
   }),
 });

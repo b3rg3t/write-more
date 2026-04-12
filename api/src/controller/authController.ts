@@ -50,7 +50,7 @@ export const signup = async (req: Request, res: Response) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
+      { expiresIn: JWT_EXPIRES_IN },
     );
 
     res.status(201).json({
@@ -105,7 +105,7 @@ export const signin = async (req: Request, res: Response) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
+      { expiresIn: JWT_EXPIRES_IN },
     );
 
     res.json({
@@ -140,6 +140,53 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     res.json({ user });
   } catch (err) {
     console.error("Get current user error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Update current user profile (requires authentication)
+export const updateProfile = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).userId; // Set by authenticate middleware
+    const { firstName, lastName, password } = req.body as {
+      firstName?: string;
+      lastName?: string;
+      password?: string;
+    };
+
+    const updateData: {
+      firstName?: string;
+      lastName?: string;
+      password?: string;
+    } = {};
+
+    if (typeof firstName === "string") {
+      updateData.firstName = firstName.trim();
+    }
+
+    if (typeof lastName === "string") {
+      updateData.lastName = lastName.trim();
+    }
+
+    if (typeof password === "string" && password.trim()) {
+      updateData.password = await hashPassword(password);
+    }
+
+    const user = await SUser.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "Profile updated successfully",
+      user,
+    });
+  } catch (err) {
+    console.error("Update profile error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };

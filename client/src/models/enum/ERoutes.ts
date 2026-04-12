@@ -1,6 +1,7 @@
 export enum ERoutes {
   AUTH = "/auth",
   TRIPS = "/",
+  PROFILE = "/profile",
   NOTES = "/notes",
   TODOS = "/todos",
   USERS = "/users",

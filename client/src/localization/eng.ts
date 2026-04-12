@@ -198,6 +198,23 @@ export const text = {
         passwordRequired: "Password is required (min 6 characters)",
       },
     },
+    profile: {
+      title: "Update Profile",
+      open: "Open profile",
+      username: "Username",
+      firstName: "First name",
+      lastName: "Last name",
+      password: "New password",
+      edit: "Change user",
+      cancelEdit: "Cancel",
+      submit: "Save Changes",
+      saving: "Saving...",
+      success: "Profile updated successfully",
+      error: "Failed to update profile. Please try again.",
+      helperText: {
+        passwordMin: "Password must be at least 6 characters",
+      },
+    },
   },
   updatePrompt: {
     message: "A new version is available.",
