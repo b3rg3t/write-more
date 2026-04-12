@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import { INote } from "../models/interfaces/INote";
+import SComment from "../models/schemas/SComment";
 import SNote from "../models/schemas/SNote";
 import STrip from "../models/schemas/STrip";
 import SUser from "../models/schemas/SUser";
@@ -228,5 +229,52 @@ export const deleteNote = async (req: AuthRequest, res: Response) => {
     res.json({ message: "Note deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Create a comment for a specific note
+export const createCommentForNote = async (req: AuthRequest, res: Response) => {
+  const { content } = req.body;
+  const noteId = req.params.id;
+
+  try {
+    if (!hasUserContext(req)) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const accessContext = await resolveAccessContext(req);
+    if (!accessContext) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(noteId)) {
+      return res.status(400).json({ message: "Invalid note id" });
+    }
+
+    if (
+      !accessContext.isAdmin &&
+      !(await canAccessNote(accessContext.userId, noteId))
+    ) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    const note = await SNote.findById(noteId);
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    const newComment = new SComment({
+      content,
+      user: req.userId,
+    });
+
+    const savedComment = await newComment.save();
+    await SNote.findByIdAndUpdate(noteId, {
+      $addToSet: { commentIds: savedComment._id },
+    });
+
+    return res.status(201).json(savedComment);
+  } catch (err) {
+    return res.status(500).json({ message: "Server error" });
   }
 };

@@ -24,6 +24,19 @@ export const text = {
     noteItem: {
       created: "Created",
       updated: "Updated",
+      comments: {
+        title: "Comments",
+        loading: "Loading comments...",
+        empty: "No comments yet",
+        placeholder: "Write a comment",
+        submit: "Comment",
+        error: "Failed to load comments",
+        edited: "Edited",
+        edit: "Edit",
+        delete: "Delete",
+        save: "Save",
+        cancel: "Cancel",
+      },
     },
     notesList: {
       loading: "Loading notes",

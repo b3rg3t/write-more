@@ -27,6 +27,12 @@ const SNote: Schema = new Schema(
         },
       },
     ],
+    commentIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
     users: [
       {
         type: Schema.Types.ObjectId,

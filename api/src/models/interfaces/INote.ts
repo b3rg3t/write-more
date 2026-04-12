@@ -6,6 +6,7 @@ export interface INote extends Document {
   content: string;
   order: number;
   links: ILink[];
+  commentIds?: mongoose.Types.ObjectId[];
   users: mongoose.Types.ObjectId[];
   startDate?: Date;
   endDate?: Date;

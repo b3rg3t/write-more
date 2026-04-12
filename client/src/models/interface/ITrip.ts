@@ -1,6 +1,7 @@
 import { IBase } from "./IBase";
 import { INote } from "./INote";
 import { ITodo } from "./ITodo";
+import { ITripUser } from "./ITripUser";
 import { IUser } from "./IUser";
 
 export interface ITrip extends IBase {
@@ -10,7 +11,7 @@ export interface ITrip extends IBase {
   endDate?: Date | string;
   notes: INote[];
   todos: ITodo[];
-  users: IUser[] | string[];
+  users: ITripUser[] | string[];
   createdBy: IUser;
   order: number;
 }

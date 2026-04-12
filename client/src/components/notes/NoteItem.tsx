@@ -23,6 +23,7 @@ import { TLink } from "../../models/type/TLink";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 import { TripDates } from "../utils/TripDates";
+import { NoteComments } from "./NoteComments";
 
 export const NoteItem: FC<{
   note: INote;
@@ -102,7 +103,7 @@ export const NoteItem: FC<{
           display: "flex",
           flexDirection: "column",
           justifyContent: "between",
-          alignItems: "end",
+          alignItems: "stretch",
           flex: 1,
           px: 0,
           pt: 0,
@@ -145,6 +146,7 @@ export const NoteItem: FC<{
             </List>
           </Container>
         )}
+        <NoteComments note={note} />
       </CardActions>
     </Card>
   );

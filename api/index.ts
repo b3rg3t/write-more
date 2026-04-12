@@ -9,6 +9,7 @@ import todosRouter from "./src/routes/todos";
 import tripsRouter from "./src/routes/trips";
 import usersRouter from "./src/routes/users";
 import authRouter from "./src/routes/auth";
+import commentsRouter from "./src/routes/comments";
 import swaggerSpec from "./src/swagger";
 
 // Load environment variables from config.env
@@ -120,5 +121,6 @@ app.use("/api/notes", notesRouter);
 app.use("/api/todos", todosRouter);
 app.use("/api/trips", tripsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/comments", commentsRouter);
 
 export default app;

@@ -57,17 +57,51 @@ export const getTrip = async (req: AuthRequest, res: Response) => {
     const userId = req.userId;
 
     const trip = await STrip.findOne({ _id: req.params.id, users: userId })
-      .populate("notes")
+      .populate({
+        path: "notes",
+        populate: {
+          path: "commentIds",
+          populate: {
+            path: "user",
+            select: "username firstName lastName",
+          },
+        },
+      })
       .populate("todos")
       .populate("users", "username email firstName lastName")
-      .populate("createdBy", "username email");
+      .populate("createdBy", "username email")
+      .lean();
 
     if (!trip) {
       return res
         .status(404)
         .json({ message: "Trip not found or access denied" });
     }
-    res.json(trip);
+
+    const tripWithCommentUserNames = {
+      ...trip,
+      notes: (trip.notes || []).map((note: any) => ({
+        ...note,
+        commentIds: (note.commentIds || []).map((comment: any) => {
+          const user = comment?.user;
+          if (!user) {
+            return comment;
+          }
+
+          const name = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+
+          return {
+            ...comment,
+            user: {
+              ...user,
+              name,
+            },
+          };
+        }),
+      })),
+    };
+
+    res.json(tripWithCommentUserNames);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }

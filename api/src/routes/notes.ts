@@ -3,6 +3,7 @@ import {
   getNotes,
   getNote,
   createNote,
+  createCommentForNote,
   updateNote,
   updateOrder,
   deleteNote,
@@ -21,6 +22,9 @@ router.get("/:id", getNote);
 
 // Create a new note
 router.post("/", createNote);
+
+// Create a comment for a note
+router.post("/:id/comments", createCommentForNote);
 
 // Update a note
 router.put("/:id", updateNote);

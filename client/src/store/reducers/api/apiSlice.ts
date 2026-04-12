@@ -7,6 +7,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL } from "./util";
 import { notesEndpoints } from "./notesApi";
+import { commentsEndpoints } from "./commentsApi";
 import { todosEndpoints } from "./todosApi";
 import { tripsEndpoints } from "./tripsApi";
 import { usersEndpoints } from "./usersApi";
@@ -47,9 +48,10 @@ const baseQueryWithAuthHandling: BaseQueryFn<
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithAuthHandling,
-  tagTypes: ["Notes", "Todos", "Trips", "Users", "Auth"],
+  tagTypes: ["Notes", "Comments", "Todos", "Trips", "Users", "Auth"],
   endpoints: (builder) => ({
     ...notesEndpoints(builder as any),
+    ...commentsEndpoints(builder as any),
     ...todosEndpoints(builder as any),
     ...tripsEndpoints(builder as any),
     ...usersEndpoints(builder as any),
@@ -65,6 +67,10 @@ export const {
   useUpdateNoteMutation,
   useReorderNotesMutation,
   useDeleteNoteMutation,
+  useGetCommentsQuery,
+  useCreateCommentForNoteMutation,
+  useUpdateCommentMutation,
+  useDeleteCommentMutation,
 
   // Todos hooks
   useGetAllTodosQuery,
