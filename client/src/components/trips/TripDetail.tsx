@@ -16,24 +16,23 @@ import { fontSize16 } from "../utils/FontSize";
 import { useAppDispatch } from "../../store/redux/hooks";
 import FormatListBulletedAddIcon from "@mui/icons-material/FormatListBulletedAdd";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { createTodoForTrip } from "../../store/reducers/todos/todosSlice";
 import { createNoteForTrip } from "../../store/reducers/notes/notesSlice";
 import { setEditTrip } from "../../store/reducers/trips/tripsSlice";
 import { setAddUserToTrip } from "../../store/reducers/trips/tripUsersSlice";
 
 import { TripDates } from "../utils/TripDates";
-import { useState } from "react";
 import { TripImagesSection } from "./TripImagesSection";
+import { useState } from "react";
+import { TripSectionAccordion } from "./TripSectionAccordion";
 
 export const TripDetail = () => {
   const { tripId } = useParams<{ tripId: string }>();
   const dispatch = useAppDispatch();
-  const [showTodos, setShowTodos] = useState(true);
-  const [showNotes, setShowNotes] = useState(true);
+  const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
   const {
     data: trip,
     isLoading,
@@ -64,14 +63,6 @@ export const TripDetail = () => {
     if (trip) {
       dispatch(setAddUserToTrip(trip._id));
     }
-  };
-
-  const handleToggleTodoVisibility = () => {
-    setShowTodos((prev) => !prev);
-  };
-
-  const handleToggleNoteVisibility = () => {
-    setShowNotes((prev) => !prev);
   };
 
   return (
@@ -199,130 +190,51 @@ export const TripDetail = () => {
           </Card>
         )}
         <Divider sx={{ my: 2 }} />
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
+        <TripSectionAccordion
+          title={text.todos.header}
+          count={trip?.todos?.length ?? 0}
+          badgeColor="info"
+          addAction={{
+            ariaLabel: "add todo",
+            color: "info",
+            icon: <FormatListBulletedAddIcon />,
+            onClick: handleCreateTodo,
+          }}
         >
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography
-              variant="h3"
-              fontSize={fontSize16}
-              fontWeight="bold"
-              sx={{ pl: 2 }}
-            >
-              {text.todos.header}
-            </Typography>
-            <Typography
-              component="span"
-              variant="caption"
-              sx={{
-                px: 1,
-                py: 0.25,
-                borderRadius: 999,
-                backgroundColor: "info.light",
-                color: "info.contrastText",
-                fontWeight: 700,
-                lineHeight: 1.5,
-                minWidth: 24,
-                textAlign: "center",
-              }}
-            >
-              {trip?.todos?.length ?? 0}
-            </Typography>
-            <IconButton
-              size="small"
-              color="info"
-              edge="end"
-              aria-label="toggle todo visibility"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleToggleTodoVisibility();
-              }}
-              sx={{ ml: 0 }}
-            >
-              {showTodos ? <VisibilityIcon /> : <VisibilityOffIcon />}
-            </IconButton>
-          </Stack>
-          <IconButton
-            color="info"
-            edge="end"
-            aria-label="add todo"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCreateTodo();
-            }}
-            sx={{ mr: 1 }}
-          >
-            <FormatListBulletedAddIcon />
-          </IconButton>
-        </Stack>
-        {showTodos && (
           <TodoList trip={trip} todos={trip?.todos ?? []} headingLevel="h3" />
-        )}
-        <Divider sx={{ my: 2 }} />
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
+        </TripSectionAccordion>
+
+        <TripSectionAccordion
+          title={text.notes.header}
+          count={trip?.notes?.length ?? 0}
+          badgeColor="secondary"
+          addAction={{
+            ariaLabel: "add note",
+            color: "secondary",
+            icon: <NoteAddIcon />,
+            onClick: handleCreateNote,
+          }}
         >
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography
-              variant="h3"
-              fontSize={fontSize16}
-              fontWeight="bold"
-              sx={{ pl: 2 }}
-            >
-              {text.notes.header}
-            </Typography>
-            <Typography
-              component="span"
-              variant="caption"
-              sx={{
-                px: 1,
-                py: 0.25,
-                borderRadius: 999,
-                backgroundColor: "secondary.light",
-                color: "secondary.contrastText",
-                fontWeight: 700,
-                lineHeight: 1.5,
-                minWidth: 24,
-                textAlign: "center",
-              }}
-            >
-              {trip?.notes?.length ?? 0}
-            </Typography>
-            <IconButton
-              size="small"
-              color="secondary"
-              edge="end"
-              aria-label="toggle note visibility"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleToggleNoteVisibility();
-              }}
-              sx={{ ml: 0 }}
-            >
-              {showNotes ? <VisibilityIcon /> : <VisibilityOffIcon />}
-            </IconButton>
-          </Stack>
-          <IconButton
-            color="secondary"
-            edge="end"
-            aria-label="add note"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCreateNote();
-            }}
-            sx={{ mr: 1 }}
-          >
-            <NoteAddIcon />
-          </IconButton>
-        </Stack>
-        {showNotes && (
           <NoteList trip={trip} notes={trip?.notes ?? []} headingLevel="h3" />
-        )}
-        <TripImagesSection tripId={tripId} />
+        </TripSectionAccordion>
+
+        <TripSectionAccordion
+          title={text.trips.tripDetail.imagesHeader}
+          count={trip?.images?.length ?? 0}
+          badgeColor="info"
+          addAction={{
+            ariaLabel: text.trips.imageUpload.title,
+            color: "info",
+            icon: <AddPhotoAlternateIcon />,
+            onClick: () => setIsImageUploadModalOpen(true),
+          }}
+        >
+          <TripImagesSection
+            tripId={tripId}
+            isUploadModalOpen={isImageUploadModalOpen}
+            onCloseUploadModal={() => setIsImageUploadModalOpen(false)}
+          />
+        </TripSectionAccordion>
       </Container>
     </RtkQueryWrapper>
   );

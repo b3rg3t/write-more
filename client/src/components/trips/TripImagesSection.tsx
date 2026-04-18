@@ -5,18 +5,14 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Divider,
   IconButton,
   Stack,
   Typography,
 } from "@mui/material";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { text } from "../../localization/eng";
 import { ITripImage } from "../../models/interface/ITripImage";
 import {
@@ -25,19 +21,22 @@ import {
 } from "../../store/reducers/api/apiSlice";
 import { API_BASE_URL } from "../../store/reducers/api/util";
 import { TOKEN_STORAGE_KEY } from "../../util/authCredentials";
-import { fontSize16 } from "../utils/FontSize";
 import { TripImageUploadModal } from "../modal/TripImageUploadModal";
 
 type TripImagesSectionProps = {
   tripId?: string;
+  isUploadModalOpen: boolean;
+  onCloseUploadModal: () => void;
 };
 
-export const TripImagesSection = ({ tripId }: TripImagesSectionProps) => {
+export const TripImagesSection = ({
+  tripId,
+  isUploadModalOpen,
+  onCloseUploadModal,
+}: TripImagesSectionProps) => {
   const SWIPE_THRESHOLD_PX = 50;
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isSlideshowOpen, setIsSlideshowOpen] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [showImages, setShowImages] = useState(true);
   const [deleteTripImage] = useDeleteTripImageMutation();
   const [thumbnailUrls, setThumbnailUrls] = useState<Record<string, string>>(
     {},
@@ -305,129 +304,79 @@ export const TripImagesSection = ({ tripId }: TripImagesSectionProps) => {
     }
   }, [tripImages.length, isSlideshowOpen]);
 
-  const { imageSlideshow, imageUpload, tripDetail } = text.trips;
+  const { imageSlideshow, tripDetail } = text.trips;
 
   return (
     <>
-      <Divider sx={{ my: 2 }} />
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Typography
-            variant="h3"
-            fontSize={fontSize16}
-            fontWeight="bold"
-            sx={{ pl: 2 }}
-          >
-            {tripDetail.imagesHeader}
-          </Typography>
-          <Typography
-            component="span"
-            variant="caption"
-            sx={{
-              px: 1,
-              py: 0.25,
-              borderRadius: 999,
-              backgroundColor: "info.light",
-              color: "info.contrastText",
-              fontWeight: 700,
-              lineHeight: 1.5,
-              minWidth: 24,
-              textAlign: "center",
-            }}
-          >
-            {tripImages.length}
-          </Typography>
-          <IconButton
-            size="small"
-            color="info"
-            edge="end"
-            aria-label="toggle image visibility"
-            onClick={() => setShowImages((prev) => !prev)}
-            sx={{ ml: 0 }}
-          >
-            {showImages ? <VisibilityIcon /> : <VisibilityOffIcon />}
-          </IconButton>
+      {isTripImagesLoading ? (
+        <Stack alignItems="center" py={2} spacing={1}>
+          <CircularProgress size={22} />
+          <Typography variant="body2">{tripDetail.loadingImages}</Typography>
         </Stack>
-        <IconButton
-          color="info"
-          edge="end"
-          aria-label={imageUpload.title}
-          onClick={() => setIsUploadModalOpen(true)}
-          sx={{ mr: 1 }}
+      ) : tripImagesError ? (
+        <Typography color="error" sx={{ px: 2, py: 1 }}>
+          {tripDetail.imageFetchError}
+        </Typography>
+      ) : tripImages.length === 0 ? (
+        <Typography sx={{ px: 2, py: 1 }} color="text.secondary">
+          {tripDetail.noImages}
+        </Typography>
+      ) : (
+        <Stack
+          direction="row"
+          flexWrap="wrap"
+          spacing={1}
+          useFlexGap
+          sx={{ p: 2 }}
         >
-          <AddPhotoAlternateIcon />
-        </IconButton>
-      </Stack>
-      {showImages &&
-        (isTripImagesLoading ? (
-          <Stack alignItems="center" py={2} spacing={1}>
-            <CircularProgress size={22} />
-            <Typography variant="body2">{tripDetail.loadingImages}</Typography>
-          </Stack>
-        ) : tripImagesError ? (
-          <Typography color="error" sx={{ px: 2, py: 1 }}>
-            {tripDetail.imageFetchError}
-          </Typography>
-        ) : tripImages.length === 0 ? (
-          <Typography sx={{ px: 2, py: 1 }} color="text.secondary">
-            {tripDetail.noImages}
-          </Typography>
-        ) : (
-          <Stack
-            direction="row"
-            flexWrap="wrap"
-            spacing={1}
-            useFlexGap
-            sx={{ p: 2 }}
-          >
-            {tripImages.map((image, index) => (
-              <Box
-                key={image._id}
-                component="button"
-                onClick={() => handleOpenSlideshow(index)}
-                aria-label={tripDetail.openGallery}
-                sx={{
-                  width: { xs: 84, sm: 110 },
-                  height: { xs: 84, sm: 110 },
-                  p: 0,
-                  border: "1px solid",
-                  borderColor: "divider",
-                  borderRadius: 1,
-                  overflow: "hidden",
-                  cursor: "pointer",
-                  backgroundColor: "transparent",
-                }}
-              >
-                {thumbnailUrls[image._id] ? (
-                  <Box
-                    component="img"
-                    src={thumbnailUrls[image._id]}
-                    alt={image.originalName}
-                    sx={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                    }}
-                  />
-                ) : (
-                  <Stack
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{ width: "100%", height: "100%" }}
-                  >
-                    <CircularProgress size={18} />
-                  </Stack>
-                )}
-              </Box>
-            ))}
-          </Stack>
-        ))}
+          {tripImages.map((image, index) => (
+            <Box
+              key={image._id}
+              component="button"
+              onClick={() => handleOpenSlideshow(index)}
+              aria-label={tripDetail.openGallery}
+              sx={{
+                width: { xs: 84, sm: 110 },
+                height: { xs: 84, sm: 110 },
+                p: 0,
+                border: "1px solid",
+                borderColor: "divider",
+                borderRadius: 1,
+                overflow: "hidden",
+                cursor: "pointer",
+                backgroundColor: "transparent",
+              }}
+            >
+              {thumbnailUrls[image._id] ? (
+                <Box
+                  component="img"
+                  src={thumbnailUrls[image._id]}
+                  alt={image.originalName}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                />
+              ) : (
+                <Stack
+                  alignItems="center"
+                  justifyContent="center"
+                  sx={{ width: "100%", height: "100%" }}
+                >
+                  <CircularProgress size={18} />
+                </Stack>
+              )}
+            </Box>
+          ))}
+        </Stack>
+      )}
 
       {!!tripId && (
         <TripImageUploadModal
           open={isUploadModalOpen}
-          onClose={() => setIsUploadModalOpen(false)}
+          onClose={onCloseUploadModal}
           tripId={tripId}
         />
       )}
