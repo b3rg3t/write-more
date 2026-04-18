@@ -148,6 +148,7 @@ export const text = {
       previous: "Previous image",
       next: "Next image",
       close: "Close gallery",
+      delete: "Delete image",
       fallbackAlt: "Trip image",
     },
     addUser: {

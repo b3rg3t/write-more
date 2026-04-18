@@ -92,6 +92,7 @@ export const {
   useAddUserToTripMutation,
   useGetTripImagesQuery,
   useUploadTripImageMutation,
+  useDeleteTripImageMutation,
 
   // Users hooks
   useAddUserMutation,

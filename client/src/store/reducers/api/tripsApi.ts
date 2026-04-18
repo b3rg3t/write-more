@@ -137,4 +137,16 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
     },
     invalidatesTags: ["Trips"],
   }),
+
+  // Delete a trip image
+  deleteTripImage: builder.mutation<
+    { message: string },
+    { tripId: string; imageId: string }
+  >({
+    query: ({ tripId, imageId }) => ({
+      url: `trips/${tripId}/images/${imageId}`,
+      method: "DELETE",
+    }),
+    invalidatesTags: ["Trips"],
+  }),
 });

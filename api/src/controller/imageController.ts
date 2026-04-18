@@ -3,7 +3,10 @@ import { Types } from "mongoose";
 import { AuthRequest } from "../middleware/authenticate";
 import STrip from "../models/schemas/STrip";
 import SImage from "../models/schemas/SImage";
-import { openTripImageDownloadStream } from "../utils/tripImageStorage";
+import {
+  openTripImageDownloadStream,
+  deleteTripImageFromGridFs,
+} from "../utils/tripImageStorage";
 
 // Get all images for a trip the user has access to
 export const getTripImages = async (req: AuthRequest, res: Response) => {
@@ -112,6 +115,54 @@ export const getTripImage = async (req: AuthRequest, res: Response) => {
     });
 
     return downloadStream.pipe(res);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Delete a specific image from a trip
+export const deleteTripImage = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const { id: tripId, imageId } = req.params;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!Types.ObjectId.isValid(imageId)) {
+      return res.status(400).json({ message: "Invalid image id" });
+    }
+
+    const trip = await STrip.findOne({ _id: tripId, users: userId });
+    if (!trip) {
+      return res
+        .status(404)
+        .json({ message: "Trip not found or access denied" });
+    }
+
+    const hasImage = trip.images.some(
+      (storedId) => storedId.toString() === imageId,
+    );
+    if (!hasImage) {
+      return res.status(404).json({ message: "Image not found for this trip" });
+    }
+
+    const image = await SImage.findById(imageId).lean();
+    if (image) {
+      await deleteTripImageFromGridFs(image.fileId);
+      if (image.thumbnailFileId) {
+        await deleteTripImageFromGridFs(image.thumbnailFileId);
+      }
+      await SImage.findByIdAndDelete(imageId);
+    }
+
+    trip.images = trip.images.filter(
+      (storedId) => storedId.toString() !== imageId,
+    );
+    await trip.save();
+
+    return res.json({ message: "Image deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }

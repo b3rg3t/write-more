@@ -14,9 +14,13 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { text } from "../../localization/eng";
 import { ITripImage } from "../../models/interface/ITripImage";
-import { useGetTripImagesQuery } from "../../store/reducers/api/apiSlice";
+import {
+  useGetTripImagesQuery,
+  useDeleteTripImageMutation,
+} from "../../store/reducers/api/apiSlice";
 import { API_BASE_URL } from "../../store/reducers/api/util";
 import { TOKEN_STORAGE_KEY } from "../../util/authCredentials";
 import { fontSize16 } from "../utils/FontSize";
@@ -31,6 +35,7 @@ export const TripImagesSection = ({ tripId }: TripImagesSectionProps) => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isSlideshowOpen, setIsSlideshowOpen] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [deleteTripImage] = useDeleteTripImageMutation();
   const [thumbnailUrls, setThumbnailUrls] = useState<Record<string, string>>(
     {},
   );
@@ -214,6 +219,41 @@ export const TripImagesSection = ({ tripId }: TripImagesSectionProps) => {
     }
   };
 
+  const handleDeleteActiveImage = async () => {
+    if (!tripId || !activeImage) {
+      return;
+    }
+
+    const imageId = activeImage._id.toString();
+
+    // Clean up blob URLs for the deleted image
+    const thumbUrl = thumbnailUrlsRef.current[imageId];
+    if (thumbUrl) {
+      URL.revokeObjectURL(thumbUrl);
+      setThumbnailUrls((prev) => {
+        const next = { ...prev };
+        delete next[imageId];
+        return next;
+      });
+    }
+    const fullUrl = fullImageUrlsRef.current[imageId];
+    if (fullUrl) {
+      URL.revokeObjectURL(fullUrl);
+      setFullImageUrls((prev) => {
+        const next = { ...prev };
+        delete next[imageId];
+        return next;
+      });
+    }
+
+    // Adjust active index before the list shrinks
+    if (activeImageIndex >= tripImages.length - 1 && activeImageIndex > 0) {
+      setActiveImageIndex(activeImageIndex - 1);
+    }
+
+    await deleteTripImage({ tripId, imageId });
+  };
+
   const handleTouchStart = (event: React.TouchEvent) => {
     const touch = event.changedTouches[0];
     touchStartXRef.current = touch.clientX;
@@ -248,6 +288,20 @@ export const TripImagesSection = ({ tripId }: TripImagesSectionProps) => {
   const activeImageUrl = activeImage
     ? fullImageUrls[activeImage._id]
     : undefined;
+
+  // Load full image whenever the active image changes (e.g. after deletion refreshes the list)
+  useEffect(() => {
+    if (isSlideshowOpen && activeImage) {
+      void loadFullImage(activeImage);
+    }
+  }, [activeImage?._id, isSlideshowOpen]);
+
+  useEffect(() => {
+    if (isSlideshowOpen && tripImages.length === 0) {
+      setIsSlideshowOpen(false);
+    }
+  }, [tripImages.length, isSlideshowOpen]);
+
   const { imageSlideshow, imageUpload, tripDetail } = text.trips;
 
   return (
@@ -363,13 +417,23 @@ export const TripImagesSection = ({ tripId }: TripImagesSectionProps) => {
           <Typography component="span" variant="body1" noWrap color="primary">
             {activeImage?.originalName}
           </Typography>
-          <IconButton
-            onClick={() => setIsSlideshowOpen(false)}
-            aria-label={imageSlideshow.close}
-            size="small"
-          >
-            <CloseIcon />
-          </IconButton>
+          <Stack direction="row" alignItems="center" flexShrink={0}>
+            <IconButton
+              onClick={() => void handleDeleteActiveImage()}
+              aria-label={imageSlideshow.delete}
+              size="small"
+              color="error"
+            >
+              <DeleteIcon />
+            </IconButton>
+            <IconButton
+              onClick={() => setIsSlideshowOpen(false)}
+              aria-label={imageSlideshow.close}
+              size="small"
+            >
+              <CloseIcon />
+            </IconButton>
+          </Stack>
         </DialogTitle>
         <DialogContent
           sx={{ px: { xs: 0, sm: 0 }, py: 1 }}

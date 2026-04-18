@@ -13,7 +13,11 @@ import {
   removeUserFromTrip,
   uploadTripImage,
 } from "../controller/tripController";
-import { getTripImage, getTripImages } from "../controller/imageController";
+import {
+  getTripImage,
+  getTripImages,
+  deleteTripImage,
+} from "../controller/imageController";
 import { authenticate } from "../middleware/authenticate";
 import { uploadTripImageFile } from "../middleware/uploadTripImage";
 
@@ -60,5 +64,8 @@ router.get("/:id/images", authenticate, getTripImages);
 
 // Get one image file for trip
 router.get("/:id/images/:imageId", authenticate, getTripImage);
+
+// Delete an image from trip
+router.delete("/:id/images/:imageId", authenticate, deleteTripImage);
 
 export default router;
