@@ -35,20 +35,18 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip }) => {
   const handleReorderNotes = async (updatedNotes: INote[]) => {
     if (!!trip) {
       try {
-        const response = await updateTrip({
+        await updateTrip({
           ...trip,
           notes: updatedNotes.map((n) => n._id) || [],
           todos:
             trip?.todos?.map((t) => (typeof t === "string" ? t : t._id)) || [],
-        });
-        console.log("Reordered todos response:", response);
+        }).unwrap();
       } catch (error) {
-        console.error("Error reordering todos:", error);
+        console.error("Error reordering notes:", error);
       }
     } else {
       try {
-        const response = await reorderNotes(notes);
-        console.log("Reordered notes response:", response);
+        await reorderNotes(notes).unwrap();
       } catch (error) {
         console.error("Error reordering notes:", error);
       }
@@ -57,6 +55,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip }) => {
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
+    if (result.destination.index === result.source.index) return;
     const reordered = reordersHelper(
       notes,
       result.source.index,

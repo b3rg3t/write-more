@@ -21,8 +21,7 @@ export const TripList: FC<TripListProps> = ({ trips }) => {
 
   const handleReorderTrips = async (trips: Pick<ITrip, "_id" | "order">[]) => {
     try {
-      const response = await reorderTrips(trips);
-      console.log("Reordered trips response:", response);
+      await reorderTrips(trips).unwrap();
     } catch (error) {
       console.error("Error reordering trips:", error);
     }
@@ -30,10 +29,11 @@ export const TripList: FC<TripListProps> = ({ trips }) => {
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
+    if (result.destination.index === result.source.index) return;
     const reordered = reordersHelper(
       trips,
       result.source.index,
-      result.destination.index
+      result.destination.index,
     );
     handleReorderTrips(reordered);
     setTrips(reordered);

@@ -30,20 +30,18 @@ export const TodoList: FC<TodoListProps> = ({ todos, headingLevel, trip }) => {
   const handleReorderNotes = async (updatedTodos: ITodo[]) => {
     if (!!trip) {
       try {
-        const response = await updateTrip({
+        await updateTrip({
           ...trip,
           notes:
             trip?.notes?.map((n) => (typeof n === "string" ? n : n._id)) || [],
           todos: updatedTodos.map((t) => t._id),
-        });
-        console.log("Reordered todos response:", response);
+        }).unwrap();
       } catch (error) {
         console.error("Error reordering todos:", error);
       }
     } else {
       try {
-        const response = await reorderTodos(updatedTodos);
-        console.log("Reordered todos response:", response);
+        await reorderTodos(updatedTodos).unwrap();
       } catch (error) {
         console.error("Error reordering todos:", error);
       }
@@ -52,6 +50,7 @@ export const TodoList: FC<TodoListProps> = ({ todos, headingLevel, trip }) => {
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
+    if (result.destination.index === result.source.index) return;
     const reordered = reordersHelper(
       todos,
       result.source.index,
