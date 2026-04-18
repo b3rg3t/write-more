@@ -1,5 +1,17 @@
 import mongoose, { Document } from "mongoose";
 
+export interface ITripSectionBase {
+  isAccordionOpen: boolean;
+}
+
+export interface ITripNotesSection extends ITripSectionBase {}
+
+export interface ITripTodosSection extends ITripSectionBase {
+  showCompleted: boolean;
+}
+
+export interface ITripImagesSection extends ITripSectionBase {}
+
 export interface ITrip extends Document {
   title: string;
   description?: string;
@@ -11,6 +23,9 @@ export interface ITrip extends Document {
   users: mongoose.Types.ObjectId[];
   createdBy: mongoose.Types.ObjectId;
   order: number;
+  notesSection?: ITripNotesSection;
+  todosSection?: ITripTodosSection;
+  imagesSection?: ITripImagesSection;
   createdAt: Date;
   updatedAt: Date;
 }

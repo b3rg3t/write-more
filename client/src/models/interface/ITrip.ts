@@ -5,6 +5,18 @@ import { ITodo } from "./ITodo";
 import { ITripUser } from "./ITripUser";
 import { IUser } from "./IUser";
 
+export interface ITripSectionBase {
+  isAccordionOpen: boolean;
+}
+
+export interface ITripNotesSection extends ITripSectionBase {}
+
+export interface ITripTodosSection extends ITripSectionBase {
+  showCompleted: boolean;
+}
+
+export interface ITripImagesSection extends ITripSectionBase {}
+
 export interface ITrip extends IBase {
   title: string;
   description?: string;
@@ -16,4 +28,7 @@ export interface ITrip extends IBase {
   users: ITripUser[] | string[];
   createdBy: IUser;
   order: number;
+  notesSection?: ITripNotesSection;
+  todosSection?: ITripTodosSection;
+  imagesSection?: ITripImagesSection;
 }

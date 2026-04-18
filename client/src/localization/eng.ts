@@ -79,6 +79,8 @@ export const text = {
       createTodo: "Create Todo",
       fetchError: "Failed to load todos. Please try again.",
       noTodosAvailable: "No todos available.",
+      showCompleted: "Show completed",
+      hideCompleted: "Hide completed",
     },
     todoDetail: {
       loading: "Loading...",

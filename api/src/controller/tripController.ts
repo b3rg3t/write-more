@@ -167,7 +167,17 @@ export const createTrip = async (req: AuthRequest, res: Response) => {
 
 // Update a trip
 export const updateTrip = async (req: AuthRequest, res: Response) => {
-  const { title, description, startDate, endDate, notes, todos } = req.body;
+  const {
+    title,
+    description,
+    startDate,
+    endDate,
+    notes,
+    todos,
+    notesSection,
+    todosSection,
+    imagesSection,
+  } = req.body;
   const userId = req.userId;
 
   try {
@@ -184,7 +194,17 @@ export const updateTrip = async (req: AuthRequest, res: Response) => {
 
     const updatedTrip = await STrip.findByIdAndUpdate(
       req.params.id,
-      { title, description, startDate, endDate, notes, todos },
+      {
+        title,
+        description,
+        startDate,
+        endDate,
+        notes,
+        todos,
+        notesSection,
+        todosSection,
+        imagesSection,
+      },
       { new: true },
     )
       .populate(tripImagePopulate)

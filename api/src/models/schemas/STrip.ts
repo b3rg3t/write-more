@@ -50,6 +50,16 @@ const STrip: Schema = new Schema(
       type: Number,
       default: 0,
     },
+    notesSection: {
+      isAccordionOpen: { type: Boolean, default: true },
+    },
+    todosSection: {
+      isAccordionOpen: { type: Boolean, default: true },
+      showCompleted: { type: Boolean, default: true },
+    },
+    imagesSection: {
+      isAccordionOpen: { type: Boolean, default: true },
+    },
   },
   {
     timestamps: true,

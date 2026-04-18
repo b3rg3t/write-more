@@ -20,9 +20,15 @@ interface TodoListProps {
   todos: ITodo[];
   headingLevel?: TypographyVariant;
   trip?: ITrip;
+  showCompleted?: boolean;
 }
 
-export const TodoList: FC<TodoListProps> = ({ todos, headingLevel, trip }) => {
+export const TodoList: FC<TodoListProps> = ({
+  todos,
+  headingLevel,
+  trip,
+  showCompleted = true,
+}) => {
   const [reorderTodos, {}] = useReorderTodosMutation();
   const [updateTrip, {}] = useUpdateTripMutation();
   const [todosState, setTodos] = useState<ITodo[]>([]);
@@ -64,6 +70,10 @@ export const TodoList: FC<TodoListProps> = ({ todos, headingLevel, trip }) => {
     setTodos(todos);
   }, [todos]);
 
+  const visibleTodos = showCompleted
+    ? todosState
+    : todosState.filter((t) => !t.isCompleted);
+
   if (todosState.length === 0 && todos.length === 0) {
     return (
       <Typography variant={"body1"}>
@@ -81,7 +91,7 @@ export const TodoList: FC<TodoListProps> = ({ todos, headingLevel, trip }) => {
             {...provided.droppableProps}
             sx={{ pt: 1 }}
           >
-            {todosState.map((todo, index) => (
+            {visibleTodos.map((todo, index) => (
               <Draggable key={todo._id} draggableId={todo._id} index={index}>
                 {(provided) => (
                   <ListItem

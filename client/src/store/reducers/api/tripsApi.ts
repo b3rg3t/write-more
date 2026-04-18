@@ -37,7 +37,15 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
     Partial<
       Pick<
         ITrip,
-        "_id" | "title" | "description" | "startDate" | "endDate" | "users"
+        | "_id"
+        | "title"
+        | "description"
+        | "startDate"
+        | "endDate"
+        | "users"
+        | "notesSection"
+        | "todosSection"
+        | "imagesSection"
       > & {
         notes: ITrip["_id"][];
         todos: ITrip["_id"][];

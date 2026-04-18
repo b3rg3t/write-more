@@ -1,5 +1,8 @@
 import { useParams } from "react-router-dom";
-import { useGetTripQuery } from "../../store/reducers/api/apiSlice";
+import {
+  useGetTripQuery,
+  useUpdateTripMutation,
+} from "../../store/reducers/api/apiSlice";
 import {
   Card,
   Container,
@@ -19,6 +22,8 @@ import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { createTodoForTrip } from "../../store/reducers/todos/todosSlice";
 import { createNoteForTrip } from "../../store/reducers/notes/notesSlice";
 import { setEditTrip } from "../../store/reducers/trips/tripsSlice";
@@ -32,6 +37,7 @@ import { TripSectionAccordion } from "./TripSectionAccordion";
 export const TripDetail = () => {
   const { tripId } = useParams<{ tripId: string }>();
   const dispatch = useAppDispatch();
+  const [updateTrip] = useUpdateTripMutation();
   const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
   const {
     data: trip,
@@ -194,6 +200,56 @@ export const TripDetail = () => {
           title={text.todos.header}
           count={trip?.todos?.length ?? 0}
           badgeColor="info"
+          defaultExpanded={trip?.todosSection?.isAccordionOpen ?? true}
+          onExpandedChange={(expanded) =>
+            trip &&
+            updateTrip({
+              _id: trip._id,
+              todosSection: {
+                ...trip.todosSection,
+                isAccordionOpen: expanded,
+                showCompleted: trip.todosSection?.showCompleted ?? true,
+              },
+              notes:
+                trip.notes?.map((n) => (typeof n === "string" ? n : n._id)) ??
+                [],
+              todos: trip.todos?.map((t) => t._id) ?? [],
+            })
+          }
+          headerExtra={
+            <IconButton
+              size="small"
+              color="info"
+              aria-label={
+                (trip?.todosSection?.showCompleted ?? true)
+                  ? text.todos.todosList.hideCompleted
+                  : text.todos.todosList.showCompleted
+              }
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!trip) return;
+                const next = !(trip.todosSection?.showCompleted ?? true);
+                updateTrip({
+                  _id: trip._id,
+                  todosSection: {
+                    isAccordionOpen: trip.todosSection?.isAccordionOpen ?? true,
+                    showCompleted: next,
+                  },
+                  notes:
+                    trip.notes?.map((n) =>
+                      typeof n === "string" ? n : n._id,
+                    ) ?? [],
+                  todos: trip.todos?.map((t) => t._id) ?? [],
+                });
+              }}
+            >
+              {(trip?.todosSection?.showCompleted ?? true) ? (
+                <VisibilityIcon />
+              ) : (
+                <VisibilityOffIcon />
+              )}
+            </IconButton>
+          }
           addAction={{
             ariaLabel: "add todo",
             color: "info",
@@ -201,13 +257,30 @@ export const TripDetail = () => {
             onClick: handleCreateTodo,
           }}
         >
-          <TodoList trip={trip} todos={trip?.todos ?? []} headingLevel="h3" />
+          <TodoList
+            trip={trip}
+            todos={trip?.todos ?? []}
+            headingLevel="h3"
+            showCompleted={trip?.todosSection?.showCompleted ?? true}
+          />
         </TripSectionAccordion>
 
         <TripSectionAccordion
           title={text.notes.header}
           count={trip?.notes?.length ?? 0}
           badgeColor="secondary"
+          defaultExpanded={trip?.notesSection?.isAccordionOpen ?? true}
+          onExpandedChange={(expanded) =>
+            trip &&
+            updateTrip({
+              _id: trip._id,
+              notesSection: { isAccordionOpen: expanded },
+              notes:
+                trip.notes?.map((n) => (typeof n === "string" ? n : n._id)) ??
+                [],
+              todos: trip.todos?.map((t) => t._id) ?? [],
+            })
+          }
           addAction={{
             ariaLabel: "add note",
             color: "secondary",
@@ -222,6 +295,18 @@ export const TripDetail = () => {
           title={text.trips.tripDetail.imagesHeader}
           count={trip?.images?.length ?? 0}
           badgeColor="info"
+          defaultExpanded={trip?.imagesSection?.isAccordionOpen ?? true}
+          onExpandedChange={(expanded) =>
+            trip &&
+            updateTrip({
+              _id: trip._id,
+              imagesSection: { isAccordionOpen: expanded },
+              notes:
+                trip.notes?.map((n) => (typeof n === "string" ? n : n._id)) ??
+                [],
+              todos: trip.todos?.map((t) => t._id) ?? [],
+            })
+          }
           addAction={{
             ariaLabel: text.trips.imageUpload.title,
             color: "info",
