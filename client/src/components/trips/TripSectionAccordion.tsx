@@ -88,6 +88,7 @@ export const TripSectionAccordion = ({
             {headerExtra ?? null}
             {addAction ? (
               <IconButton
+                component="span"
                 color={addAction.color}
                 edge="end"
                 aria-label={addAction.ariaLabel}

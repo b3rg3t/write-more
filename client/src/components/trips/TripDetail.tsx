@@ -218,6 +218,7 @@ export const TripDetail = () => {
           }
           headerExtra={
             <IconButton
+              component="span"
               size="small"
               color="info"
               aria-label={
