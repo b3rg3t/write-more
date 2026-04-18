@@ -320,6 +320,23 @@ export const TripImagesSection = ({ tripId }: TripImagesSectionProps) => {
           >
             {tripDetail.imagesHeader}
           </Typography>
+          <Typography
+            component="span"
+            variant="caption"
+            sx={{
+              px: 1,
+              py: 0.25,
+              borderRadius: 999,
+              backgroundColor: "info.light",
+              color: "info.contrastText",
+              fontWeight: 700,
+              lineHeight: 1.5,
+              minWidth: 24,
+              textAlign: "center",
+            }}
+          >
+            {tripImages.length}
+          </Typography>
           <IconButton
             size="small"
             color="info"

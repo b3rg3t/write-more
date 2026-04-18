@@ -213,6 +213,23 @@ export const TripDetail = () => {
             >
               {text.todos.header}
             </Typography>
+            <Typography
+              component="span"
+              variant="caption"
+              sx={{
+                px: 1,
+                py: 0.25,
+                borderRadius: 999,
+                backgroundColor: "info.light",
+                color: "info.contrastText",
+                fontWeight: 700,
+                lineHeight: 1.5,
+                minWidth: 24,
+                textAlign: "center",
+              }}
+            >
+              {trip?.todos?.length ?? 0}
+            </Typography>
             <IconButton
               size="small"
               color="info"
@@ -257,6 +274,23 @@ export const TripDetail = () => {
               sx={{ pl: 2 }}
             >
               {text.notes.header}
+            </Typography>
+            <Typography
+              component="span"
+              variant="caption"
+              sx={{
+                px: 1,
+                py: 0.25,
+                borderRadius: 999,
+                backgroundColor: "secondary.light",
+                color: "secondary.contrastText",
+                fontWeight: 700,
+                lineHeight: 1.5,
+                minWidth: 24,
+                textAlign: "center",
+              }}
+            >
+              {trip?.notes?.length ?? 0}
             </Typography>
             <IconButton
               size="small"
