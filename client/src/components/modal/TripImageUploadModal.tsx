@@ -42,6 +42,35 @@ export const TripImageUploadModal = ({
     onClose();
   };
 
+  const getUploadErrorMessage = (error: unknown): string => {
+    if (typeof error !== "object" || !error || !("status" in error)) {
+      return errors.uploadFailed;
+    }
+
+    const status = (error as { status?: unknown }).status;
+
+    if (typeof status !== "number") {
+      return errors.uploadFailed;
+    }
+
+    switch (status) {
+      case 400:
+        return errors.badRequest;
+      case 401:
+        return errors.unauthorized;
+      case 403:
+        return errors.forbidden;
+      case 404:
+        return errors.notFound;
+      case 413:
+        return errors.tooLarge;
+      case 500:
+        return errors.server;
+      default:
+        return errors.uploadFailed;
+    }
+  };
+
   const handleSubmit = async () => {
     if (!file) {
       setErrorMessage(errors.noFile);
@@ -53,7 +82,7 @@ export const TripImageUploadModal = ({
       await uploadTripImage({ tripId, file }).unwrap();
       handleClose();
     } catch (err) {
-      setErrorMessage(errors.uploadFailed);
+      setErrorMessage(getUploadErrorMessage(err));
     }
   };
 
@@ -99,6 +128,7 @@ export const TripImageUploadModal = ({
               accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
               onChange={(event) => {
                 const selectedFile = event.target.files?.[0] || null;
+                setErrorMessage("");
                 setFile(selectedFile);
               }}
             />

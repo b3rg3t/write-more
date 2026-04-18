@@ -14,6 +14,8 @@ type TripImageUploadRequest = AuthRequest & {
   file?: Express.Multer.File;
 };
 
+const MAX_COMPRESSED_IMAGE_BYTES = 512 * 1024;
+
 const tripImagePopulate = {
   path: "images",
   select: "originalName uploadedAt thumbnailContentType thumbnailSize",
@@ -445,8 +447,15 @@ export const uploadTripImage = async (
 
     const compressedImage = await sharp(req.file.buffer)
       .rotate()
-      .webp({ quality: 80 })
+      .webp({ quality: 20 })
       .toBuffer({ resolveWithObject: true });
+
+    if (compressedImage.info.size > MAX_COMPRESSED_IMAGE_BYTES) {
+      return res.status(413).json({
+        message:
+          "Compressed image is too large. Maximum allowed size is 524288 bytes (0.5MB).",
+      });
+    }
 
     const thumbnailImage = await sharp(compressedImage.data)
       .resize({ width: 320, withoutEnlargement: true })

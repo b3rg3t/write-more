@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import multer from "multer";
 
-const DEFAULT_MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+const DEFAULT_MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 
 const parseMaxBytes = (): number => {
   const rawValue = process.env.IMAGE_UPLOAD_MAX_BYTES;

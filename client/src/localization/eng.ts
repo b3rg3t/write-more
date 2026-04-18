@@ -141,6 +141,14 @@ export const text = {
       },
       errors: {
         noFile: "Please choose a file first.",
+        badRequest:
+          "Invalid image upload. Please check file type and try again.",
+        unauthorized: "Your session expired. Please sign in again.",
+        forbidden: "You do not have permission to upload images for this trip.",
+        notFound: "Trip not found or access denied.",
+        tooLarge:
+          "Image is too large after compression. Please choose a smaller image.",
+        server: "Server error while uploading image. Please try again.",
         uploadFailed: "Failed to upload image. Please try again.",
       },
     },
