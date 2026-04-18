@@ -5,6 +5,7 @@ export interface ITrip extends Document {
   description?: string;
   startDate?: Date;
   endDate?: Date;
+  images: mongoose.Types.ObjectId[];
   notes: mongoose.Types.ObjectId[];
   todos: mongoose.Types.ObjectId[];
   users: mongoose.Types.ObjectId[];

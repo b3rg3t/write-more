@@ -16,6 +16,12 @@ const STrip: Schema = new Schema(
     endDate: {
       type: Date,
     },
+    images: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Image",
+      },
+    ],
     notes: [
       {
         type: Schema.Types.ObjectId,
@@ -47,7 +53,7 @@ const STrip: Schema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export default mongoose.model<ITrip>("Trip", STrip, "my_trips");

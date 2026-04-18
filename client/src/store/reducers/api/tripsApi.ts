@@ -1,4 +1,5 @@
 import { ITrip } from "../../../models/interface/ITrip";
+import { ITripImage } from "../../../models/interface/ITripImage";
 import { INote } from "../../../models/interface/INote";
 import { ITodo } from "../../../models/interface/ITodo";
 import { TEndpointBuilderType } from "../../../models/type/TEndpointBuilderType";
@@ -99,6 +100,41 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
       method: "POST",
       body: { userId },
     }),
+    invalidatesTags: ["Trips"],
+  }),
+
+  // Get trip images metadata (snapshot-focused)
+  getTripImages: builder.query<
+    { tripId: string; images: ITripImage[] },
+    string
+  >({
+    query: (tripId) => `trips/${tripId}/images`,
+    providesTags: ["Trips"],
+  }),
+
+  // Upload trip image
+  uploadTripImage: builder.mutation<
+    {
+      message: string;
+      tripId: string;
+      image: {
+        id: string;
+        originalName: string;
+        uploadedAt: string;
+      };
+    },
+    { tripId: string; file: File }
+  >({
+    query: ({ tripId, file }) => {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      return {
+        url: `trips/${tripId}/image`,
+        method: "POST",
+        body: formData,
+      };
+    },
     invalidatesTags: ["Trips"],
   }),
 });

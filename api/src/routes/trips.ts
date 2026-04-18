@@ -11,8 +11,11 @@ import {
   createNoteForTrip,
   addUserToTrip,
   removeUserFromTrip,
+  uploadTripImage,
 } from "../controller/tripController";
+import { getTripImage, getTripImages } from "../controller/imageController";
 import { authenticate } from "../middleware/authenticate";
+import { uploadTripImageFile } from "../middleware/uploadTripImage";
 
 const router = express.Router();
 
@@ -48,5 +51,14 @@ router.post("/:id/users", authenticate, addUserToTrip);
 
 // Remove user from trip
 router.delete("/:id/users/:userId", authenticate, removeUserFromTrip);
+
+// Upload image for trip
+router.post("/:id/image", authenticate, uploadTripImageFile, uploadTripImage);
+
+// Get all images for trip
+router.get("/:id/images", authenticate, getTripImages);
+
+// Get one image file for trip
+router.get("/:id/images/:imageId", authenticate, getTripImage);
 
 export default router;

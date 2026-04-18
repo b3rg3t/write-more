@@ -122,6 +122,33 @@ export const text = {
     tripDetail: {
       loading: "Loading trip",
       notFound: "Trip not found",
+      imagesHeader: "Images",
+      noImages: "No images uploaded yet.",
+      loadingImages: "Loading images...",
+      imageFetchError: "Failed to load images.",
+      openGallery: "Open image gallery",
+    },
+    imageUpload: {
+      title: "Upload Image",
+      helperText:
+        "Select an image to upload. It will be compressed automatically.",
+      buttons: {
+        chooseFile: "Choose Image",
+        noFileSelected: "No file selected",
+        upload: "Upload",
+        uploading: "Uploading...",
+        cancel: "Cancel",
+      },
+      errors: {
+        noFile: "Please choose a file first.",
+        uploadFailed: "Failed to upload image. Please try again.",
+      },
+    },
+    imageSlideshow: {
+      previous: "Previous image",
+      next: "Next image",
+      close: "Close gallery",
+      fallbackAlt: "Trip image",
     },
     addUser: {
       title: "Add User to Trip",

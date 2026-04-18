@@ -27,6 +27,7 @@ import { setAddUserToTrip } from "../../store/reducers/trips/tripUsersSlice";
 
 import { TripDates } from "../utils/TripDates";
 import { useState } from "react";
+import { TripImagesSection } from "./TripImagesSection";
 
 export const TripDetail = () => {
   const { tripId } = useParams<{ tripId: string }>();
@@ -287,6 +288,7 @@ export const TripDetail = () => {
         {showNotes && (
           <NoteList trip={trip} notes={trip?.notes ?? []} headingLevel="h3" />
         )}
+        <TripImagesSection tripId={tripId} />
       </Container>
     </RtkQueryWrapper>
   );

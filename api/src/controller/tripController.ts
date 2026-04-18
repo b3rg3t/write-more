@@ -1,11 +1,23 @@
 import type { Request, Response } from "express";
+import sharp from "sharp";
 import { ITrip } from "../models/interfaces/ITrip";
 import STrip from "../models/schemas/STrip";
 import STodo from "../models/schemas/STodos";
 import SNote from "../models/schemas/SNote";
+import SImage from "../models/schemas/SImage";
 import SUser from "../models/schemas/SUser";
 import { AuthRequest } from "../middleware/authenticate";
 import { EUserRole } from "../models/enums/EUserRole";
+import { uploadTripImageToGridFs } from "../utils/tripImageStorage";
+
+type TripImageUploadRequest = AuthRequest & {
+  file?: Express.Multer.File;
+};
+
+const tripImagePopulate = {
+  path: "images",
+  select: "originalName uploadedAt thumbnailContentType thumbnailSize",
+};
 
 // Get all trips for the authenticated user
 export const getTrips = async (req: AuthRequest, res: Response) => {
@@ -14,6 +26,7 @@ export const getTrips = async (req: AuthRequest, res: Response) => {
 
     // Only get trips where the user is in the users array
     const trips = await STrip.find({ users: userId })
+      .populate(tripImagePopulate)
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
@@ -39,6 +52,7 @@ export const getAllTripsAdmin = async (req: AuthRequest, res: Response) => {
 
     // Get all trips
     const trips = await STrip.find()
+      .populate(tripImagePopulate)
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
@@ -57,6 +71,7 @@ export const getTrip = async (req: AuthRequest, res: Response) => {
     const userId = req.userId;
 
     const trip = await STrip.findOne({ _id: req.params.id, users: userId })
+      .populate(tripImagePopulate)
       .populate({
         path: "notes",
         populate: {
@@ -128,6 +143,7 @@ export const createTrip = async (req: AuthRequest, res: Response) => {
       endDate,
       notes: notes || [],
       todos: todos || [],
+      images: [],
       users: [userId], // Creator is automatically added
       createdBy: userId,
       order: newOrder,
@@ -135,6 +151,7 @@ export const createTrip = async (req: AuthRequest, res: Response) => {
     const savedTrip = await newTrip.save();
 
     const populatedTrip = await STrip.findById(savedTrip._id)
+      .populate(tripImagePopulate)
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
@@ -168,6 +185,7 @@ export const updateTrip = async (req: AuthRequest, res: Response) => {
       { title, description, startDate, endDate, notes, todos },
       { new: true },
     )
+      .populate(tripImagePopulate)
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
@@ -351,6 +369,7 @@ export const addUserToTrip = async (req: AuthRequest, res: Response) => {
     }
 
     const updatedTrip = await STrip.findById(id)
+      .populate(tripImagePopulate)
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
@@ -387,6 +406,7 @@ export const removeUserFromTrip = async (req: AuthRequest, res: Response) => {
     await trip.save();
 
     const updatedTrip = await STrip.findById(id)
+      .populate(tripImagePopulate)
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
@@ -395,5 +415,93 @@ export const removeUserFromTrip = async (req: AuthRequest, res: Response) => {
     res.json(updatedTrip);
   } catch (err) {
     res.status(500).json({ message: "Error removing user from trip" });
+  }
+};
+
+// Upload and compress trip image
+export const uploadTripImage = async (
+  req: TripImageUploadRequest,
+  res: Response,
+) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ message: "Image file is required (field name: image)." });
+    }
+
+    const trip = await STrip.findOne({ _id: req.params.id, users: userId });
+    if (!trip) {
+      return res
+        .status(404)
+        .json({ message: "Trip not found or access denied" });
+    }
+
+    const compressedImage = await sharp(req.file.buffer)
+      .rotate()
+      .webp({ quality: 80 })
+      .toBuffer({ resolveWithObject: true });
+
+    const thumbnailImage = await sharp(compressedImage.data)
+      .resize({ width: 320, withoutEnlargement: true })
+      .webp({ quality: 50 })
+      .toBuffer({ resolveWithObject: true });
+
+    const baseName = req.file.originalname.replace(/\.[^/.]+$/, "") || "trip";
+    const compressedFileName = `${baseName}.webp`;
+
+    const uploadedFileId = await uploadTripImageToGridFs({
+      buffer: compressedImage.data,
+      fileName: compressedFileName,
+      mimeType: "image/webp",
+      tripId: trip._id.toString(),
+      userId,
+    });
+
+    const thumbnailFileId = await uploadTripImageToGridFs({
+      buffer: thumbnailImage.data,
+      fileName: `${baseName}-snapshot.webp`,
+      mimeType: "image/webp",
+      tripId: trip._id.toString(),
+      userId,
+    });
+
+    const savedImage = await new SImage({
+      fileId: uploadedFileId,
+      contentType: "image/webp",
+      originalName: req.file.originalname,
+      size: compressedImage.info.size,
+      thumbnailFileId,
+      thumbnailContentType: "image/webp",
+      thumbnailSize: thumbnailImage.info.size,
+      uploadedAt: new Date(),
+    }).save();
+
+    trip.images.push(savedImage._id);
+
+    await trip.save();
+
+    return res.json({
+      message: "Trip image uploaded successfully",
+      tripId: trip._id,
+      image: {
+        id: savedImage._id,
+        fileId: savedImage.fileId,
+        contentType: savedImage.contentType,
+        originalName: savedImage.originalName,
+        size: savedImage.size,
+        thumbnailContentType: savedImage.thumbnailContentType,
+        thumbnailSize: savedImage.thumbnailSize,
+        uploadedAt: savedImage.uploadedAt,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };

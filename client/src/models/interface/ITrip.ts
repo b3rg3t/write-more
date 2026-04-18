@@ -1,4 +1,5 @@
 import { IBase } from "./IBase";
+import { ITripImage } from "./ITripImage";
 import { INote } from "./INote";
 import { ITodo } from "./ITodo";
 import { ITripUser } from "./ITripUser";
@@ -9,6 +10,7 @@ export interface ITrip extends IBase {
   description?: string;
   startDate?: Date | string;
   endDate?: Date | string;
+  images: ITripImage[];
   notes: INote[];
   todos: ITodo[];
   users: ITripUser[] | string[];

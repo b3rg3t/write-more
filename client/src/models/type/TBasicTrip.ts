@@ -9,6 +9,7 @@ export type TBasicTrip = Partial<
     ITrip,
     | "createdAt"
     | "updatedAt"
+    | "images"
     | "notes"
     | "todos"
     | "users"
@@ -16,6 +17,7 @@ export type TBasicTrip = Partial<
     | "startDate"
     | "endDate"
   > & {
+    images?: string[];
     notes: INote[] | string[];
     todos: ITodo[] | string[];
     users?: ITripUser[] | string[];

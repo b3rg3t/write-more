@@ -415,6 +415,100 @@ const swaggerOptions: swaggerJSDoc.Options = {
           responses: { "200": { description: "User removed from trip" } },
         },
       },
+      "/api/trips/{id}/image": {
+        post: {
+          tags: ["Trips"],
+          summary: "Upload trip image (compressed to WebP)",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "multipart/form-data": {
+                schema: {
+                  type: "object",
+                  required: ["image"],
+                  properties: {
+                    image: {
+                      type: "string",
+                      format: "binary",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": { description: "Trip image uploaded" },
+            "400": { description: "Invalid file or request" },
+            "401": { description: "Unauthorized" },
+            "404": { description: "Trip not found" },
+            "413": { description: "File too large" },
+          },
+        },
+      },
+      "/api/trips/{id}/images": {
+        get: {
+          tags: ["Trips"],
+          summary: "Get all images for a trip",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
+          responses: {
+            "200": { description: "Trip images fetched" },
+            "401": { description: "Unauthorized" },
+            "404": { description: "Trip not found" },
+          },
+        },
+      },
+      "/api/trips/{id}/images/{imageId}": {
+        get: {
+          tags: ["Trips"],
+          summary: "Get one image file for a trip (snapshot by default)",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+            {
+              name: "imageId",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+            {
+              name: "snapshot",
+              in: "query",
+              required: false,
+              schema: { type: "string", enum: ["true", "false"] },
+              description:
+                "Defaults to true. Set snapshot=false to return full resolution.",
+            },
+          ],
+          responses: {
+            "200": { description: "Trip image file streamed" },
+            "400": { description: "Invalid image id" },
+            "401": { description: "Unauthorized" },
+            "404": { description: "Trip or image not found" },
+          },
+        },
+      },
       "/api/users": {
         get: {
           tags: ["Users"],

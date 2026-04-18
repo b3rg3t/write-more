@@ -90,6 +90,8 @@ export const {
   useCreateNoteForTripMutation,
   useCreateTodoForTripMutation,
   useAddUserToTripMutation,
+  useGetTripImagesQuery,
+  useUploadTripImageMutation,
 
   // Users hooks
   useAddUserMutation,
