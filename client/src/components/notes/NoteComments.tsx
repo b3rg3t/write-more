@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FC, MouseEvent, useState } from "react";
+import { FC, MouseEvent, useMemo, useState } from "react";
 import { text } from "../../localization/eng";
 import { IComment } from "../../models/interface/IComment";
 import SendIcon from "@mui/icons-material/Send";
@@ -117,6 +117,14 @@ export const NoteComments: FC<INoteCommentsProps> = ({ noteId, comments }) => {
 
   const commentTexts = text.notes.noteItem.comments;
   const currentUserId = currentUserResponse?.user?._id;
+  const sortedComments = useMemo(
+    () =>
+      [...comments].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      ),
+    [comments],
+  );
 
   return (
     <Box onClick={handleContainerClick} sx={{ mt: 1, mr: 1 }}>
@@ -176,11 +184,11 @@ export const NoteComments: FC<INoteCommentsProps> = ({ noteId, comments }) => {
           </Stack>
         </FormGroup>
       )}
-      {comments.length === 0 ? (
+      {sortedComments.length === 0 ? (
         <></>
       ) : (
         <Stack spacing={1}>
-          {comments.map((comment) => (
+          {sortedComments.map((comment) => (
             <Box
               key={comment._id}
               sx={{
