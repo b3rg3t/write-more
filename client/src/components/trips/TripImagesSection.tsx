@@ -370,7 +370,13 @@ export const TripImagesSection = ({
             </IconButton>
           </Stack>
         </DialogTitle>
-        <DialogContent sx={{ px: { xs: 0, sm: 0 }, py: 1 }}>
+        <DialogContent
+          sx={{
+            px: { xs: 0, sm: 0 },
+            py: 1,
+            display: "flex",
+          }}
+        >
           <Swiper
             modules={[Navigation, Pagination, Keyboard]}
             onSwiper={setSwiperInstance}
@@ -381,7 +387,12 @@ export const TripImagesSection = ({
             pagination={{ clickable: true }}
             spaceBetween={20}
             slidesPerView={1}
-            style={{ minHeight: 280 }}
+            style={{
+              minHeight: 280,
+              display: "flex",
+              flexGrow: 1,
+              width: "100%",
+            }}
           >
             {tripImages.map((image) => {
               const imageUrl = fullImageUrls[image._id];
