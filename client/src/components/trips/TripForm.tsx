@@ -116,7 +116,7 @@ export const TripForm: FC<{
   const handlePostTrip = async (data: TBasicTrip) => {
     if (isNew) {
       try {
-        createTrip({
+        await createTrip({
           title: data[ETripForm.TITLE],
           description: data[ETripForm.DESCRIPTION],
           startDate: data[ETripForm.START_DATE]
@@ -137,13 +137,14 @@ export const TripForm: FC<{
             data[ETripForm.USERS]?.map((u) =>
               typeof u === "string" ? u : u._id,
             ) || [],
-        });
+        }).unwrap();
       } catch (error) {
         console.error("Error creating trip:", error);
+        throw error;
       }
     } else if (trip) {
       try {
-        updateTrip({
+        await updateTrip({
           _id: trip._id,
           title: data[ETripForm.TITLE],
           description: data[ETripForm.DESCRIPTION],
@@ -165,17 +166,22 @@ export const TripForm: FC<{
             data[ETripForm.USERS]?.map((u) =>
               typeof u === "string" ? u : u._id,
             ) || [],
-        });
+        }).unwrap();
       } catch (error) {
-        console.error("Error creating trip:", error);
+        console.error("Error updating trip:", error);
+        throw error;
       }
     }
   };
 
-  const onSubmit = (data: TBasicTrip) => {
-    handlePostTrip(data);
-    reset();
-    dispatch(cancelTrip());
+  const onSubmit = async (data: TBasicTrip) => {
+    try {
+      await handlePostTrip(data);
+      reset();
+      dispatch(cancelTrip());
+    } catch (error) {
+      console.error("Submission failed:", error);
+    }
   };
 
   return (
