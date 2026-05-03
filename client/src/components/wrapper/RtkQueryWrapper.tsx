@@ -1,5 +1,6 @@
 import {
   Alert,
+  Box,
   Button,
   CircularProgress,
   Container,
@@ -66,13 +67,12 @@ export const RtkQueryWrapper: FC<IRtkQueryWrapperProps> = ({
     return <Alert severity="error">{fetchError}</Alert>;
   } else if (data?.length === 0 && !isFetching) {
     return (
-      <Alert
-        severity="info"
-        action={<Button onClick={onCreate}>{createMessage}</Button>}
-        sx={{ mt: 1 }}
-      >
-        {noData}
-      </Alert>
+      <Box sx={{ mt: 1 }}>
+        <Alert severity="info">{noData}</Alert>
+        <Button onClick={onCreate} variant="contained" fullWidth sx={{ mt: 2 }}>
+          {createMessage}
+        </Button>
+      </Box>
     );
   }
   return <>{children}</>;
