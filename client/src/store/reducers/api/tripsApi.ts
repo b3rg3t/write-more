@@ -108,7 +108,7 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
       method: "POST",
       body: { userId },
     }),
-    invalidatesTags: ["Trips"],
+    invalidatesTags: ["Trips", "Notes", "Todos"],
   }),
 
   // Get trip images metadata (snapshot-focused)
@@ -155,6 +155,6 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
       url: `trips/${tripId}/images/${imageId}`,
       method: "DELETE",
     }),
-    invalidatesTags: ["Trips"],
+    invalidatesTags: ["Trips", "Todos", "Notes"],
   }),
 });
