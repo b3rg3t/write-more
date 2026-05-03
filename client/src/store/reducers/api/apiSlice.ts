@@ -12,10 +12,13 @@ import { todosEndpoints } from "./todosApi";
 import { tripsEndpoints } from "./tripsApi";
 import { usersEndpoints } from "./usersApi";
 import { authEndpoints } from "./authApi";
+import { ERoutes } from "../../../models/enum/ERoutes";
 import {
   clearCredentials,
   TOKEN_STORAGE_KEY,
 } from "../../../util/authCredentials";
+
+export const AUTH_LOGOUT = "auth/logout";
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
@@ -40,6 +43,11 @@ const baseQueryWithAuthHandling: BaseQueryFn<
     (result.error.status === 401 || result.error.status === 403)
   ) {
     clearCredentials();
+    api.dispatch({ type: AUTH_LOGOUT });
+
+    if (typeof window !== "undefined") {
+      window.location.replace(ERoutes.AUTH);
+    }
   }
 
   return result;

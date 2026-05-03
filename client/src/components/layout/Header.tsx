@@ -8,7 +8,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 import { useAppDispatch } from "../../store/redux/hooks";
-import { apiSlice } from "../../store/reducers/api/apiSlice";
+import { AUTH_LOGOUT } from "../../store/reducers/api/apiSlice";
 import {
   clearCredentials,
   TOKEN_STORAGE_KEY,
@@ -25,7 +25,7 @@ export const Header = () => {
 
   const handleLogout = () => {
     clearCredentials();
-    dispatch(apiSlice.util.resetApiState());
+    dispatch({ type: AUTH_LOGOUT });
     navigate(ERoutes.AUTH);
   };
 
