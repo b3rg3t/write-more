@@ -198,7 +198,7 @@ export const TripDetail = () => {
         <Divider sx={{ my: 2 }} />
         <TripSectionAccordion
           title={text.todos.header}
-          count={trip?.todos?.length ?? 0}
+          count={`${trip?.todos?.filter((t) => !t.isCompleted).length ?? 0}/${trip?.todos?.length ?? 0}`}
           badgeColor="info"
           defaultExpanded={trip?.todosSection?.isAccordionOpen ?? true}
           onExpandedChange={(expanded) =>

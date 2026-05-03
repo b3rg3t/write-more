@@ -12,7 +12,7 @@ import { fontSize16 } from "../utils/FontSize";
 
 type TripSectionAccordionProps = {
   title: string;
-  count: number;
+  count: number | string;
   badgeColor: "info" | "secondary";
   defaultExpanded?: boolean;
   onExpandedChange?: (expanded: boolean) => void;
