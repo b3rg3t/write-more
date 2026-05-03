@@ -2,19 +2,25 @@ import { NoteList } from "./NoteList";
 import { text } from "../../localization/eng";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { useGetAllNotesQuery } from "../../store/reducers/api/apiSlice";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 import { createNewNote } from "../../store/reducers/notes/notesSlice";
 import { Action } from "../utils/Action";
 import { PageHeader } from "../layout/PageHeader";
 
 export const Notes = () => {
-  const { data, isLoading, isUninitialized, isFetching, error } =
+  const { data, isLoading, isUninitialized, isFetching, error, refetch } =
     useGetAllNotesQuery();
   const dispatch = useAppDispatch();
   const sortedData = useMemo(() => {
     return data ? [...data].sort((a, b) => a.order - b.order) : [];
   }, [data]);
+
+  useEffect(() => {
+    if (!data || data.length === 0) {
+      refetch();
+    }
+  }, [data, refetch]);
 
   const { header } = text.notes;
   const { loading, createNote, noNotes, fetchError } = text.notes.notesList;

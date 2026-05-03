@@ -5,17 +5,23 @@ import { useAppDispatch } from "../../store/redux/hooks";
 import { text } from "../../localization/eng";
 import { Action } from "../utils/Action";
 import { createNewTodo } from "../../store/reducers/todos/todosSlice";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { PageHeader } from "../layout/PageHeader";
 
 export const Todos = () => {
-  const { data, isLoading, isUninitialized, isFetching, error } =
+  const { data, isLoading, isUninitialized, isFetching, error, refetch } =
     useGetAllTodosQuery();
   const dispatch = useAppDispatch();
 
   const sortedTodos = useMemo(() => {
     return data ? [...data].sort((a, b) => a.order - b.order) : [];
   }, [data]);
+
+  useEffect(() => {
+    if (!data || data.length === 0) {
+      refetch();
+    }
+  }, [data, refetch]);
 
   const { header } = text.todos;
   const { loading, createTodo, noTodos, fetchError } = text.todos.todosList;

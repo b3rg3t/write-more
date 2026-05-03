@@ -4,17 +4,23 @@ import { Action } from "../utils/Action";
 import { createNewTrip } from "../../store/reducers/trips/tripsSlice";
 import { text } from "../../localization/eng";
 import { useAppDispatch } from "../../store/redux/hooks";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useGetAllTripsQuery } from "../../store/reducers/api/apiSlice";
 import { PageHeader } from "../layout/PageHeader";
 
 export const Trips = () => {
-  const { data, isLoading, isUninitialized, isFetching, error } =
+  const { data, isLoading, isUninitialized, isFetching, error, refetch } =
     useGetAllTripsQuery();
   const dispatch = useAppDispatch();
   const sortedTrips = useMemo(() => {
     return data ? [...data].sort((a, b) => a.order - b.order) : [];
   }, [data]);
+
+  useEffect(() => {
+    if (!data || data.length === 0) {
+      refetch();
+    }
+  }, [data, refetch]);
 
   const { header } = text.trips;
   const { loading, createTrip, noTrips, fetchError } = text.trips.tripsList;
