@@ -30,7 +30,7 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
       method: "POST",
       body,
     }),
-    invalidatesTags: ["Trips"],
+    invalidatesTags: ["Trips", "Notes", "Todos"],
   }),
   updateTrip: builder.mutation<
     ITrip,
@@ -57,7 +57,7 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
       method: "PUT",
       body,
     }),
-    invalidatesTags: ["Trips"],
+    invalidatesTags: ["Trips", "Notes", "Todos"],
   }),
   reorderTrips: builder.mutation<ITrip[], Pick<ITrip, "_id" | "order">[]>({
     query: (body) => ({
@@ -85,7 +85,7 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
       method: "POST",
       body,
     }),
-    invalidatesTags: ["Trips"],
+    invalidatesTags: ["Trips", "Notes", "Todos"],
   }),
 
   // Create todo for trip
@@ -98,7 +98,7 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
       method: "POST",
       body,
     }),
-    invalidatesTags: ["Trips"],
+    invalidatesTags: ["Trips", "Notes", "Todos"],
   }),
 
   // Add user to trip
@@ -143,7 +143,7 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
         body: formData,
       };
     },
-    invalidatesTags: ["Trips"],
+    invalidatesTags: ["Trips", "Notes", "Todos"],
   }),
 
   // Delete a trip image
@@ -155,6 +155,6 @@ export const tripsEndpoints = (builder: TEndpointBuilderType) => ({
       url: `trips/${tripId}/images/${imageId}`,
       method: "DELETE",
     }),
-    invalidatesTags: ["Trips", "Todos", "Notes"],
+    invalidatesTags: ["Trips"],
   }),
 });
