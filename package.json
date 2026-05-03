@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "write-more-root",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm --prefix api run dev\" \"npm --prefix client run dev\"",
+    "build:all": "npm --prefix api run build && npm --prefix client run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
