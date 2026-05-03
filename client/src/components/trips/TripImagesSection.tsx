@@ -9,10 +9,13 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Keyboard, Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { text } from "../../localization/eng";
 import { ITripImage } from "../../models/interface/ITripImage";
 import {
@@ -34,9 +37,9 @@ export const TripImagesSection = ({
   isUploadModalOpen,
   onCloseUploadModal,
 }: TripImagesSectionProps) => {
-  const SWIPE_THRESHOLD_PX = 50;
   const [isSlideshowOpen, setIsSlideshowOpen] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [deleteTripImage] = useDeleteTripImageMutation();
   const [thumbnailUrls, setThumbnailUrls] = useState<Record<string, string>>(
     {},
@@ -46,8 +49,6 @@ export const TripImagesSection = ({
   );
   const thumbnailUrlsRef = useRef<Record<string, string>>({});
   const fullImageUrlsRef = useRef<Record<string, string>>({});
-  const touchStartXRef = useRef<number | null>(null);
-  const touchStartYRef = useRef<number | null>(null);
 
   const {
     data: tripImagesResponse,
@@ -192,35 +193,6 @@ export const TripImagesSection = ({
     }
   };
 
-  const handleNextSlide = () => {
-    if (tripImages.length === 0) {
-      return;
-    }
-
-    const nextIndex = (activeImageIndex + 1) % tripImages.length;
-    setActiveImageIndex(nextIndex);
-
-    const nextImage = tripImages[nextIndex];
-    if (nextImage) {
-      void loadFullImage(nextImage);
-    }
-  };
-
-  const handlePrevSlide = () => {
-    if (tripImages.length === 0) {
-      return;
-    }
-
-    const prevIndex =
-      (activeImageIndex - 1 + tripImages.length) % tripImages.length;
-    setActiveImageIndex(prevIndex);
-
-    const prevImage = tripImages[prevIndex];
-    if (prevImage) {
-      void loadFullImage(prevImage);
-    }
-  };
-
   const handleDeleteActiveImage = async () => {
     if (!tripId || !activeImage) {
       return;
@@ -256,47 +228,28 @@ export const TripImagesSection = ({
     await deleteTripImage({ tripId, imageId });
   };
 
-  const handleTouchStart = (event: React.TouchEvent) => {
-    const touch = event.changedTouches[0];
-    touchStartXRef.current = touch.clientX;
-    touchStartYRef.current = touch.clientY;
-  };
-
-  const handleTouchEnd = (event: React.TouchEvent) => {
-    if (touchStartXRef.current === null || touchStartYRef.current === null) {
-      return;
-    }
-
-    const touch = event.changedTouches[0];
-    const deltaX = touch.clientX - touchStartXRef.current;
-    const deltaY = touch.clientY - touchStartYRef.current;
-
-    if (
-      Math.abs(deltaX) > SWIPE_THRESHOLD_PX &&
-      Math.abs(deltaX) > Math.abs(deltaY)
-    ) {
-      if (deltaX < 0) {
-        handleNextSlide();
-      } else {
-        handlePrevSlide();
-      }
-    }
-
-    touchStartXRef.current = null;
-    touchStartYRef.current = null;
-  };
-
   const activeImage = tripImages[activeImageIndex];
-  const activeImageUrl = activeImage
-    ? fullImageUrls[activeImage._id]
-    : undefined;
 
-  // Load full image whenever the active image changes (e.g. after deletion refreshes the list)
   useEffect(() => {
     if (isSlideshowOpen && activeImage) {
       void loadFullImage(activeImage);
+
+      if (tripImages.length > 1) {
+        const nextIndex = (activeImageIndex + 1) % tripImages.length;
+        const prevIndex =
+          (activeImageIndex - 1 + tripImages.length) % tripImages.length;
+
+        void loadFullImage(tripImages[nextIndex]);
+        void loadFullImage(tripImages[prevIndex]);
+      }
     }
-  }, [activeImage?._id, isSlideshowOpen]);
+  }, [activeImage?._id, activeImageIndex, isSlideshowOpen, tripImages]);
+
+  useEffect(() => {
+    if (swiperInstance && isSlideshowOpen) {
+      swiperInstance.slideTo(activeImageIndex, 0);
+    }
+  }, [activeImageIndex, isSlideshowOpen, swiperInstance]);
 
   useEffect(() => {
     if (isSlideshowOpen && tripImages.length === 0) {
@@ -417,70 +370,50 @@ export const TripImagesSection = ({
             </IconButton>
           </Stack>
         </DialogTitle>
-        <DialogContent
-          sx={{ px: { xs: 0, sm: 0 }, py: 1 }}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          <IconButton
-            onClick={handlePrevSlide}
-            aria-label={imageSlideshow.previous}
-            size="small"
-            sx={{
-              display: { xs: "none", sm: "inline-flex" },
-              position: "fixed",
-              left: 8,
-              top: "50%",
-              transform: "translateY(-50%)",
-              zIndex: 1,
-              bgcolor: "rgba(0,0,0,0.35)",
-              color: "white",
-              "&:hover": { bgcolor: "rgba(0,0,0,0.55)" },
-            }}
+        <DialogContent sx={{ px: { xs: 0, sm: 0 }, py: 1 }}>
+          <Swiper
+            modules={[Navigation, Pagination, Keyboard]}
+            onSwiper={setSwiperInstance}
+            onSlideChange={(swiper) => setActiveImageIndex(swiper.activeIndex)}
+            initialSlide={activeImageIndex}
+            navigation
+            keyboard={{ enabled: true }}
+            pagination={{ clickable: true }}
+            spaceBetween={20}
+            slidesPerView={1}
+            style={{ minHeight: 280 }}
           >
-            <ArrowBackIosNewIcon />
-          </IconButton>
-          <Box
-            sx={{
-              minHeight: 280,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {activeImageUrl ? (
-              <Box
-                component="img"
-                src={activeImageUrl}
-                alt={activeImage?.originalName || imageSlideshow.fallbackAlt}
-                sx={{
-                  width: "100%",
-                  maxHeight: "calc(100vh - 120px)",
-                  objectFit: "contain",
-                }}
-              />
-            ) : (
-              <CircularProgress />
-            )}
-          </Box>
-          <IconButton
-            onClick={handleNextSlide}
-            aria-label={imageSlideshow.next}
-            size="small"
-            sx={{
-              display: { xs: "none", sm: "inline-flex" },
-              position: "fixed",
-              right: 8,
-              top: "50%",
-              transform: "translateY(-50%)",
-              zIndex: 1,
-              bgcolor: "rgba(0,0,0,0.35)",
-              color: "white",
-              "&:hover": { bgcolor: "rgba(0,0,0,0.55)" },
-            }}
-          >
-            <ArrowForwardIosIcon />
-          </IconButton>
+            {tripImages.map((image) => {
+              const imageUrl = fullImageUrls[image._id];
+              return (
+                <SwiperSlide key={image._id}>
+                  <Box
+                    sx={{
+                      minHeight: 280,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {imageUrl ? (
+                      <Box
+                        component="img"
+                        src={imageUrl}
+                        alt={image.originalName || imageSlideshow.fallbackAlt}
+                        sx={{
+                          width: "100%",
+                          maxHeight: "calc(100vh - 120px)",
+                          objectFit: "contain",
+                        }}
+                      />
+                    ) : (
+                      <CircularProgress />
+                    )}
+                  </Box>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
         </DialogContent>
       </Dialog>
     </>
