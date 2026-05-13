@@ -28,7 +28,7 @@ description: "Use when changing frontend React code, RTK Query endpoints, routin
 
 ## UI and Localization Rules
 
-- Keep all user-facing text in `client/src/localization/eng.ts` (no hardcoded UI strings in components).
+- **Always** keep all user-facing text in `client/src/localization/eng.ts` — never hardcode UI strings in components.
 - Use Material UI components and established spacing/layout patterns.
 - Keep responsive behavior for mobile and desktop.
 - Avoid broad redesigns unless explicitly requested.
@@ -52,4 +52,5 @@ description: "Use when changing frontend React code, RTK Query endpoints, routin
 ## Safety
 
 - Never hardcode secrets or tokens in client code.
+- **Always put user-facing text in `client/src/localization/eng.ts`** — no hardcoded strings in components.
 - Keep changes backward-compatible unless a breaking change is requested.

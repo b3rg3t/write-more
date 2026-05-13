@@ -1,4 +1,8 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "chat.mcp.enabled": true,
+  "chat.mcp.discovery": {
+    "enabled": true
+  }
 }
