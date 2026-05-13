@@ -38,7 +38,11 @@ const baseQueryWithAuthHandling: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   const result = await rawBaseQuery(args, api, extraOptions);
 
+  const url = typeof args === "string" ? args : args.url;
+  const isAuthRoute = url.startsWith("auth/");
+
   if (
+    !isAuthRoute &&
     result.error &&
     (result.error.status === 401 || result.error.status === 403)
   ) {
