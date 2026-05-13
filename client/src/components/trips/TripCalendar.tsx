@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 import { fontSize16 } from "../utils/FontSize";
 import { useState, useEffect } from "react";
+import { INote } from "../../models/interface/INote";
 
 const getCalendarRows = (year: number, month: number) => {
   const firstDay = new Date(year, month, 1);
@@ -69,6 +70,28 @@ const getWeekNumber = (date: Date) => {
 
 const isDateInRange = (date: Date, start: Date, end: Date) =>
   date.getTime() >= start.getTime() && date.getTime() <= end.getTime();
+
+const getNotesForDate = (date: Date, notes: INote[]) => {
+  return notes.filter((note) => {
+    if (!note.startDate || !note.endDate) return false;
+    const start = normalizeDate(new Date(note.startDate));
+    const end = normalizeDate(new Date(note.endDate));
+    return isDateInRange(date, start, end);
+  });
+};
+
+const noteColors = [
+  "#FF6B6B", // Red
+  "#4ECDC4", // Teal
+  "#45B7D1", // Blue
+  "#FFA07A", // Light Salmon
+  "#98D8C8", // Mint
+  "#F7DC6F", // Yellow
+  "#BB8FCE", // Light Purple
+  "#85C1E9", // Light Blue
+  "#F8C471", // Orange
+  "#82E0AA", // Light Green
+];
 
 export const TripCalendar = () => {
   const { tripId } = useParams<{ tripId: string }>();
@@ -129,6 +152,11 @@ export const TripCalendar = () => {
   );
   const calendarRows = getCalendarRows(currentYear, currentMonth);
   const weekDays = text.trips.tripCalendar.weekDays;
+
+  const notesWithDates = trip?.notes.filter((note) => {
+    if (!note.startDate || !note.endDate) return false;
+    return note;
+  });
 
   return (
     <RtkQueryWrapper
@@ -309,7 +337,7 @@ export const TripCalendar = () => {
                             align="center"
                             sx={{
                               height: { xs: 36, sm: 42, md: 56, lg: 68 },
-                              border: "1px solid lightgray",
+                              border: "1px solid #d3d3d3",
                               backgroundColor: isSelected
                                 ? "primary.light"
                                 : "inherit",
@@ -324,22 +352,79 @@ export const TripCalendar = () => {
                             {day ? (
                               <Box
                                 sx={{
-                                  width: { xs: 20, sm: 24, md: 28, lg: 32 },
-                                  height: { xs: 20, sm: 24, md: 28, lg: 32 },
-                                  mx: "auto",
-                                  borderRadius: "50%",
-                                  display: "inline-flex",
+                                  display: "flex",
+                                  flexDirection: "column",
                                   alignItems: "center",
-                                  justifyContent: "center",
-                                  fontWeight: isSelected ? 700 : 500,
-                                  fontSize: {
-                                    xs: "0.75rem",
-                                    sm: "0.875rem",
-                                    md: "1rem",
-                                  },
+                                  gap: 0.25,
+                                  height: "100%",
+                                  justifyContent:
+                                    trip?.notes &&
+                                    getNotesForDate(
+                                      normalizedDayDate,
+                                      trip.notes,
+                                    ).length > 0
+                                      ? "flex-start"
+                                      : "center",
                                 }}
                               >
-                                {day}
+                                <Box
+                                  sx={{
+                                    width: { xs: 20, sm: 24, md: 28, lg: 32 },
+                                    height: { xs: 20, sm: 24, md: 28, lg: 32 },
+                                    mx: "auto",
+                                    borderRadius: "50%",
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontWeight: isSelected ? 700 : 500,
+                                    fontSize: {
+                                      xs: "0.75rem",
+                                      sm: "0.875rem",
+                                      md: "1rem",
+                                    },
+                                  }}
+                                >
+                                  {day}
+                                </Box>
+                                {trip?.notes && (
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      gap: 0.5,
+                                      width: "100%",
+                                      alignItems: "stretch",
+                                    }}
+                                  >
+                                    {getNotesForDate(
+                                      normalizedDayDate,
+                                      trip.notes,
+                                    )
+                                      .slice(0, 4) // Limit to 4 indicators to prevent overflow
+                                      .map((note, noteIndex) => {
+                                        const bgColor =
+                                          notesWithDates?.findIndex(
+                                            (n) => n._id === note._id,
+                                          );
+                                        if (bgColor === undefined) return null;
+                                        return (
+                                          <Box
+                                            key={note._id || noteIndex}
+                                            sx={{
+                                              width: "100%",
+                                              height: 2,
+                                              backgroundColor:
+                                                noteColors[
+                                                  bgColor % noteColors.length
+                                                ],
+                                              flexShrink: 0,
+                                            }}
+                                            title={note.title}
+                                          />
+                                        );
+                                      })}
+                                  </Box>
+                                )}
                               </Box>
                             ) : null}
                           </TableCell>
@@ -350,6 +435,39 @@ export const TripCalendar = () => {
                 })}
               </TableBody>
             </Table>
+            {notesWithDates && notesWithDates.length > 0 && (
+              <Box
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "start",
+                  mt: 2,
+                }}
+              >
+                <Stack sx={{ px: { xs: 1, sm: 2 } }} spacing={1}>
+                  {notesWithDates.map((note, noteIndex) => (
+                    <Stack
+                      key={note._id}
+                      sx={{ alignItems: "center", gap: 0.5 }}
+                      direction="row"
+                    >
+                      <Box
+                        sx={{
+                          width: 12,
+                          height: 12,
+                          backgroundColor:
+                            noteColors[noteIndex % noteColors.length],
+                          display: "inline-block",
+                          borderRadius: "50%",
+                          mr: 1,
+                        }}
+                      />
+                      <Typography>{note.title}</Typography>
+                    </Stack>
+                  ))}
+                </Stack>
+              </Box>
+            )}
           </TableContainer>
         </>
       )}
