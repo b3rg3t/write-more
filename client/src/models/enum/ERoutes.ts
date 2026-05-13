@@ -7,6 +7,7 @@ export enum ERoutes {
   USERS = "/users",
   USER_DETAIL = "/user/:userId",
   TRIP_DETAIL = "/trip/:tripId",
+  TRIP_CALENDAR = "/trip/:tripId/calendar",
   NOTE_DETAIL = "/note/:noteId",
   TODO_DETAIL = "/todo/:todoId",
 }

@@ -8,6 +8,7 @@ import { TodosPage } from "./TodosPage";
 import { UsersPage } from "./UsersPage";
 import { ProfilePage } from "./ProfilePage";
 import { TripDetailPage } from "./TripDetailPage";
+import { TripCalendarPage } from "./TripCalendarPage";
 import { NoteDetailPage } from "./NoteDetailPage";
 import { TodoDetailPage } from "./TodoDetailPage";
 
@@ -64,6 +65,15 @@ export const appRoutes = [
     element={
       <ProtectedRoute>
         <TripDetailPage />
+      </ProtectedRoute>
+    }
+  />,
+  <Route
+    key={ERoutes.TRIP_CALENDAR}
+    path={ERoutes.TRIP_CALENDAR}
+    element={
+      <ProtectedRoute>
+        <TripCalendarPage />
       </ProtectedRoute>
     }
   />,

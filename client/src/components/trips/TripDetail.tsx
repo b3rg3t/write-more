@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetTripQuery,
   useUpdateTripMutation,
@@ -33,6 +33,7 @@ import { TripDates } from "../utils/TripDates";
 import { TripImagesSection } from "./TripImagesSection";
 import { useState } from "react";
 import { TripSectionAccordion } from "./TripSectionAccordion";
+import { ERoutes } from "../../models/enum/ERoutes";
 
 export const TripDetail = () => {
   const { tripId } = useParams<{ tripId: string }>();
@@ -46,6 +47,12 @@ export const TripDetail = () => {
     isUninitialized,
     isFetching,
   } = useGetTripQuery(tripId!);
+  const navigate = useNavigate();
+
+  const handleOpenCalendar = () => {
+    if (!tripId) return;
+    navigate(ERoutes.TRIP_CALENDAR.replace(":tripId", tripId));
+  };
 
   const handleCreateTodo = () => {
     if (trip) {
@@ -136,7 +143,11 @@ export const TripDetail = () => {
               <EditSquareIcon />
             </IconButton>
           </Stack>
-          <TripDates startDate={trip?.startDate} endDate={trip?.endDate} />
+          <TripDates
+            startDate={trip?.startDate}
+            endDate={trip?.endDate}
+            onClick={handleOpenCalendar}
+          />
           <Typography sx={{ mt: 1, whiteSpace: "pre-wrap" }}>
             {trip?.description}
           </Typography>

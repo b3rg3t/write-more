@@ -130,6 +130,16 @@ export const text = {
       imageFetchError: "Failed to load images.",
       openGallery: "Open image gallery",
     },
+    tripCalendar: {
+      backToTrip: "Back to Trip",
+      title: "Trip Calendar",
+      calendarView: "Calendar view for",
+      dates: "Dates:",
+      loading: "Loading calendar...",
+      fetchError: "Failed to load calendar. Please try again.",
+      weekLabel: "Week",
+      weekDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    },
     imageUpload: {
       title: "Upload Image",
       helperText:
