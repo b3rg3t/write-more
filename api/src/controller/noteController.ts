@@ -10,6 +10,21 @@ import { EUserRole } from "../models/enums/EUserRole";
 
 const hasUserContext = (req: AuthRequest) => Boolean(req.userId);
 
+const commentIdsPopulate = {
+  path: "commentIds",
+  populate: { path: "user", select: "username firstName lastName" },
+};
+
+const addCommentUserNames = (note: any) => ({
+  ...note,
+  commentIds: (note.commentIds || []).map((comment: any) => {
+    const user = comment?.user;
+    if (!user) return comment;
+    const name = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+    return { ...comment, user: { ...user, name } };
+  }),
+});
+
 const resolveAccessContext = async (req: AuthRequest) => {
   if (!req.userId || !mongoose.Types.ObjectId.isValid(req.userId)) {
     return null;
@@ -54,14 +69,14 @@ export const getNotes = async (req: AuthRequest, res: Response) => {
     }
 
     const notes = accessContext.isAdmin
-      ? await SNote.find()
+      ? await SNote.find().populate(commentIdsPopulate).lean()
       : await SNote.find({
           _id: {
             $in: await getAccessibleNoteIds(accessContext.userId),
           },
-        });
+        }).populate(commentIdsPopulate).lean();
 
-    res.json(notes);
+    res.json(notes.map(addCommentUserNames));
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -86,11 +101,11 @@ export const getNote = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ message: "Note not found" });
     }
 
-    const note = await SNote.findById(req.params.id);
+    const note = await SNote.findById(req.params.id).populate(commentIdsPopulate).lean();
     if (!note) {
       return res.status(404).json({ message: "Note not found" });
     }
-    res.json(note);
+    res.json(addCommentUserNames(note));
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
