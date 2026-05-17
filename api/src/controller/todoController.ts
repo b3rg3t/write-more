@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import { ITodo } from "../models/interfaces/ITodo";
 import STodo from "../models/schemas/STodos";
@@ -40,8 +40,8 @@ const canAccessTodo = async (userId: string, todoId: string) =>
     }),
   );
 
-// Get all notes
-export const getTodos = async (req: AuthRequest, res: Response) => {
+// Get all todos
+export const getTodos = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -62,12 +62,12 @@ export const getTodos = async (req: AuthRequest, res: Response) => {
 
     res.json(todos);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Get a specific todo by ID
-export const getTodo = async (req: AuthRequest, res: Response) => {
+export const getTodo = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -91,12 +91,12 @@ export const getTodo = async (req: AuthRequest, res: Response) => {
     }
     res.json(todo);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
-// Create a new note
-export const createTodo = async (req: AuthRequest, res: Response) => {
+// Create a new todo
+export const createTodo = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { name, isCompleted } = req.body;
 
   try {
@@ -105,24 +105,24 @@ export const createTodo = async (req: AuthRequest, res: Response) => {
     }
 
     // Find the highest order
-    const highestOrderNote = await STodo.findOne().sort({ order: -1 });
-    const newOrder = highestOrderNote ? highestOrderNote.order + 1 : 0;
+    const highestOrderTodo = await STodo.findOne().sort({ order: -1 });
+    const newOrder = highestOrderTodo ? highestOrderTodo.order + 1 : 0;
 
-    const newNote = new STodo({
+    const newTodo = new STodo({
       name,
       isCompleted,
       order: newOrder,
       users: [req.userId],
     });
-    const savedNote = await newNote.save();
-    res.status(201).json(savedNote);
+    const savedTodo = await newTodo.save();
+    res.status(201).json(savedTodo);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
-// Update a note
-export const updateTodo = async (req: AuthRequest, res: Response) => {
+// Update a todo
+export const updateTodo = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { name, isCompleted } = req.body;
 
   try {
@@ -142,22 +142,22 @@ export const updateTodo = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ message: "Todo not found" });
     }
 
-    const updatedNote = await STodo.findByIdAndUpdate(
+    const updatedTodo = await STodo.findByIdAndUpdate(
       req.params.id,
       { name, isCompleted },
       { new: true },
     );
-    if (!updatedNote) {
-      return res.status(404).json({ message: "Note not found" });
+    if (!updatedTodo) {
+      return res.status(404).json({ message: "Todo not found" });
     }
-    res.json(updatedNote);
+    res.json(updatedTodo);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
-// Update order for all notes
-export const updateAll = async (req: AuthRequest, res: Response) => {
+// Update order for all todos
+export const updateAll = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const updates: Pick<ITodo, "_id" | "order">[] = req.body;
 
   try {
@@ -195,12 +195,12 @@ export const updateAll = async (req: AuthRequest, res: Response) => {
     const updatedNotes = await Promise.all(promises);
     res.json(updatedNotes);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
-// Delete a note
-export const deleteTodo = async (req: AuthRequest, res: Response) => {
+// Delete a todo
+export const deleteTodo = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -218,12 +218,12 @@ export const deleteTodo = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ message: "Todo not found" });
     }
 
-    const deletedNote = await STodo.findByIdAndDelete(req.params.id);
-    if (!deletedNote) {
-      return res.status(404).json({ message: "Note not found" });
+    const deletedTodo = await STodo.findByIdAndDelete(req.params.id);
+    if (!deletedTodo) {
+      return res.status(404).json({ message: "Todo not found" });
     }
-    res.json({ message: "Note deleted successfully" });
+    res.json({ message: "Todo deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };

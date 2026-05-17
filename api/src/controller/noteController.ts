@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import { INote } from "../models/interfaces/INote";
 import SComment from "../models/schemas/SComment";
@@ -9,21 +9,6 @@ import { AuthRequest } from "../middleware/authenticate";
 import { EUserRole } from "../models/enums/EUserRole";
 
 const hasUserContext = (req: AuthRequest) => Boolean(req.userId);
-
-const commentIdsPopulate = {
-  path: "commentIds",
-  populate: { path: "user", select: "username firstName lastName" },
-};
-
-const addCommentUserNames = (note: any) => ({
-  ...note,
-  commentIds: (note.commentIds || []).map((comment: any) => {
-    const user = comment?.user;
-    if (!user) return comment;
-    const name = `${user.firstName || ""} ${user.lastName || ""}`.trim();
-    return { ...comment, user: { ...user, name } };
-  }),
-});
 
 const resolveAccessContext = async (req: AuthRequest) => {
   if (!req.userId || !mongoose.Types.ObjectId.isValid(req.userId)) {
@@ -43,6 +28,21 @@ const resolveAccessContext = async (req: AuthRequest) => {
   };
 };
 
+const commentIdsPopulate = {
+  path: "commentIds",
+  populate: { path: "user", select: "username firstName lastName" },
+};
+
+const addCommentUserNames = (note: any) => ({
+  ...note,
+  commentIds: (note.commentIds || []).map((comment: any) => {
+    const user = comment?.user;
+    if (!user) return comment;
+    const name = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+    return { ...comment, user: { ...user, name } };
+  }),
+});
+
 const getAccessibleNoteIds = async (userId: string) =>
   STrip.distinct("notes", {
     users: new mongoose.Types.ObjectId(userId),
@@ -57,7 +57,7 @@ const canAccessNote = async (userId: string, noteId: string) =>
   );
 
 // Get all notes
-export const getNotes = async (req: AuthRequest, res: Response) => {
+export const getNotes = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -78,12 +78,12 @@ export const getNotes = async (req: AuthRequest, res: Response) => {
 
     res.json(notes.map(addCommentUserNames));
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Get a specific note by ID
-export const getNote = async (req: AuthRequest, res: Response) => {
+export const getNote = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -107,12 +107,12 @@ export const getNote = async (req: AuthRequest, res: Response) => {
     }
     res.json(addCommentUserNames(note));
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Create a new note
-export const createNote = async (req: AuthRequest, res: Response) => {
+export const createNote = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { title, content, links, startDate, endDate } = req.body;
 
   try {
@@ -136,12 +136,12 @@ export const createNote = async (req: AuthRequest, res: Response) => {
     const savedNote = await newNote.save();
     res.status(201).json(savedNote);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Update a note
-export const updateNote = async (req: AuthRequest, res: Response) => {
+export const updateNote = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { title, content, links, startDate, endDate } = req.body;
 
   try {
@@ -171,12 +171,12 @@ export const updateNote = async (req: AuthRequest, res: Response) => {
     }
     res.json(updatedNote);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Update order for all notes
-export const updateOrder = async (req: AuthRequest, res: Response) => {
+export const updateOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const updates: Pick<INote, "_id" | "order">[] = req.body; // array of { id, order }
 
   try {
@@ -214,12 +214,12 @@ export const updateOrder = async (req: AuthRequest, res: Response) => {
     const updatedNotes = await Promise.all(promises);
     res.json(updatedNotes);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Delete a note
-export const deleteNote = async (req: AuthRequest, res: Response) => {
+export const deleteNote = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -243,12 +243,12 @@ export const deleteNote = async (req: AuthRequest, res: Response) => {
     }
     res.json({ message: "Note deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Create a comment for a specific note
-export const createCommentForNote = async (req: AuthRequest, res: Response) => {
+export const createCommentForNote = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { content } = req.body;
   const noteId = req.params.id;
 
@@ -290,6 +290,6 @@ export const createCommentForNote = async (req: AuthRequest, res: Response) => {
 
     return res.status(201).json(savedComment);
   } catch (err) {
-    return res.status(500).json({ message: "Server error" });
+    return next(err);
   }
 };

@@ -39,7 +39,7 @@ router.post("/", authenticate, createTrip);
 router.put("/:id", authenticate, updateTrip);
 
 // Update order for all trips
-router.patch("/order", updateOrder);
+router.patch("/order", authenticate, updateOrder);
 
 // Delete a trip
 router.delete("/:id", authenticate, deleteTrip);

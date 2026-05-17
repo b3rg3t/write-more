@@ -1,4 +1,4 @@
-import type { Response } from "express";
+import type { Response, NextFunction } from "express";
 import { Types } from "mongoose";
 import { AuthRequest } from "../middleware/authenticate";
 import STrip from "../models/schemas/STrip";
@@ -9,7 +9,7 @@ import {
 } from "../utils/tripImageStorage";
 
 // Get all images for a trip the user has access to
-export const getTripImages = async (req: AuthRequest, res: Response) => {
+export const getTripImages = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.userId;
 
@@ -45,12 +45,12 @@ export const getTripImages = async (req: AuthRequest, res: Response) => {
       images: imageSnapshots,
     });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Get one specific image file for a trip the user has access to
-export const getTripImage = async (req: AuthRequest, res: Response) => {
+export const getTripImage = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.userId;
     const { id: tripId, imageId } = req.params;
@@ -116,12 +116,12 @@ export const getTripImage = async (req: AuthRequest, res: Response) => {
 
     return downloadStream.pipe(res);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Delete a specific image from a trip
-export const deleteTripImage = async (req: AuthRequest, res: Response) => {
+export const deleteTripImage = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.userId;
     const { id: tripId, imageId } = req.params;
@@ -164,6 +164,6 @@ export const deleteTripImage = async (req: AuthRequest, res: Response) => {
 
     return res.json({ message: "Image deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };

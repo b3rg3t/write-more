@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import sharp from "sharp";
 import { ITrip } from "../models/interfaces/ITrip";
 import STrip from "../models/schemas/STrip";
@@ -22,7 +22,7 @@ const tripImagePopulate = {
 };
 
 // Get all trips for the authenticated user
-export const getTrips = async (req: AuthRequest, res: Response) => {
+export const getTrips = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.userId;
 
@@ -37,12 +37,12 @@ export const getTrips = async (req: AuthRequest, res: Response) => {
 
     res.json(trips);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Admin endpoint - get all trips
-export const getAllTripsAdmin = async (req: AuthRequest, res: Response) => {
+export const getAllTripsAdmin = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.userId;
 
@@ -63,12 +63,12 @@ export const getAllTripsAdmin = async (req: AuthRequest, res: Response) => {
 
     res.json(trips);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Get a specific trip by ID
-export const getTrip = async (req: AuthRequest, res: Response) => {
+export const getTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.userId;
 
@@ -120,12 +120,12 @@ export const getTrip = async (req: AuthRequest, res: Response) => {
 
     res.json(tripWithCommentUserNames);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Create a new trip
-export const createTrip = async (req: AuthRequest, res: Response) => {
+export const createTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { title, description, startDate, endDate, notes, todos } = req.body;
   const userId = req.userId;
 
@@ -161,12 +161,12 @@ export const createTrip = async (req: AuthRequest, res: Response) => {
 
     res.status(201).json(populatedTrip);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Update a trip
-export const updateTrip = async (req: AuthRequest, res: Response) => {
+export const updateTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const {
     title,
     description,
@@ -220,12 +220,12 @@ export const updateTrip = async (req: AuthRequest, res: Response) => {
     }
     res.json(updatedTrip);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Update order for all trips
-export const updateOrder = async (req: Request, res: Response) => {
+export const updateOrder = async (req: Request, res: Response, next: NextFunction) => {
   const updates: Pick<ITrip, "_id" | "order">[] = req.body; // array of { id, order }
 
   try {
@@ -239,12 +239,12 @@ export const updateOrder = async (req: Request, res: Response) => {
     const updatedTrips = await Promise.all(promises);
     res.json(updatedTrips);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Delete a trip
-export const deleteTrip = async (req: AuthRequest, res: Response) => {
+export const deleteTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.userId;
 
@@ -262,12 +262,12 @@ export const deleteTrip = async (req: AuthRequest, res: Response) => {
     }
     res.json({ message: "Trip deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Create a todo and connect it to a trip
-export const createTodoForTrip = async (req: AuthRequest, res: Response) => {
+export const createTodoForTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { name, isCompleted } = req.body;
   const tripId = req.params.tripId;
   const userId = req.userId;
@@ -313,12 +313,12 @@ export const createTodoForTrip = async (req: AuthRequest, res: Response) => {
       message: "Todo created and connected to trip successfully",
     });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Create a note and connect it to a trip
-export const createNoteForTrip = async (req: AuthRequest, res: Response) => {
+export const createNoteForTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { title, content, links, startDate, endDate } = req.body;
   const tripId = req.params.tripId;
   const userId = req.userId;
@@ -367,12 +367,12 @@ export const createNoteForTrip = async (req: AuthRequest, res: Response) => {
       message: "Note created and connected to trip successfully",
     });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Add users to a trip
-export const addUserToTrip = async (req: AuthRequest, res: Response) => {
+export const addUserToTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const { userId: userIdToAdd } = req.body;
@@ -401,12 +401,12 @@ export const addUserToTrip = async (req: AuthRequest, res: Response) => {
 
     res.json(updatedTrip);
   } catch (err) {
-    res.status(500).json({ message: "Error adding user to trip" });
+    next(err);
   }
 };
 
 // Remove user from a trip
-export const removeUserFromTrip = async (req: AuthRequest, res: Response) => {
+export const removeUserFromTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { id, userId: userIdToRemove } = req.params;
     const currentUserId = req.userId;
@@ -438,7 +438,7 @@ export const removeUserFromTrip = async (req: AuthRequest, res: Response) => {
 
     res.json(updatedTrip);
   } catch (err) {
-    res.status(500).json({ message: "Error removing user from trip" });
+    next(err);
   }
 };
 
@@ -446,6 +446,7 @@ export const removeUserFromTrip = async (req: AuthRequest, res: Response) => {
 export const uploadTripImage = async (
   req: TripImageUploadRequest,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const userId = req.userId;
@@ -533,6 +534,6 @@ export const uploadTripImage = async (
       },
     });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };

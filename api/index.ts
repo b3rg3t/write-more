@@ -11,6 +11,7 @@ import usersRouter from "./src/routes/users";
 import authRouter from "./src/routes/auth";
 import commentsRouter from "./src/routes/comments";
 import swaggerSpec from "./src/swagger";
+import { errorHandler } from "./src/middleware/errorHandler";
 
 // Load environment variables from config.env
 dotenv.config({ path: ".env" });
@@ -122,5 +123,7 @@ app.use("/api/todos", todosRouter);
 app.use("/api/trips", tripsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/comments", commentsRouter);
+
+app.use(errorHandler);
 
 export default app;

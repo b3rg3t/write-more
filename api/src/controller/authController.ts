@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import SUser from "../models/schemas/SUser";
 import { hashPassword, comparePassword } from "../utils/auth";
@@ -8,7 +8,7 @@ const JWT_SECRET =
 const JWT_EXPIRES_IN = "7d";
 
 // Signup - Create a new user
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { username, email, password, firstName, lastName, role } = req.body;
 
@@ -66,13 +66,12 @@ export const signup = async (req: Request, res: Response) => {
       },
     });
   } catch (err) {
-    console.error("Signup error:", err);
-    res.status(500).json({ message: "Server error during signup" });
+    next(err);
   }
 };
 
 // Signin - Authenticate existing user
-export const signin = async (req: Request, res: Response) => {
+export const signin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
 
@@ -121,13 +120,12 @@ export const signin = async (req: Request, res: Response) => {
       },
     });
   } catch (err) {
-    console.error("Signin error:", err);
-    res.status(500).json({ message: "Server error during signin" });
+    next(err);
   }
 };
 
 // Get current user (requires authentication)
-export const getCurrentUser = async (req: Request, res: Response) => {
+export const getCurrentUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = (req as any).userId; // Set by authenticate middleware
 
@@ -139,13 +137,12 @@ export const getCurrentUser = async (req: Request, res: Response) => {
 
     res.json({ user });
   } catch (err) {
-    console.error("Get current user error:", err);
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
 // Update current user profile (requires authentication)
-export const updateProfile = async (req: Request, res: Response) => {
+export const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = (req as any).userId; // Set by authenticate middleware
     const { firstName, lastName, password } = req.body as {
@@ -186,7 +183,6 @@ export const updateProfile = async (req: Request, res: Response) => {
       user,
     });
   } catch (err) {
-    console.error("Update profile error:", err);
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };

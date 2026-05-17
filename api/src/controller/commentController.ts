@@ -1,4 +1,4 @@
-import type { Response } from "express";
+import type { Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import SComment from "../models/schemas/SComment";
 import SNote from "../models/schemas/SNote";
@@ -60,7 +60,7 @@ const canAccessNote = async (userId: string, noteId: string) =>
     }),
   );
 
-export const getComments = async (req: AuthRequest, res: Response) => {
+export const getComments = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -102,11 +102,11 @@ export const getComments = async (req: AuthRequest, res: Response) => {
 
     res.json(comments.map(withCommentUserName));
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
-export const getComment = async (req: AuthRequest, res: Response) => {
+export const getComment = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -133,11 +133,11 @@ export const getComment = async (req: AuthRequest, res: Response) => {
 
     res.json(withCommentUserName(comment));
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
-export const createComment = async (req: AuthRequest, res: Response) => {
+export const createComment = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { content, noteId } = req.body;
 
   try {
@@ -178,11 +178,11 @@ export const createComment = async (req: AuthRequest, res: Response) => {
 
     res.status(201).json(savedComment);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
-export const updateComment = async (req: AuthRequest, res: Response) => {
+export const updateComment = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { content } = req.body;
 
   try {
@@ -214,11 +214,11 @@ export const updateComment = async (req: AuthRequest, res: Response) => {
 
     res.json(updatedComment);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
 
-export const deleteComment = async (req: AuthRequest, res: Response) => {
+export const deleteComment = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -248,6 +248,6 @@ export const deleteComment = async (req: AuthRequest, res: Response) => {
 
     res.json({ message: "Comment deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    next(err);
   }
 };
