@@ -23,8 +23,12 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 import { fontSize16 } from "../utils/FontSize";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { flushSync } from "react-dom";
 import { INote } from "../../models/interface/INote";
+import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperType } from "swiper";
+import "swiper/css";
 
 const getCalendarRows = (year: number, month: number) => {
   const firstDay = new Date(year, month, 1);
@@ -116,6 +120,8 @@ export const TripCalendar = () => {
     tripStart ? tripStart.getFullYear() : new Date().getFullYear(),
   );
 
+  const swiperRef = useRef<SwiperType | null>(null);
+
   useEffect(() => {
     if (trip?.startDate) {
       const startDate = new Date(trip.startDate);
@@ -146,17 +152,210 @@ export const TripCalendar = () => {
     }
   };
 
+  const handleSlideChangeTransitionEnd = (swiper: SwiperType) => {
+    if (swiper.activeIndex === 0) {
+      flushSync(() => handlePrevMonth());
+    } else if (swiper.activeIndex === 2) {
+      flushSync(() => handleNextMonth());
+    }
+    // Jump back to center slide without animation so next swipe is ready
+    swiper.slideTo(1, 0);
+  };
+
+  const getOffsetYearMonth = (offset: number) => {
+    const d = new Date(currentYear, currentMonth + offset, 1);
+    return { year: d.getFullYear(), month: d.getMonth() };
+  };
+
   const monthName = new Date(currentYear, currentMonth).toLocaleString(
     "default",
     { month: "long" },
   );
-  const calendarRows = getCalendarRows(currentYear, currentMonth);
   const weekDays = text.trips.tripCalendar.weekDays;
 
   const notesWithDates = trip?.notes.filter((note) => {
     if (!note.startDate || !note.endDate) return false;
     return note;
   });
+
+  const renderCalendarTable = (year: number, month: number) => {
+    const rows = getCalendarRows(year, month);
+    return (
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell
+              align="center"
+              sx={{
+                py: { xs: 0.25, sm: 0.5 },
+                px: { xs: 0.25, sm: 0.5 },
+                fontWeight: 700,
+                width: 10,
+                minWidth: { xs: 32, sm: 40, md: 60 },
+                fontSize: {
+                  xs: "0.7rem",
+                  sm: "0.75rem",
+                  md: "0.875rem",
+                },
+              }}
+            >
+              {text.trips.tripCalendar.weekLabel}
+            </TableCell>
+            {weekDays.map((day) => (
+              <TableCell
+                key={day}
+                align="center"
+                sx={{
+                  py: { xs: 0.25, sm: 0.5 },
+                  px: { xs: 0.25, sm: 0.5 },
+                  fontWeight: 700,
+                  fontSize: {
+                    xs: "0.7rem",
+                    sm: "0.75rem",
+                    md: "0.875rem",
+                  },
+                  minWidth: { xs: 32, sm: 40 },
+                }}
+              >
+                {day}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((week, rowIndex) => {
+            const weekNumber = getWeekNumber(week[0]);
+            return (
+              <TableRow key={`week-${rowIndex}`}>
+                <TableCell
+                  align="center"
+                  sx={{
+                    py: { xs: 0.25, sm: 0.5 },
+                    px: { xs: 0.25, sm: 0.5 },
+                    fontWeight: 700,
+                    border: "1px solid lightgray",
+                    width: { xs: 32, sm: 40, md: 60 },
+                    minWidth: { xs: 32, sm: 40, md: 60 },
+                    fontSize: {
+                      xs: "0.7rem",
+                      sm: "0.75rem",
+                      md: "0.875rem",
+                    },
+                  }}
+                >
+                  {weekNumber}
+                </TableCell>
+                {week.map((dayDate, cellIndex) => {
+                  const day =
+                    dayDate.getMonth() === month ? dayDate.getDate() : null;
+                  const normalizedDayDate = normalizeDate(dayDate);
+                  const isSelected = Boolean(
+                    day &&
+                      tripStart &&
+                      tripEnd &&
+                      isDateInRange(normalizedDayDate, tripStart, tripEnd),
+                  );
+
+                  return (
+                    <TableCell
+                      key={`cell-${rowIndex}-${cellIndex}`}
+                      align="center"
+                      sx={{
+                        height: { xs: 36, sm: 42, md: 56, lg: 68 },
+                        border: "1px solid #d3d3d3",
+                        backgroundColor: isSelected
+                          ? "primary.light"
+                          : "inherit",
+                        color: isSelected
+                          ? "primary.contrastText"
+                          : "text.primary",
+                        py: { xs: 0.25, sm: 0.5 },
+                        px: { xs: 0.25, sm: 0.5 },
+                        minWidth: { xs: 32, sm: 40 },
+                      }}
+                    >
+                      {day ? (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: 0.25,
+                            height: "100%",
+                            justifyContent:
+                              trip?.notes &&
+                              getNotesForDate(normalizedDayDate, trip.notes)
+                                .length > 0
+                                ? "flex-start"
+                                : "center",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: { xs: 20, sm: 24, md: 28, lg: 32 },
+                              height: { xs: 20, sm: 24, md: 28, lg: 32 },
+                              mx: "auto",
+                              borderRadius: "50%",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontWeight: isSelected ? 700 : 500,
+                              fontSize: {
+                                xs: "0.75rem",
+                                sm: "0.875rem",
+                                md: "1rem",
+                              },
+                            }}
+                          >
+                            {day}
+                          </Box>
+                          {trip?.notes && (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 0.5,
+                                width: "100%",
+                                alignItems: "stretch",
+                              }}
+                            >
+                              {getNotesForDate(normalizedDayDate, trip.notes)
+                                .slice(0, 4) // Limit to 4 indicators to prevent overflow
+                                .map((note, noteIndex) => {
+                                  const bgColor = notesWithDates?.findIndex(
+                                    (n) => n._id === note._id,
+                                  );
+                                  if (bgColor === undefined) return null;
+                                  return (
+                                    <Box
+                                      key={note._id || noteIndex}
+                                      sx={{
+                                        width: "100%",
+                                        height: 2,
+                                        backgroundColor:
+                                          noteColors[
+                                            bgColor % noteColors.length
+                                          ],
+                                        flexShrink: 0,
+                                      }}
+                                      title={note.title}
+                                    />
+                                  );
+                                })}
+                            </Box>
+                          )}
+                        </Box>
+                      ) : null}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    );
+  };
 
   return (
     <RtkQueryWrapper
@@ -257,184 +456,23 @@ export const TripCalendar = () => {
                 </IconButton>
               </Box>
             </Stack>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      py: { xs: 0.25, sm: 0.5 },
-                      px: { xs: 0.25, sm: 0.5 },
-                      fontWeight: 700,
-                      width: 10,
-                      minWidth: { xs: 32, sm: 40, md: 60 },
-                      fontSize: { xs: "0.7rem", sm: "0.75rem", md: "0.875rem" },
-                    }}
-                  >
-                    {text.trips.tripCalendar.weekLabel}
-                  </TableCell>
-                  {weekDays.map((day) => (
-                    <TableCell
-                      key={day}
-                      align="center"
-                      sx={{
-                        py: { xs: 0.25, sm: 0.5 },
-                        px: { xs: 0.25, sm: 0.5 },
-                        fontWeight: 700,
-
-                        fontSize: {
-                          xs: "0.7rem",
-                          sm: "0.75rem",
-                          md: "0.875rem",
-                        },
-                        minWidth: { xs: 32, sm: 40 },
-                      }}
-                    >
-                      {day}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {calendarRows.map((week, rowIndex) => {
-                  const weekNumber = getWeekNumber(week[0]);
-                  return (
-                    <TableRow key={`week-${rowIndex}`}>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          py: { xs: 0.25, sm: 0.5 },
-                          px: { xs: 0.25, sm: 0.5 },
-                          fontWeight: 700,
-                          border: "1px solid lightgray",
-                          width: { xs: 32, sm: 40, md: 60 },
-                          minWidth: { xs: 32, sm: 40, md: 60 },
-                          fontSize: {
-                            xs: "0.7rem",
-                            sm: "0.75rem",
-                            md: "0.875rem",
-                          },
-                        }}
-                      >
-                        {weekNumber}
-                      </TableCell>
-                      {week.map((dayDate, cellIndex) => {
-                        const day =
-                          dayDate.getMonth() === currentMonth
-                            ? dayDate.getDate()
-                            : null;
-                        const normalizedDayDate = normalizeDate(dayDate);
-                        const isSelected = Boolean(
-                          day &&
-                          tripStart &&
-                          tripEnd &&
-                          isDateInRange(normalizedDayDate, tripStart, tripEnd),
-                        );
-
-                        return (
-                          <TableCell
-                            key={`cell-${rowIndex}-${cellIndex}`}
-                            align="center"
-                            sx={{
-                              height: { xs: 36, sm: 42, md: 56, lg: 68 },
-                              border: "1px solid #d3d3d3",
-                              backgroundColor: isSelected
-                                ? "primary.light"
-                                : "inherit",
-                              color: isSelected
-                                ? "primary.contrastText"
-                                : "text.primary",
-                              py: { xs: 0.25, sm: 0.5 },
-                              px: { xs: 0.25, sm: 0.5 },
-                              minWidth: { xs: 32, sm: 40 },
-                            }}
-                          >
-                            {day ? (
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "center",
-                                  gap: 0.25,
-                                  height: "100%",
-                                  justifyContent:
-                                    trip?.notes &&
-                                    getNotesForDate(
-                                      normalizedDayDate,
-                                      trip.notes,
-                                    ).length > 0
-                                      ? "flex-start"
-                                      : "center",
-                                }}
-                              >
-                                <Box
-                                  sx={{
-                                    width: { xs: 20, sm: 24, md: 28, lg: 32 },
-                                    height: { xs: 20, sm: 24, md: 28, lg: 32 },
-                                    mx: "auto",
-                                    borderRadius: "50%",
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontWeight: isSelected ? 700 : 500,
-                                    fontSize: {
-                                      xs: "0.75rem",
-                                      sm: "0.875rem",
-                                      md: "1rem",
-                                    },
-                                  }}
-                                >
-                                  {day}
-                                </Box>
-                                {trip?.notes && (
-                                  <Box
-                                    sx={{
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      gap: 0.5,
-                                      width: "100%",
-                                      alignItems: "stretch",
-                                    }}
-                                  >
-                                    {getNotesForDate(
-                                      normalizedDayDate,
-                                      trip.notes,
-                                    )
-                                      .slice(0, 4) // Limit to 4 indicators to prevent overflow
-                                      .map((note, noteIndex) => {
-                                        const bgColor =
-                                          notesWithDates?.findIndex(
-                                            (n) => n._id === note._id,
-                                          );
-                                        if (bgColor === undefined) return null;
-                                        return (
-                                          <Box
-                                            key={note._id || noteIndex}
-                                            sx={{
-                                              width: "100%",
-                                              height: 2,
-                                              backgroundColor:
-                                                noteColors[
-                                                  bgColor % noteColors.length
-                                                ],
-                                              flexShrink: 0,
-                                            }}
-                                            title={note.title}
-                                          />
-                                        );
-                                      })}
-                                  </Box>
-                                )}
-                              </Box>
-                            ) : null}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+            <Swiper
+              initialSlide={1}
+              onSwiper={(s) => {
+                swiperRef.current = s;
+              }}
+              onSlideChangeTransitionEnd={handleSlideChangeTransitionEnd}
+              style={{ width: "100%" }}
+            >
+              {[-1, 0, 1].map((offset) => {
+                const { year, month } = getOffsetYearMonth(offset);
+                return (
+                  <SwiperSlide key={offset}>
+                    {renderCalendarTable(year, month)}
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
             {notesWithDates && notesWithDates.length > 0 && (
               <Box
                 sx={{
