@@ -37,6 +37,8 @@ export const text = {
         delete: "Delete",
         save: "Save",
         cancel: "Cancel",
+        showMore: "Show more",
+        showLess: "Show less",
       },
     },
     notesList: {

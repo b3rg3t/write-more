@@ -34,6 +34,9 @@ export const NoteComments: FC<INoteCommentsProps> = ({ noteId, comments }) => {
   const [isCommentFormVisible, setIsCommentFormVisible] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState("");
+  const [showAll, setShowAll] = useState(false);
+
+  const COMMENTS_LIMIT = 5;
   const { data: currentUserResponse } = useGetCurrentUserQuery();
   const [createCommentForNote, { isLoading: isCreatingComment }] =
     useCreateCommentForNoteMutation();
@@ -187,99 +190,146 @@ export const NoteComments: FC<INoteCommentsProps> = ({ noteId, comments }) => {
       {sortedComments.length === 0 ? (
         <></>
       ) : (
-        <Stack spacing={1}>
-          {sortedComments.map((comment) => (
-            <Box
-              key={comment._id}
-              sx={{
-                border: 1,
-                borderColor: "divider",
-                borderRadius: 1,
-                px: 1,
-                py: 0.75,
-              }}
-            >
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                spacing={1}
-                sx={{ mb: 0.5 }}
+        <Box sx={{ position: "relative" }}>
+          <Stack spacing={1}>
+            {(showAll
+              ? sortedComments
+              : sortedComments.slice(0, COMMENTS_LIMIT)
+            ).map((comment) => (
+              <Box
+                key={comment._id}
+                sx={{
+                  border: 1,
+                  borderColor: "divider",
+                  borderRadius: 1,
+                  px: 1,
+                  py: 0.75,
+                }}
               >
-                <Typography variant="subtitle2">
-                  {comment.user.name || comment.user.username}
-                </Typography>
-                <Stack direction="row" alignItems="center" spacing={0.5}>
-                  {comment.isEdited ? (
-                    <Typography variant="caption" color="text.secondary">
-                      {commentTexts.edited}
-                    </Typography>
-                  ) : null}
-                  {comment.user._id === currentUserId ? (
-                    <>
-                      <IconButton
-                        size="small"
-                        aria-label={commentTexts.edit}
-                        onClick={() => handleEditCommentStart(comment)}
-                      >
-                        <EditIcon fontSize="inherit" />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        aria-label={commentTexts.delete}
-                        disabled={isDeletingComment}
-                        onClick={() => void handleDeleteComment(comment._id)}
-                      >
-                        <DeleteIcon fontSize="inherit" />
-                      </IconButton>
-                    </>
-                  ) : null}
-                </Stack>
-              </Stack>
-
-              {editingCommentId === comment._id ? (
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <TextField
-                    fullWidth
-                    size="small"
-                    value={editingContent}
-                    onChange={(event) => setEditingContent(event.target.value)}
-                    onClick={handleContainerClick}
-                    onKeyDown={(event) => {
-                      event.stopPropagation();
-                      if (event.key === "Enter" && !event.shiftKey) {
-                        event.preventDefault();
-                        void handleEditCommentSave();
-                      }
-                    }}
-                  />
-                  <IconButton
-                    size="small"
-                    aria-label={commentTexts.save}
-                    disabled={isUpdatingComment || !editingContent.trim()}
-                    onClick={() => void handleEditCommentSave()}
-                  >
-                    <CheckIcon fontSize="inherit" />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    aria-label={commentTexts.cancel}
-                    onClick={handleEditCommentCancel}
-                  >
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                </Stack>
-              ) : (
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ whiteSpace: "pre-wrap" }}
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  spacing={1}
+                  sx={{ mb: 0.5 }}
                 >
-                  {comment.content}
-                </Typography>
+                  <Typography variant="subtitle2">
+                    {comment.user.name || comment.user.username}
+                  </Typography>
+                  <Stack direction="row" alignItems="center" spacing={0.5}>
+                    {comment.isEdited ? (
+                      <Typography variant="caption" color="text.secondary">
+                        {commentTexts.edited}
+                      </Typography>
+                    ) : null}
+                    {comment.user._id === currentUserId ? (
+                      <>
+                        <IconButton
+                          size="small"
+                          aria-label={commentTexts.edit}
+                          onClick={() => handleEditCommentStart(comment)}
+                        >
+                          <EditIcon fontSize="inherit" />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          aria-label={commentTexts.delete}
+                          disabled={isDeletingComment}
+                          onClick={() => void handleDeleteComment(comment._id)}
+                        >
+                          <DeleteIcon fontSize="inherit" />
+                        </IconButton>
+                      </>
+                    ) : null}
+                  </Stack>
+                </Stack>
+
+                {editingCommentId === comment._id ? (
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <TextField
+                      fullWidth
+                      size="small"
+                      value={editingContent}
+                      onChange={(event) =>
+                        setEditingContent(event.target.value)
+                      }
+                      onClick={handleContainerClick}
+                      onKeyDown={(event) => {
+                        event.stopPropagation();
+                        if (event.key === "Enter" && !event.shiftKey) {
+                          event.preventDefault();
+                          void handleEditCommentSave();
+                        }
+                      }}
+                    />
+                    <IconButton
+                      size="small"
+                      aria-label={commentTexts.save}
+                      disabled={isUpdatingComment || !editingContent.trim()}
+                      onClick={() => void handleEditCommentSave()}
+                    >
+                      <CheckIcon fontSize="inherit" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      aria-label={commentTexts.cancel}
+                      onClick={handleEditCommentCancel}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  </Stack>
+                ) : (
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ whiteSpace: "pre-wrap" }}
+                  >
+                    {comment.content}
+                  </Typography>
+                )}
+              </Box>
+            ))}
+          </Stack>
+          {sortedComments.length > COMMENTS_LIMIT && (
+            <>
+              {!showAll && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 48,
+                    background: (theme) =>
+                      `linear-gradient(to bottom, transparent, ${theme.palette.background.paper})`,
+                    pointerEvents: "none",
+                    zIndex: 1,
+                  }}
+                />
               )}
-            </Box>
-          ))}
-        </Stack>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  mt: showAll ? 1 : "-14px",
+                  position: "relative",
+                  zIndex: 2,
+                }}
+              >
+                <Button
+                  size="small"
+                  onClick={() => setShowAll((prev) => !prev)}
+                  sx={{
+                    textTransform: "none",
+                    backgroundColor: "transparent",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
+                >
+                  {showAll ? commentTexts.showLess : commentTexts.showMore}
+                </Button>
+              </Box>
+            </>
+          )}
+        </Box>
       )}
     </Box>
   );
