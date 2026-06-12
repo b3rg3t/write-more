@@ -100,7 +100,7 @@ export const NoteComments: FC<INoteCommentsProps> = ({ noteId, comments }) => {
     }
 
     try {
-      await updateComment({ id: editingCommentId, content }).unwrap();
+      await updateComment({ id: editingCommentId, content, noteId }).unwrap();
       handleEditCommentCancel();
     } catch (error) {
       console.error("Failed to update comment:", error);
@@ -109,7 +109,7 @@ export const NoteComments: FC<INoteCommentsProps> = ({ noteId, comments }) => {
 
   const handleDeleteComment = async (commentId: string) => {
     try {
-      await deleteComment({ id: commentId }).unwrap();
+      await deleteComment({ id: commentId, noteId }).unwrap();
       if (editingCommentId === commentId) {
         handleEditCommentCancel();
       }

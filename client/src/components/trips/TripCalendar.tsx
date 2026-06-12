@@ -277,17 +277,11 @@ export const TripCalendar = () => {
                       {day ? (
                         <Box
                           sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: 0.25,
+                            position: "relative",
                             height: "100%",
-                            justifyContent:
-                              trip?.notes &&
-                              getNotesForDate(normalizedDayDate, trip.notes)
-                                .length > 0
-                                ? "flex-start"
-                                : "center",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
                           <Box
@@ -312,11 +306,14 @@ export const TripCalendar = () => {
                           {trip?.notes && (
                             <Box
                               sx={{
+                                position: "absolute",
+                                bottom: 2,
+                                left: 0,
+                                right: 0,
                                 display: "flex",
                                 flexDirection: "column",
                                 gap: 0.5,
-                                width: "100%",
-                                alignItems: "stretch",
+                                px: 0.25,
                               }}
                             >
                               {getNotesForDate(normalizedDayDate, trip.notes)
@@ -329,14 +326,26 @@ export const TripCalendar = () => {
                                   return (
                                     <Box
                                       key={note._id || noteIndex}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(
+                                          ERoutes.NOTE_DETAIL.replace(
+                                            ":noteId",
+                                            note._id,
+                                          ),
+                                        );
+                                      }}
                                       sx={{
                                         width: "100%",
-                                        height: 2,
+                                        height: 4,
                                         backgroundColor:
                                           noteColors[
                                             bgColor % noteColors.length
                                           ],
                                         flexShrink: 0,
+                                        cursor: "pointer",
+                                        borderRadius: 0.5,
+                                        "&:hover": { opacity: 0.75 },
                                       }}
                                       title={note.title}
                                     />
@@ -486,8 +495,18 @@ export const TripCalendar = () => {
                   {notesWithDates.map((note, noteIndex) => (
                     <Stack
                       key={note._id}
-                      sx={{ alignItems: "center", gap: 0.5 }}
                       direction="row"
+                      onClick={() =>
+                        navigate(
+                          ERoutes.NOTE_DETAIL.replace(":noteId", note._id),
+                        )
+                      }
+                      sx={{
+                        alignItems: "center",
+                        gap: 0.5,
+                        cursor: "pointer",
+                        "&:hover": { opacity: 0.75 },
+                      }}
                     >
                       <Box
                         sx={{

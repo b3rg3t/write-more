@@ -8,7 +8,7 @@ export const notesEndpoints = (builder: TEndpointBuilderType) => ({
   }),
   getNote: builder.query<INote, string>({
     query: (id) => `notes/${id}`,
-    providesTags: ["Notes"],
+    providesTags: (_result, _error, id) => [{ type: "Notes", id }],
   }),
   addNote: builder.mutation<INote, Partial<INote>>({
     query: (body) => ({
@@ -24,7 +24,10 @@ export const notesEndpoints = (builder: TEndpointBuilderType) => ({
       method: "PUT",
       body,
     }),
-    invalidatesTags: ["Notes", "Trips"],
+    invalidatesTags: (_result, _error, { _id }) => [
+      { type: "Notes", id: _id },
+      "Trips",
+    ],
   }),
   reorderNotes: builder.mutation<INote[], Pick<INote, "_id" | "order">[]>({
     query: (body) => ({

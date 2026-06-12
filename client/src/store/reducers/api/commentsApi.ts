@@ -15,21 +15,39 @@ export const commentsEndpoints = (builder: TEndpointBuilderType) => ({
       method: "POST",
       body: { content },
     }),
-    invalidatesTags: ["Comments", "Trips"],
+    invalidatesTags: (_result, _error, { noteId }) => [
+      { type: "Notes", id: noteId },
+      "Comments",
+      "Trips",
+    ],
   }),
-  updateComment: builder.mutation<IComment, { id: string; content: string }>({
+  updateComment: builder.mutation<
+    IComment,
+    { id: string; content: string; noteId: string }
+  >({
     query: ({ id, content }) => ({
       url: `comments/${id}`,
       method: "PUT",
       body: { content },
     }),
-    invalidatesTags: ["Comments", "Trips"],
+    invalidatesTags: (_result, _error, { noteId }) => [
+      { type: "Notes", id: noteId },
+      "Comments",
+      "Trips",
+    ],
   }),
-  deleteComment: builder.mutation<{ message: string }, { id: string }>({
+  deleteComment: builder.mutation<
+    { message: string },
+    { id: string; noteId: string }
+  >({
     query: ({ id }) => ({
       url: `comments/${id}`,
       method: "DELETE",
     }),
-    invalidatesTags: ["Comments", "Trips"],
+    invalidatesTags: (_result, _error, { noteId }) => [
+      { type: "Notes", id: noteId },
+      "Comments",
+      "Trips",
+    ],
   }),
 });
