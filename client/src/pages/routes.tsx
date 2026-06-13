@@ -1,16 +1,18 @@
+import { lazy } from "react";
 import { Route } from "react-router-dom";
 import { ERoutes } from "../models/enum/ERoutes";
 import { ProtectedRoute } from "../components/wrapper/ProtectedRoute";
-import { AuthPage } from "./AuthPage";
-import { TripsPage } from "./TripsPage";
-import { NotesPage } from "./NotesPage";
-import { TodosPage } from "./TodosPage";
-import { UsersPage } from "./UsersPage";
-import { ProfilePage } from "./ProfilePage";
-import { TripDetailPage } from "./TripDetailPage";
-import { TripCalendarPage } from "./TripCalendarPage";
-import { NoteDetailPage } from "./NoteDetailPage";
-import { TodoDetailPage } from "./TodoDetailPage";
+
+const AuthPage = lazy(() => import("./AuthPage").then((m) => ({ default: m.AuthPage })));
+const TripsPage = lazy(() => import("./TripsPage").then((m) => ({ default: m.TripsPage })));
+const NotesPage = lazy(() => import("./NotesPage").then((m) => ({ default: m.NotesPage })));
+const TodosPage = lazy(() => import("./TodosPage").then((m) => ({ default: m.TodosPage })));
+const UsersPage = lazy(() => import("./UsersPage").then((m) => ({ default: m.UsersPage })));
+const ProfilePage = lazy(() => import("./ProfilePage").then((m) => ({ default: m.ProfilePage })));
+const TripDetailPage = lazy(() => import("./TripDetailPage").then((m) => ({ default: m.TripDetailPage })));
+const TripCalendarPage = lazy(() => import("./TripCalendarPage").then((m) => ({ default: m.TripCalendarPage })));
+const NoteDetailPage = lazy(() => import("./NoteDetailPage").then((m) => ({ default: m.NoteDetailPage })));
+const TodoDetailPage = lazy(() => import("./TodoDetailPage").then((m) => ({ default: m.TodoDetailPage })));
 
 export const appRoutes = [
   <Route key={ERoutes.AUTH} path={ERoutes.AUTH} element={<AuthPage />} />,

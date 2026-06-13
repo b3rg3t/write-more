@@ -1,10 +1,11 @@
+import { Suspense } from "react";
 import { ThemeProvider } from "@emotion/react";
 import "./styles/App.scss";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { Container } from "@mui/material";
+import { Box, CircularProgress, Container } from "@mui/material";
 import { Routes } from "react-router-dom";
 import { theme } from "./theme";
 import { Footer } from "./components/layout/Footer";
@@ -30,7 +31,15 @@ const App = () => {
       <TodoFormModal />
       <DeleteModal resourceType="todo" />
       <Container maxWidth="md" sx={{ px: 1, py: 2, pt: 6, pb: 10 }}>
-        <Routes>{appRoutes}</Routes>
+        <Suspense
+          fallback={
+            <Box display="flex" justifyContent="center" mt={8}>
+              <CircularProgress />
+            </Box>
+          }
+        >
+          <Routes>{appRoutes}</Routes>
+        </Suspense>
       </Container>
       <Footer />
     </ThemeProvider>
