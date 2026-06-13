@@ -135,6 +135,7 @@ export const text = {
     tripDetail: {
       loading: "Loading trip",
       notFound: "Trip not found",
+      createdBy: "Created by",
       imagesHeader: "Images",
       noImages: "No images uploaded yet.",
       loadingImages: "Loading images...",

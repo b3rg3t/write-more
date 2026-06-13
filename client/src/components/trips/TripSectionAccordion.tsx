@@ -5,6 +5,7 @@ import {
   AccordionSummary,
   IconButton,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
@@ -87,19 +88,21 @@ export const TripSectionAccordion = ({
           <Stack direction="row" alignItems="center" spacing={0.5}>
             {headerExtra ?? null}
             {addAction ? (
-              <IconButton
-                component="span"
-                color={addAction.color}
-                edge="end"
-                aria-label={addAction.ariaLabel}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addAction.onClick();
-                }}
-                sx={{ mr: 0.5 }}
-              >
-                {addAction.icon}
-              </IconButton>
+              <Tooltip title={addAction.ariaLabel}>
+                <IconButton
+                  component="span"
+                  color={addAction.color}
+                  edge="end"
+                  aria-label={addAction.ariaLabel}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addAction.onClick();
+                  }}
+                  sx={{ mr: 0.5 }}
+                >
+                  {addAction.icon}
+                </IconButton>
+              </Tooltip>
             ) : null}
           </Stack>
         </Stack>

@@ -56,6 +56,7 @@ export const TodoItem: FC<{
       <Typography
         variant={headingLevel}
         fontSize={fontSize16}
+        color="text.primary"
         sx={{
           textDecoration: isChecked ? "line-through" : undefined,
           pb: 1,

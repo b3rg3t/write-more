@@ -4,11 +4,13 @@ import {
   useUpdateTripMutation,
 } from "../../store/reducers/api/apiSlice";
 import {
+  Avatar,
   Card,
   Container,
   Divider,
   IconButton,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { text } from "../../localization/eng";
@@ -92,37 +94,66 @@ export const TripDetail = () => {
       }}
     >
       <Container maxWidth="md" sx={{ px: 0 }}>
-        <Stack direction="row" justifyContent="space-between" spacing={2}>
-          <Typography fontSize={"small"}>
-            {trip?.createdBy && `@${trip.createdBy.username}`}
-          </Typography>
-          <Typography fontSize={"small"}>
-            {trip?.createdAt &&
-              new Date(trip.createdAt).toLocaleString(undefined, {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              })}
-          </Typography>
-        </Stack>
-        <Card
-          variant="outlined"
-          sx={{
-            borderRadius: 2,
-            display: "flex",
-            flexDirection: "column",
-            px: 2,
-            pb: 2,
-            pt: 1,
-          }}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="end"
+          sx={{ mb: 1 }}
         >
+          {trip?.createdBy && trip?.createdAt ? (
+            <Typography fontSize={"small"} color="text.secondary">
+              {`${text.trips.tripDetail.createdBy} @${trip.createdBy.username} on ${new Date(trip.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}`}
+            </Typography>
+          ) : (
+            <span />
+          )}
+          <Stack direction="row" alignItems="center" spacing={0.5}>
+            {trip?.users?.map((user, index) => {
+              if (typeof user === "string") return null;
+              const initials =
+                [user.firstName, user.lastName]
+                  .filter(Boolean)
+                  .map((n) => n![0].toUpperCase())
+                  .join("") ||
+                user.username?.[0]?.toUpperCase() ||
+                "?";
+              const fullName =
+                user.firstName && user.lastName
+                  ? `${user.firstName} ${user.lastName}`
+                  : `@${user.username}`;
+              return (
+                <Tooltip key={user._id ?? index} title={fullName}>
+                  <Avatar
+                    sx={{
+                      width: 24,
+                      height: 24,
+                      fontSize: "0.7rem",
+                      bgcolor: "primary.main",
+                    }}
+                  >
+                    {initials}
+                  </Avatar>
+                </Tooltip>
+              );
+            })}
+            <IconButton
+              color="info"
+              size="small"
+              aria-label="add user"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddUser();
+              }}
+            >
+              <GroupAddIcon fontSize="small" />
+            </IconButton>
+          </Stack>
+        </Stack>
+        <Card variant="outlined" sx={{ borderRadius: 2, px: 2, pb: 2, pt: 1 }}>
           <Stack
             direction="row"
             justifyContent="space-between"
-            alignItems="start"
+            alignItems="flex-start"
           >
             <Typography
               variant="h2"
@@ -152,60 +183,6 @@ export const TripDetail = () => {
             {trip?.description}
           </Typography>
         </Card>
-        {trip?.users && trip.users.length > 0 && (
-          <Card variant="outlined" sx={{ mt: 1, p: 2, pt: 1 }}>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography variant="h3" fontSize={fontSize16} fontWeight="bold">
-                {text.users.header}
-              </Typography>
-              <IconButton
-                color="info"
-                edge="end"
-                aria-label="add user"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleAddUser();
-                }}
-              >
-                <GroupAddIcon />
-              </IconButton>
-            </Stack>
-            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-              {trip.users.map((user, index) => {
-                if (typeof user === "string") {
-                  return (
-                    <Typography key={index} fontSize={"small"}>
-                      {user}
-                    </Typography>
-                  );
-                }
-                const displayName =
-                  user.firstName && user.lastName
-                    ? `${user.firstName} ${user.lastName}`
-                    : `@${user.username}`;
-                return (
-                  <Typography
-                    key={user._id}
-                    fontSize={"small"}
-                    sx={{
-                      px: 1.5,
-                      py: 0.5,
-                      backgroundColor: "primary.light",
-                      borderRadius: 2,
-                      color: "primary.contrastText",
-                    }}
-                  >
-                    {`@${user.username}, ${displayName}`}
-                  </Typography>
-                );
-              })}
-            </Stack>
-          </Card>
-        )}
         <Divider sx={{ my: 2 }} />
         <TripSectionAccordion
           title={text.todos.header}
@@ -228,42 +205,51 @@ export const TripDetail = () => {
             })
           }
           headerExtra={
-            <IconButton
-              component="span"
-              size="small"
-              color="info"
-              aria-label={
+            <Tooltip
+              title={
                 (trip?.todosSection?.showCompleted ?? true)
                   ? text.todos.todosList.hideCompleted
                   : text.todos.todosList.showCompleted
               }
-              onClick={(e) => {
-                e.stopPropagation();
-                if (!trip) return;
-                const next = !(trip.todosSection?.showCompleted ?? true);
-                updateTrip({
-                  _id: trip._id,
-                  todosSection: {
-                    isAccordionOpen: trip.todosSection?.isAccordionOpen ?? true,
-                    showCompleted: next,
-                  },
-                  notes:
-                    trip.notes?.map((n) =>
-                      typeof n === "string" ? n : n._id,
-                    ) ?? [],
-                  todos: trip.todos?.map((t) => t._id) ?? [],
-                });
-              }}
             >
-              {(trip?.todosSection?.showCompleted ?? true) ? (
-                <VisibilityIcon />
-              ) : (
-                <VisibilityOffIcon />
-              )}
-            </IconButton>
+              <IconButton
+                component="span"
+                size="small"
+                color="info"
+                aria-label={
+                  (trip?.todosSection?.showCompleted ?? true)
+                    ? text.todos.todosList.hideCompleted
+                    : text.todos.todosList.showCompleted
+                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!trip) return;
+                  const next = !(trip.todosSection?.showCompleted ?? true);
+                  updateTrip({
+                    _id: trip._id,
+                    todosSection: {
+                      isAccordionOpen:
+                        trip.todosSection?.isAccordionOpen ?? true,
+                      showCompleted: next,
+                    },
+                    notes:
+                      trip.notes?.map((n) =>
+                        typeof n === "string" ? n : n._id,
+                      ) ?? [],
+                    todos: trip.todos?.map((t) => t._id) ?? [],
+                  });
+                }}
+              >
+                {(trip?.todosSection?.showCompleted ?? true) ? (
+                  <VisibilityIcon />
+                ) : (
+                  <VisibilityOffIcon />
+                )}
+              </IconButton>
+            </Tooltip>
           }
           addAction={{
-            ariaLabel: "add todo",
+            ariaLabel: text.todos.todosList.createTodo,
             color: "info",
             icon: <FormatListBulletedAddIcon />,
             onClick: handleCreateTodo,
@@ -294,7 +280,7 @@ export const TripDetail = () => {
             })
           }
           addAction={{
-            ariaLabel: "add note",
+            ariaLabel: text.notes.notesList.createNote,
             color: "secondary",
             icon: <NoteAddIcon />,
             onClick: handleCreateNote,

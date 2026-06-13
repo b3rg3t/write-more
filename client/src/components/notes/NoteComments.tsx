@@ -134,10 +134,9 @@ export const NoteComments: FC<INoteCommentsProps> = ({ noteId, comments }) => {
       <Divider />
       {!isCommentFormVisible ? (
         <Button
-          variant="outlined"
-          size="small"
+          variant="contained"
           onClick={handleOpenCommentForm}
-          startIcon={<AddCommentIcon fontSize="small" />}
+          startIcon={<AddCommentIcon />}
           sx={{ my: 1, textTransform: "none" }}
         >
           {commentTexts.add}
