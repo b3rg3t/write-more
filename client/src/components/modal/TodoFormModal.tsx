@@ -58,7 +58,7 @@ export const TodoFormModal = () => {
 
   const open = !!isNew || !!isEditing || !!creatingTodoForTrip;
 
-  const { titleNew, titleEdit, buttons } = text.todos.todosForm;
+  const { titleNew, titleEdit, fetchError, buttons } = text.todos.todosForm;
 
   return (
     <Dialog
@@ -105,7 +105,7 @@ export const TodoFormModal = () => {
         sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
       >
         {todo1.error ? (
-          <Alert severity="error">Failed to load todo. Please try again.</Alert>
+          <Alert severity="error">{fetchError}</Alert>
         ) : isEditing &&
           (todo1.isLoading || todo1.isFetching || todo1.isUninitialized) ? (
           <Stack alignItems="center" py={4}>

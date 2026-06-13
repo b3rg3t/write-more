@@ -24,8 +24,8 @@ export const TodoForm: FC<{
 }> = ({ todo, children, formId }) => {
   const isNew = useAppSelector(selectIsNew);
   const creatingTodoForTrip = useAppSelector(selectCreatingTodoForTrip);
-  const [createNote] = useAddTodoMutation();
-  const [updateNote] = useUpdateTodoMutation();
+  const [createTodo] = useAddTodoMutation();
+  const [updateTodo] = useUpdateTodoMutation();
   const [createTodoForTrip] = useCreateTodoForTripMutation();
   const dispatch = useAppDispatch();
   const titleRef = useRef<HTMLInputElement>(null);
@@ -56,7 +56,7 @@ export const TodoForm: FC<{
     }
   }, [todo, isNew, creatingTodoForTrip]);
 
-  const handlePostNote = async (data: TBasicTodo) => {
+  const handlePostTodo = async (data: TBasicTodo) => {
     if (creatingTodoForTrip) {
       try {
         await createTodoForTrip({
@@ -69,28 +69,28 @@ export const TodoForm: FC<{
       }
     } else if (isNew) {
       try {
-        createNote({
+        createTodo({
           name: data[ETodoForm.NAME] || "",
           isCompleted: data[ETodoForm.IS_COMPLETED] || false,
         });
       } catch (error) {
-        console.error("Error creating note:", error);
+        console.error("Error creating todo:", error);
       }
     } else if (todo) {
       try {
-        updateNote({
+        updateTodo({
           _id: todo._id,
           name: data[ETodoForm.NAME] || "",
           isCompleted: data[ETodoForm.IS_COMPLETED] || false,
         });
       } catch (error) {
-        console.error("Error updating note:", error);
+        console.error("Error updating todo:", error);
       }
     }
   };
 
   const onSubmit = (data: TBasicTodo) => {
-    handlePostNote(data);
+    handlePostTodo(data);
     reset();
     dispatch(cancelTodo());
   };

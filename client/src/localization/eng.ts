@@ -10,6 +10,7 @@ export const text = {
         submit: "Submit",
         cancel: "Cancel",
       },
+      fetchError: "Failed to load note. Please try again.",
       helperText: {
         nameRequired: "Name is required",
         contentRequired: "Content is required",
@@ -56,6 +57,7 @@ export const text = {
     deleteNote: {
       title: "Delete Note",
       titleUnknown: "Unknown Note",
+      fetchError: "Failed to load note. Please try again.",
       confirmation:
         "Are you sure you want to delete '{title}'? This action cannot be undone.",
       buttons: { confirm: "Delete", cancel: "Cancel" },
@@ -71,6 +73,7 @@ export const text = {
         submit: "Submit",
         cancel: "Cancel",
       },
+      fetchError: "Failed to load todo. Please try again.",
       helperText: {
         nameRequired: "Name is required",
       },
@@ -91,6 +94,7 @@ export const text = {
     deleteTodo: {
       title: "Delete Todo",
       titleUnknown: "Unknown Todo",
+      fetchError: "Failed to load todo. Please try again.",
       confirmation:
         "Are you sure you want to delete '{title}'? This action cannot be undone.",
       buttons: { confirm: "Delete", cancel: "Cancel" },
@@ -106,6 +110,7 @@ export const text = {
         submit: "Submit",
         cancel: "Cancel",
       },
+      fetchError: "Failed to load trip. Please try again.",
       helperText: {
         titleRequired: "Title is required",
       },
@@ -113,6 +118,7 @@ export const text = {
     deleteTrip: {
       title: "Delete Trip",
       titleUnknown: "Unknown Trip",
+      fetchError: "Failed to load trip. Please try again.",
       confirmation:
         "Are you sure you want to delete '{title}'? This action cannot be undone.",
       buttons: { confirm: "Delete", cancel: "Cancel" },

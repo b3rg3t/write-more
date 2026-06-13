@@ -131,7 +131,7 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
         ? text.todos.deleteTodo
         : text.trips.deleteTrip;
 
-  const { title, titleUnknown, confirmation, buttons } = textConfig;
+  const { title, titleUnknown, fetchError, confirmation, buttons } = textConfig;
 
   // Get the resource title/name
   const resourceTitle =
@@ -169,9 +169,7 @@ export const DeleteModal = ({ resourceType }: DeleteModalProps) => {
         sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
       >
         {resourceError ? (
-          <Alert severity="error">
-            Failed to load resource. Please try again.
-          </Alert>
+          <Alert severity="error">{fetchError}</Alert>
         ) : (
           <DialogContentText id="delete-dialog-description" sx={{ mb: 2 }}>
             {confirmation.replace("{title}", resourceTitle || titleUnknown)}

@@ -50,7 +50,7 @@ export const TripFormModal = () => {
 
   const open = !!isNew || !!isEditing;
 
-  const { titleNew, titleEdit, buttons } = text.trips.tripsForm;
+  const { titleNew, titleEdit, fetchError, buttons } = text.trips.tripsForm;
 
   return (
     <Dialog
@@ -97,7 +97,7 @@ export const TripFormModal = () => {
         sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
       >
         {trip.error ? (
-          <Alert severity="error">Failed to load trip. Please try again.</Alert>
+          <Alert severity="error">{fetchError}</Alert>
         ) : !isNew &&
           (trip.isLoading || trip.isFetching || trip.isUninitialized) ? (
           <Stack

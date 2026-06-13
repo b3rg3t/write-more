@@ -57,7 +57,7 @@ export const NoteFormModal = () => {
 
   const open = !!isNew || !!isEditing || !!creatingNoteForTrip;
 
-  const { titleNew, titleEdit, buttons } = text.notes.notesForm;
+  const { titleNew, titleEdit, fetchError, buttons } = text.notes.notesForm;
 
   return (
     <Dialog
@@ -104,7 +104,7 @@ export const NoteFormModal = () => {
         sx={{ px: { xs: 1, sm: 3 }, py: { xs: 1, sm: 2 }, overflow: "auto" }}
       >
         {note1.error ? (
-          <Alert severity="error">Failed to load note. Please try again.</Alert>
+          <Alert severity="error">{fetchError}</Alert>
         ) : isEditing &&
           (note1.isLoading || note1.isFetching || note1.isUninitialized) ? (
           <Stack alignItems="center" py={4}>
