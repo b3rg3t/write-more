@@ -270,6 +270,9 @@ export const text = {
       cancelEdit: "Cancel",
       submit: "Save Changes",
       saving: "Saving...",
+      loading: "Loading profile...",
+      noData: "Profile not found.",
+      fetchError: "Failed to load profile. Please try again.",
       success: "Profile updated successfully",
       error: "Failed to update profile. Please try again.",
       helperText: {
