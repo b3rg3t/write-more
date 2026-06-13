@@ -23,6 +23,7 @@ import {
 import { useGetAllNotesQuery } from "../../store/reducers/api/apiSlice";
 import { useGetAllTodosQuery } from "../../store/reducers/api/apiSlice";
 import { useGetAllUsersQuery } from "../../store/reducers/api/apiSlice";
+import { formatDateToInputValue } from "../../util/date";
 
 export const TripForm: FC<{
   trip?: ITrip;
@@ -81,16 +82,8 @@ export const TripForm: FC<{
     } else {
       setValue(ETripForm.TITLE, trip?.title || "");
       setValue(ETripForm.DESCRIPTION, trip?.description || "");
-      setValue(
-        ETripForm.START_DATE,
-        trip?.startDate
-          ? new Date(trip.startDate).toISOString().split("T")[0]
-          : "",
-      );
-      setValue(
-        ETripForm.END_DATE,
-        trip?.endDate ? new Date(trip.endDate).toISOString().split("T")[0] : "",
-      );
+      setValue(ETripForm.START_DATE, formatDateToInputValue(trip?.startDate));
+      setValue(ETripForm.END_DATE, formatDateToInputValue(trip?.endDate));
       setValue(
         ETripForm.NOTES,
         trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || [],

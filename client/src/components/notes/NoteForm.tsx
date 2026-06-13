@@ -9,8 +9,10 @@ import { INote } from "../../models/interface/INote";
 import {
   cancelNote,
   selectCreatingNoteForTrip,
+  selectCreatingNoteForTripDate,
   selectIsNew,
 } from "../../store/reducers/notes/notesSlice";
+import { formatDateToInputValue } from "../../util/date";
 import {
   useAddNoteMutation,
   useUpdateNoteMutation,
@@ -25,6 +27,7 @@ export const NoteForm: FC<{
 }> = ({ note, children, formId }) => {
   const isNew = useAppSelector(selectIsNew);
   const creatingNoteForTrip = useAppSelector(selectCreatingNoteForTrip);
+  const creatingNoteForTripDate = useAppSelector(selectCreatingNoteForTripDate);
   const [createNote] = useAddNoteMutation();
   const [updateNote] = useUpdateNoteMutation();
   const [createNoteForTrip] = useCreateNoteForTripMutation();
@@ -53,25 +56,24 @@ export const NoteForm: FC<{
   } = text;
 
   useEffect(() => {
-    if (!note || isNew) {
-      reset();
-      return;
-    } else {
+    if (note) {
       setValue(ENoteForm.TITLE, note?.title || "");
       setValue(ENoteForm.CONTENT, note?.content || "");
       setValue(ENoteForm.LINKS, note?.links || []);
-      setValue(
-        ENoteForm.START_DATE,
-        note?.startDate
-          ? new Date(note.startDate).toISOString().split("T")[0]
-          : "",
-      );
-      setValue(
-        ENoteForm.END_DATE,
-        note?.endDate ? new Date(note.endDate).toISOString().split("T")[0] : "",
-      );
+      setValue(ENoteForm.START_DATE, formatDateToInputValue(note?.startDate));
+      setValue(ENoteForm.END_DATE, formatDateToInputValue(note?.endDate));
+    } else if (isNew || creatingNoteForTrip) {
+      reset({
+        [ENoteForm.TITLE]: "",
+        [ENoteForm.CONTENT]: "",
+        [ENoteForm.LINKS]: [],
+        [ENoteForm.START_DATE]: creatingNoteForTripDate || "",
+        [ENoteForm.END_DATE]: creatingNoteForTripDate || "",
+      });
+    } else {
+      reset();
     }
-  }, [note, isNew, creatingNoteForTrip]);
+  }, [note, isNew, creatingNoteForTrip, creatingNoteForTripDate]);
 
   useEffect(() => {
     // Focus the title field when the form opens

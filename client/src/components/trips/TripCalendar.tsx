@@ -1,5 +1,8 @@
 import { useParams } from "react-router-dom";
+import { useAppDispatch } from "../../store/redux/hooks";
 import { useGetTripQuery } from "../../store/reducers/api/apiSlice";
+import { createNoteForTripOnDate } from "../../store/reducers/notes/notesSlice";
+import { formatDateToInputValue } from "../../util/date";
 import {
   Card,
   Paper,
@@ -101,6 +104,7 @@ const noteColors = [
 export const TripCalendar = () => {
   const { tripId } = useParams<{ tripId: string }>();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const {
     data: trip,
     isLoading,
@@ -133,6 +137,16 @@ export const TripCalendar = () => {
 
   const handleBackClick = () => {
     navigate(ERoutes.TRIP_DETAIL.replace(":tripId", tripId!));
+  };
+
+  const handleDateClick = (date: Date) => {
+    if (!tripId) return;
+    dispatch(
+      createNoteForTripOnDate({
+        tripId,
+        date: formatDateToInputValue(date),
+      }),
+    );
   };
 
   const handlePrevMonth = () => {
@@ -261,6 +275,16 @@ export const TripCalendar = () => {
                     <TableCell
                       key={`cell-${rowIndex}-${cellIndex}`}
                       align="center"
+                      onClick={() => {
+                        if (
+                          day &&
+                          tripStart &&
+                          tripEnd &&
+                          isDateInRange(normalizedDayDate, tripStart, tripEnd)
+                        ) {
+                          handleDateClick(normalizedDayDate);
+                        }
+                      }}
                       sx={{
                         height: { xs: 36, sm: 42, md: 56, lg: 68 },
                         border: "1px solid #d3d3d3",
@@ -273,6 +297,24 @@ export const TripCalendar = () => {
                         py: { xs: 0.25, sm: 0.5 },
                         px: { xs: 0.25, sm: 0.5 },
                         minWidth: { xs: 32, sm: 40 },
+                        cursor:
+                          day &&
+                          tripStart &&
+                          tripEnd &&
+                          isDateInRange(normalizedDayDate, tripStart, tripEnd)
+                            ? "pointer"
+                            : "default",
+                        "&:hover":
+                          day &&
+                          tripStart &&
+                          tripEnd &&
+                          isDateInRange(normalizedDayDate, tripStart, tripEnd)
+                            ? {
+                                backgroundColor: isSelected
+                                  ? "primary.light"
+                                  : "action.hover",
+                              }
+                            : undefined,
                       }}
                     >
                       {day ? (

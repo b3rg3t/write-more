@@ -9,12 +9,14 @@ interface INotesState {
   isNew?: boolean;
   isDeleting?: INote["_id"];
   creatingNoteForTrip?: ITrip["_id"];
+  creatingNoteForTripDate?: string;
 }
 
 const initialState: INotesState = {
   isEditing: undefined,
   isNew: false,
   isDeleting: undefined,
+  creatingNoteForTripDate: undefined,
 };
 
 export const notesSlice = createSlice({
@@ -31,6 +33,7 @@ export const notesSlice = createSlice({
       state.isNew = false;
       state.isEditing = undefined;
       state.creatingNoteForTrip = undefined;
+      state.creatingNoteForTripDate = undefined;
     },
     deleteNote: (state, action: PayloadAction<INote["_id"] | undefined>) => {
       state.isDeleting = action.payload;
@@ -42,6 +45,13 @@ export const notesSlice = createSlice({
     createNoteForTrip: (state, action: PayloadAction<ITrip["_id"]>) => {
       state.creatingNoteForTrip = action.payload;
     },
+    createNoteForTripOnDate: (
+      state,
+      action: PayloadAction<{ tripId: ITrip["_id"]; date: string }>,
+    ) => {
+      state.creatingNoteForTrip = action.payload.tripId;
+      state.creatingNoteForTripDate = action.payload.date;
+    },
   },
 });
 
@@ -50,12 +60,15 @@ const selectIsEditing = (state: RootState) => state.notes.isEditing;
 const selectIsDeleting = (state: RootState) => state.notes.isDeleting;
 const selectCreatingNoteForTrip = (state: RootState) =>
   state.notes.creatingNoteForTrip;
+const selectCreatingNoteForTripDate = (state: RootState) =>
+  state.notes.creatingNoteForTripDate;
 
 export {
   selectIsNew,
   selectIsEditing,
   selectIsDeleting,
   selectCreatingNoteForTrip,
+  selectCreatingNoteForTripDate,
 };
 
 export const {
@@ -64,4 +77,5 @@ export const {
   setEditNote,
   deleteNote,
   createNoteForTrip,
+  createNoteForTripOnDate,
 } = notesSlice.actions;
