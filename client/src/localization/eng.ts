@@ -86,6 +86,7 @@ export const text = {
     todosList: {
       loading: "Loading todos",
       noTodos: "Create a new todo to get started!",
+      noActiveTodos: "No active todos. Great job!",
       createTodo: "Create Todo",
       fetchError: "Failed to load todos. Please try again.",
       noTodosAvailable: "No todos available.",

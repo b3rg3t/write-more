@@ -74,7 +74,13 @@ export const TodoList: FC<TodoListProps> = ({
     setTodos(reordered);
   };
 
-  if (todosState.length === 0 && todos.length === 0) {
+  if (visibleTodos.length === 0 && todos.length !== 0) {
+    return (
+      <Typography variant={"body1"}>
+        <i>{text.todos.todosList.noActiveTodos}</i>
+      </Typography>
+    );
+  } else if (todosState.length === 0 && todos.length === 0) {
     return (
       <Typography variant={"body1"}>
         {text.todos.todosList.noTodosAvailable}
