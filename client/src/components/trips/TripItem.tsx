@@ -41,7 +41,9 @@ export const TripItem: FC<{ trip: ITrip }> = ({ trip }) => {
   };
 
   const handleNoteClick = (noteId: string) => {
-    navigate(ERoutes.NOTE_DETAIL.replace(":noteId", noteId));
+    navigate(ERoutes.NOTE_DETAIL.replace(":noteId", noteId), {
+      state: { tripId: trip._id },
+    });
   };
 
   const handleTodoClick = (todoId: string) => {

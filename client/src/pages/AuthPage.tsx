@@ -6,7 +6,7 @@ export const AuthPage = () => {
   const navigate = useNavigate();
 
   const handleAuthSuccess = () => {
-    navigate(ERoutes.TRIPS);
+    navigate(ERoutes.TRIPS, { replace: true });
   };
 
   return <AuthPageComponent onSuccess={handleAuthSuccess} />;

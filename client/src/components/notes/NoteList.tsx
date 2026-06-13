@@ -86,7 +86,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip }) => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <NoteItem note={note} headingLevel={headingLevel} />
+                    <NoteItem note={note} headingLevel={headingLevel} tripId={trip?._id} />
                   </ListItem>
                 )}
               </Draggable>

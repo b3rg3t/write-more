@@ -53,6 +53,8 @@ export const text = {
     noteDetail: {
       loading: "Loading...",
       notFound: "Note not found",
+      backToCalendar: "Back to Calendar",
+      backToTrip: "Back to Trip",
     },
     deleteNote: {
       title: "Delete Note",

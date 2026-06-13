@@ -29,7 +29,8 @@ import { NoteComments } from "./NoteComments";
 export const NoteItem: FC<{
   note: INote;
   headingLevel?: TypographyVariant;
-}> = ({ headingLevel = "h3", note }) => {
+  tripId?: string;
+}> = ({ headingLevel = "h3", note, tripId }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -38,7 +39,9 @@ export const NoteItem: FC<{
   };
 
   const handleClick = () => {
-    navigate(ERoutes.NOTE_DETAIL.replace(":noteId", note._id));
+    navigate(ERoutes.NOTE_DETAIL.replace(":noteId", note._id), {
+      state: tripId ? { tripId } : undefined,
+    });
   };
 
   const handleLinkClick = (url: TLink["url"]) => {

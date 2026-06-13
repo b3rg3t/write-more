@@ -13,11 +13,12 @@ import {
   TableRow,
   TableCell,
   IconButton,
+  Container,
 } from "@mui/material";
 import { text } from "../../localization/eng";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
 import { TripDates } from "../utils/TripDates";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { BackButton } from "../utils/BackButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useNavigate } from "react-router-dom";
@@ -251,9 +252,9 @@ export const TripCalendar = () => {
                   const normalizedDayDate = normalizeDate(dayDate);
                   const isSelected = Boolean(
                     day &&
-                      tripStart &&
-                      tripEnd &&
-                      isDateInRange(normalizedDayDate, tripStart, tripEnd),
+                    tripStart &&
+                    tripEnd &&
+                    isDateInRange(normalizedDayDate, tripStart, tripEnd),
                   );
 
                   return (
@@ -333,6 +334,12 @@ export const TripCalendar = () => {
                                             ":noteId",
                                             note._id,
                                           ),
+                                          {
+                                            state: {
+                                              tripId,
+                                              fromCalendar: true,
+                                            },
+                                          },
                                         );
                                       }}
                                       sx={{
@@ -379,23 +386,12 @@ export const TripCalendar = () => {
       }}
     >
       {trip && (
-        <>
+        <Container maxWidth="md" sx={{ px: 0, py: 2 }}>
           <Stack spacing={2}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-                cursor: "pointer",
-                color: "primary.main",
-              }}
+            <BackButton
+              label={text.trips.tripCalendar.backToTrip}
               onClick={handleBackClick}
-            >
-              <ArrowBackIcon />
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                {text.trips.tripCalendar.backToTrip}
-              </Typography>
-            </Box>
+            />
 
             <Card>
               <Stack sx={{ p: 2 }} spacing={2}>
@@ -499,6 +495,7 @@ export const TripCalendar = () => {
                       onClick={() =>
                         navigate(
                           ERoutes.NOTE_DETAIL.replace(":noteId", note._id),
+                          { state: { tripId, fromCalendar: true } },
                         )
                       }
                       sx={{
@@ -526,7 +523,7 @@ export const TripCalendar = () => {
               </Box>
             )}
           </TableContainer>
-        </>
+        </Container>
       )}
     </RtkQueryWrapper>
   );
