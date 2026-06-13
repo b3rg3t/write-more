@@ -32,7 +32,7 @@ export const getTrips = async (req: AuthRequest, res: Response, next: NextFuncti
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
-      .populate("createdBy", "username email")
+      .populate("createdBy", "username email firstName lastName")
       .sort({ order: 1 });
 
     res.json(trips);
@@ -58,7 +58,7 @@ export const getAllTripsAdmin = async (req: AuthRequest, res: Response, next: Ne
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
-      .populate("createdBy", "username email")
+      .populate("createdBy", "username email firstName lastName")
       .sort({ order: 1 });
 
     res.json(trips);
@@ -86,7 +86,7 @@ export const getTrip = async (req: AuthRequest, res: Response, next: NextFunctio
       })
       .populate("todos")
       .populate("users", "username email firstName lastName")
-      .populate("createdBy", "username email")
+      .populate("createdBy", "username email firstName lastName")
       .lean();
 
     if (!trip) {
@@ -157,7 +157,7 @@ export const createTrip = async (req: AuthRequest, res: Response, next: NextFunc
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
-      .populate("createdBy", "username email");
+      .populate("createdBy", "username email firstName lastName");
 
     res.status(201).json(populatedTrip);
   } catch (err) {
@@ -213,7 +213,7 @@ export const updateTrip = async (req: AuthRequest, res: Response, next: NextFunc
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
-      .populate("createdBy", "username email");
+      .populate("createdBy", "username email firstName lastName");
 
     if (!updatedTrip) {
       return res.status(404).json({ message: "Trip not found" });
@@ -397,7 +397,7 @@ export const addUserToTrip = async (req: AuthRequest, res: Response, next: NextF
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
-      .populate("createdBy", "username email");
+      .populate("createdBy", "username email firstName lastName");
 
     res.json(updatedTrip);
   } catch (err) {
@@ -434,7 +434,7 @@ export const removeUserFromTrip = async (req: AuthRequest, res: Response, next: 
       .populate("notes")
       .populate("todos")
       .populate("users", "username email firstName lastName")
-      .populate("createdBy", "username email");
+      .populate("createdBy", "username email firstName lastName");
 
     res.json(updatedTrip);
   } catch (err) {

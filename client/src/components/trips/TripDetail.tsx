@@ -81,7 +81,6 @@ export const TripDetail = () => {
       dispatch(setAddUserToTrip(trip._id));
     }
   };
-
   return (
     <RtkQueryWrapper
       isLoading={isLoading || isUninitialized}
@@ -195,7 +194,7 @@ export const TripDetail = () => {
         </Card>
         {trip?.createdBy && trip?.createdAt ? (
           <Typography fontSize={"small"} color="text.secondary" sx={{ mt: 1 }}>
-            {`${text.trips.tripDetail.createdBy} @${trip.createdBy.username} on ${new Date(trip.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}`}
+            {`${text.trips.tripDetail.createdBy} ${trip.createdBy.firstName && trip.createdBy.lastName ? `${trip.createdBy.firstName} ${trip.createdBy.lastName}` : `@${trip.createdBy.username}`} on ${new Date(trip.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}`}
           </Typography>
         ) : (
           <span />
