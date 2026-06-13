@@ -54,18 +54,6 @@ export const TodoList: FC<TodoListProps> = ({
     }
   };
 
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-    if (result.destination.index === result.source.index) return;
-    const reordered = reordersHelper(
-      todos,
-      result.source.index,
-      result.destination.index,
-    );
-    handleReorderNotes(reordered);
-    setTodos(reordered);
-  };
-
   useEffect(() => {
     setTodos(todos);
   }, [todos]);
@@ -73,6 +61,18 @@ export const TodoList: FC<TodoListProps> = ({
   const visibleTodos = showCompleted
     ? todosState
     : todosState.filter((t) => !t.isCompleted);
+
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+    if (result.destination.index === result.source.index) return;
+    const draggedTodo = visibleTodos[result.source.index];
+    const targetTodo = visibleTodos[result.destination.index];
+    const fullSrcIndex = todosState.findIndex((t) => t._id === draggedTodo._id);
+    const fullDstIndex = todosState.findIndex((t) => t._id === targetTodo._id);
+    const reordered = reordersHelper(todosState, fullSrcIndex, fullDstIndex);
+    handleReorderNotes(reordered);
+    setTodos(reordered);
+  };
 
   if (todosState.length === 0 && todos.length === 0) {
     return (
