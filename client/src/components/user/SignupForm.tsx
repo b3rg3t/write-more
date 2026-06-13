@@ -138,7 +138,12 @@ export const SignupForm: FC<SignupFormProps> = ({
           </Button>
 
           {onSwitchToSignin && (
-            <Button variant="text" onClick={onSwitchToSignin} fullWidth>
+            <Button
+              variant="text"
+              onClick={onSwitchToSignin}
+              fullWidth
+              sx={{ textTransform: "none" }}
+            >
               {signupText.switchToSignin}
             </Button>
           )}

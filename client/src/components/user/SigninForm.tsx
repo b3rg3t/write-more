@@ -63,7 +63,17 @@ export const SigninForm: FC<SigninFormProps> = ({
   const { signin: signinText } = text.user;
 
   return (
-    <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
+    <Box
+      sx={{
+        maxWidth: 400,
+        mx: "auto",
+        mt: 4,
+        backgroundColor: "white",
+        borderRadius: 2,
+        p: 3,
+        boxShadow: 1,
+      }}
+    >
       <Typography variant="h4" component="h2" gutterBottom>
         {signinText.title}
       </Typography>
@@ -110,7 +120,12 @@ export const SigninForm: FC<SigninFormProps> = ({
           </Button>
 
           {onSwitchToSignup && (
-            <Button variant="text" onClick={onSwitchToSignup} fullWidth>
+            <Button
+              variant="text"
+              onClick={onSwitchToSignup}
+              fullWidth
+              sx={{ textTransform: "none" }}
+            >
               {signinText.switchToSignup}
             </Button>
           )}

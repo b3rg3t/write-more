@@ -1,7 +1,9 @@
 import {
   Alert,
+  Avatar,
   Box,
   Button,
+  Divider,
   FormGroup,
   Stack,
   TextField,
@@ -103,102 +105,131 @@ export const ProfilePage = () => {
 
   const profileText = text.user.profile;
 
-  return (
-    <Box sx={{ maxWidth: 520, mx: "auto", mt: 2 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
-        {profileText.title}
-      </Typography>
+  const user = currentUserResponse?.user;
+  const initials = [user?.firstName, user?.lastName]
+    .filter(Boolean)
+    .map((n) => n![0].toUpperCase())
+    .join("") || user?.username?.[0]?.toUpperCase() || "?";
 
+  return (
+    <Box sx={{ maxWidth: 480, mx: "auto", mt: 2 }}>
       {successMessage && (
         <Alert severity="success" sx={{ mb: 2 }}>
           {successMessage}
         </Alert>
       )}
-
       {errorMessage && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {errorMessage}
         </Alert>
       )}
 
-      {!isEditMode ? (
-        <Stack spacing={1.5}>
-          <Typography variant="body1">
-            <strong>{profileText.username}:</strong>{" "}
-            {currentUserResponse?.user?.username || "-"}
+      <Box
+        sx={{
+          backgroundColor: "white",
+          borderRadius: 2,
+          p: 3,
+          boxShadow: 1,
+        }}
+      >
+        <Stack alignItems="center" spacing={1} sx={{ mb: 3 }}>
+          <Avatar
+            sx={{
+              width: 64,
+              height: 64,
+              fontSize: "1.5rem",
+              bgcolor: "primary.main",
+            }}
+          >
+            {initials}
+          </Avatar>
+          <Typography variant="h2" fontWeight={700}>
+            {user?.username ? `@${user.username}` : "—"}
           </Typography>
-          <Typography variant="body1">
-            <strong>{profileText.firstName}:</strong>{" "}
-            {currentUserResponse?.user?.firstName || "-"}
-          </Typography>
-          <Typography variant="body1">
-            <strong>{profileText.lastName}:</strong>{" "}
-            {currentUserResponse?.user?.lastName || "-"}
-          </Typography>
-          <Stack direction="row" justifyContent="flex-end">
-            <Button
-              type="button"
-              variant="contained"
-              onClick={handleStartEdit}
-              disabled={isLoadingCurrentUser}
-            >
-              {profileText.edit}
-            </Button>
-          </Stack>
         </Stack>
-      ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormGroup sx={{ width: "100%", gap: 2 }}>
-            <TextField
-              label={profileText.firstName}
-              fullWidth
-              disabled={isLoadingCurrentUser || isSaving}
-              {...register("firstName")}
-            />
 
-            <TextField
-              label={profileText.lastName}
-              fullWidth
-              disabled={isLoadingCurrentUser || isSaving}
-              {...register("lastName")}
-            />
+        <Divider sx={{ mb: 3 }} />
 
-            <TextField
-              label={profileText.password}
-              type="password"
-              fullWidth
-              disabled={isLoadingCurrentUser || isSaving}
-              helperText={
-                errors.password ? profileText.helperText.passwordMin : ""
-              }
-              {...register("password", {
-                validate: (value) =>
-                  !value ||
-                  value.length >= 6 ||
-                  profileText.helperText.passwordMin,
-              })}
-            />
-
-            <Stack direction="row" justifyContent="flex-end" spacing={1}>
+        {!isEditMode ? (
+          <Stack spacing={2}>
+            <Stack spacing={0.5}>
+              <Typography variant="caption" color="text.secondary">
+                {profileText.firstName}
+              </Typography>
+              <Typography variant="body1">
+                {user?.firstName || "—"}
+              </Typography>
+            </Stack>
+            <Stack spacing={0.5}>
+              <Typography variant="caption" color="text.secondary">
+                {profileText.lastName}
+              </Typography>
+              <Typography variant="body1">
+                {user?.lastName || "—"}
+              </Typography>
+            </Stack>
+            <Stack direction="row" justifyContent="flex-end" sx={{ pt: 1 }}>
               <Button
                 type="button"
-                variant="outlined"
-                onClick={handleCancelEdit}
-                disabled={isSaving}
-              >
-                {profileText.cancelEdit}
-              </Button>
-              <Button
-                type="submit"
                 variant="contained"
-                disabled={isLoadingCurrentUser || isSaving}
+                onClick={handleStartEdit}
+                disabled={isLoadingCurrentUser}
               >
-                {isSaving ? profileText.saving : profileText.submit}
+                {profileText.edit}
               </Button>
             </Stack>
-          </FormGroup>
-        </form>
-      )}
+          </Stack>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FormGroup sx={{ width: "100%", gap: 2 }}>
+              <TextField
+                label={profileText.firstName}
+                fullWidth
+                disabled={isLoadingCurrentUser || isSaving}
+                {...register("firstName")}
+              />
+              <TextField
+                label={profileText.lastName}
+                fullWidth
+                disabled={isLoadingCurrentUser || isSaving}
+                {...register("lastName")}
+              />
+              <TextField
+                label={profileText.password}
+                type="password"
+                fullWidth
+                disabled={isLoadingCurrentUser || isSaving}
+                helperText={
+                  errors.password ? profileText.helperText.passwordMin : ""
+                }
+                {...register("password", {
+                  validate: (value) =>
+                    !value ||
+                    value.length >= 6 ||
+                    profileText.helperText.passwordMin,
+                })}
+              />
+              <Stack direction="row" justifyContent="flex-end" spacing={1} sx={{ pt: 1 }}>
+                <Button
+                  type="button"
+                  variant="outlined"
+                  onClick={handleCancelEdit}
+                  disabled={isSaving}
+                >
+                  {profileText.cancelEdit}
+                </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={isLoadingCurrentUser || isSaving}
+                >
+                  {isSaving ? profileText.saving : profileText.submit}
+                </Button>
+              </Stack>
+            </FormGroup>
+          </form>
+        )}
+      </Box>
     </Box>
   );
 };

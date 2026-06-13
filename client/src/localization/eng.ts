@@ -1,5 +1,6 @@
 export const text = {
   appName: "Write More",
+  tagline: "Plan your trips. Capture your memories.",
   notes: {
     header: "Notes",
     notesForm: {
