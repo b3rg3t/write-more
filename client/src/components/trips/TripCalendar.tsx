@@ -386,7 +386,7 @@ export const TripCalendar = () => {
       }}
     >
       {trip && (
-        <Container maxWidth="md" sx={{ px: 0, py: 2 }}>
+        <Container maxWidth="md" sx={{ px: 0, py: 1 }}>
           <Stack spacing={2}>
             <BackButton
               label={text.trips.tripCalendar.backToTrip}

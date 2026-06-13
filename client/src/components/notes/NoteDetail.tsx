@@ -11,7 +11,10 @@ export const NoteDetail = () => {
   const { noteId } = useParams<{ noteId: string }>();
   const location = useLocation();
   const navigate = useNavigate();
-  const state = location.state as { tripId?: string; fromCalendar?: boolean } | null;
+  const state = location.state as {
+    tripId?: string;
+    fromCalendar?: boolean;
+  } | null;
   const tripId = state?.tripId;
   const fromCalendar = state?.fromCalendar;
   const {
@@ -34,7 +37,7 @@ export const NoteDetail = () => {
         fetchError: text.notes.noteDetail.notFound,
       }}
     >
-      <Container maxWidth="md" sx={{ px: 0, py: 2 }}>
+      <Container maxWidth="md" sx={{ px: 0, py: 1 }}>
         {tripId && (
           <BackButton
             label={
