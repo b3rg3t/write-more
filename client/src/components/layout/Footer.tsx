@@ -27,6 +27,7 @@ export const Footer = () => {
   if (!token) {
     return (
       <Container
+        maxWidth="md"
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -77,7 +78,7 @@ export const Footer = () => {
           pb: isMobileSafari || isSafari ? 2 : 0,
         }}
       >
-        <Container sx={{ px: 2 }}>
+        <Container maxWidth="md" sx={{ px: 2 }}>
           <Box
             sx={{
               my: 0,
