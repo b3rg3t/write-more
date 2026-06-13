@@ -12,6 +12,7 @@ import {
   Stack,
   Tooltip,
   Typography,
+  Button,
 } from "@mui/material";
 import { text } from "../../localization/eng";
 import { RtkQueryWrapper } from "../wrapper/RtkQueryWrapper";
@@ -24,6 +25,7 @@ import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { createTodoForTrip } from "../../store/reducers/todos/todosSlice";
@@ -100,13 +102,21 @@ export const TripDetail = () => {
           alignItems="end"
           sx={{ mb: 1 }}
         >
-          {trip?.createdBy && trip?.createdAt ? (
-            <Typography fontSize={"small"} color="text.secondary">
-              {`${text.trips.tripDetail.createdBy} @${trip.createdBy.username} on ${new Date(trip.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}`}
-            </Typography>
-          ) : (
-            <span />
-          )}
+          <Button
+            size="small"
+            color="primary"
+            variant="outlined"
+            startIcon={<CalendarTodayIcon fontSize="small" />}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpenCalendar();
+            }}
+            aria-label={text.trips.tripDetail.calendar}
+            sx={{ textTransform: "none" }}
+          >
+            {text.trips.tripDetail.calendar}
+          </Button>
+
           <Stack direction="row" alignItems="center" spacing={0.5}>
             {trip?.users?.map((user, index) => {
               if (typeof user === "string") return null;
@@ -183,6 +193,13 @@ export const TripDetail = () => {
             {trip?.description}
           </Typography>
         </Card>
+        {trip?.createdBy && trip?.createdAt ? (
+          <Typography fontSize={"small"} color="text.secondary" sx={{ mt: 1 }}>
+            {`${text.trips.tripDetail.createdBy} @${trip.createdBy.username} on ${new Date(trip.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}`}
+          </Typography>
+        ) : (
+          <span />
+        )}
         <Divider sx={{ my: 2 }} />
         <TripSectionAccordion
           title={text.todos.header}

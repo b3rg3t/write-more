@@ -136,6 +136,7 @@ export const text = {
       loading: "Loading trip",
       notFound: "Trip not found",
       createdBy: "Created by",
+      calendar: "Calendar",
       imagesHeader: "Images",
       noImages: "No images uploaded yet.",
       loadingImages: "Loading images...",
@@ -274,6 +275,10 @@ export const text = {
       helperText: {
         passwordMin: "Password must be at least 6 characters",
       },
+      logoutConfirmTitle: "Confirm Logout",
+      logoutConfirmMessage: "Are you sure you want to sign out?",
+      logoutConfirmCancel: "Cancel",
+      logoutConfirmConfirm: "Logout",
     },
   },
   updatePrompt: {

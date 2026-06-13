@@ -1,4 +1,17 @@
-import { Box, Container, Stack, Typography, IconButton } from "@mui/material";
+import {
+  Box,
+  Container,
+  Stack,
+  Typography,
+  IconButton,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
+import { useState } from "react";
 import { fontSize16 } from "../utils/FontSize";
 import { text } from "../../localization/eng";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -31,6 +44,15 @@ export const Header = () => {
 
   const handleOpenProfile = () => {
     navigate(ERoutes.PROFILE);
+  };
+
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+
+  const openLogoutDialog = () => setLogoutDialogOpen(true);
+  const closeLogoutDialog = () => setLogoutDialogOpen(false);
+  const confirmLogout = () => {
+    closeLogoutDialog();
+    handleLogout();
   };
 
   return (
@@ -84,7 +106,7 @@ export const Header = () => {
             {isAuthenticated && (
               <IconButton
                 color="primary"
-                onClick={handleLogout}
+                onClick={openLogoutDialog}
                 aria-label="logout"
                 size="small"
               >
@@ -93,6 +115,28 @@ export const Header = () => {
             )}
           </Stack>
         </Stack>
+        <Dialog
+          open={logoutDialogOpen}
+          onClose={closeLogoutDialog}
+          aria-labelledby="logout-dialog-title"
+        >
+          <DialogTitle id="logout-dialog-title">
+            {text.user.profile.logoutConfirmTitle}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {text.user.profile.logoutConfirmMessage}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeLogoutDialog}>
+              {text.user.profile.logoutConfirmCancel}
+            </Button>
+            <Button variant="contained" color="error" onClick={confirmLogout} autoFocus>
+              {text.user.profile.logoutConfirmConfirm}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </Box>
   );
