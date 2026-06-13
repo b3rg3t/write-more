@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import SUser from "../models/schemas/SUser";
+import { hashPassword } from "../utils/auth";
 
 // Get all users
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
@@ -32,7 +33,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     const user = new SUser({
       username,
       email,
-      password,
+      password: password ? await hashPassword(password) : undefined,
       role,
       firstName,
       lastName,
@@ -50,11 +51,13 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
   const { username, email, password, role, firstName, lastName, avatarUrl } =
     req.body;
   try {
-    const user = await SUser.findByIdAndUpdate(
-      req.params.id,
-      { username, email, password, role, firstName, lastName, avatarUrl },
-      { new: true }
-    ).select("-password");
+    const updates: Record<string, unknown> = { username, email, role, firstName, lastName, avatarUrl };
+    if (password) {
+      updates.password = await hashPassword(password);
+    }
+    const user = await SUser.findByIdAndUpdate(req.params.id, updates, {
+      new: true,
+    }).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

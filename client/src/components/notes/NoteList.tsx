@@ -21,9 +21,10 @@ interface NoteListProps {
   notes: INote[];
   headingLevel?: TypographyVariant;
   trip?: ITrip;
+  titleOnly?: boolean;
 }
 
-export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip }) => {
+export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip, titleOnly }) => {
   const [reorderNotes, {}] = useReorderNotesMutation();
   const [updateTrip, {}] = useUpdateTripMutation();
   const [notesState, setNotes] = useState<INote[]>([]);
@@ -86,7 +87,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip }) => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <NoteItem note={note} headingLevel={headingLevel} tripId={trip?._id} />
+                    <NoteItem note={note} headingLevel={headingLevel} tripId={trip?._id} titleOnly={titleOnly} />
                   </ListItem>
                 )}
               </Draggable>

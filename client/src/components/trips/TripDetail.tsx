@@ -288,12 +288,58 @@ export const TripDetail = () => {
             trip &&
             updateTrip({
               _id: trip._id,
-              notesSection: { isAccordionOpen: expanded },
+              notesSection: {
+                isAccordionOpen: expanded,
+                showTitleOnly: trip.notesSection?.showTitleOnly ?? false,
+              },
               notes:
                 trip.notes?.map((n) => (typeof n === "string" ? n : n._id)) ??
                 [],
               todos: trip.todos?.map((t) => t._id) ?? [],
             })
+          }
+          headerExtra={
+            <Tooltip
+              title={
+                (trip?.notesSection?.showTitleOnly ?? false)
+                  ? text.notes.notesList.showFullNote
+                  : text.notes.notesList.showTitleOnly
+              }
+            >
+              <IconButton
+                component="span"
+                size="small"
+                color="secondary"
+                aria-label={
+                  (trip?.notesSection?.showTitleOnly ?? false)
+                    ? text.notes.notesList.showFullNote
+                    : text.notes.notesList.showTitleOnly
+                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!trip) return;
+                  const next = !(trip.notesSection?.showTitleOnly ?? false);
+                  updateTrip({
+                    _id: trip._id,
+                    notesSection: {
+                      isAccordionOpen: trip.notesSection?.isAccordionOpen ?? true,
+                      showTitleOnly: next,
+                    },
+                    notes:
+                      trip.notes?.map((n) =>
+                        typeof n === "string" ? n : n._id,
+                      ) ?? [],
+                    todos: trip.todos?.map((t) => t._id) ?? [],
+                  });
+                }}
+              >
+                {(trip?.notesSection?.showTitleOnly ?? false) ? (
+                  <VisibilityOffIcon />
+                ) : (
+                  <VisibilityIcon />
+                )}
+              </IconButton>
+            </Tooltip>
           }
           addAction={{
             ariaLabel: text.notes.notesList.createNote,
@@ -302,7 +348,12 @@ export const TripDetail = () => {
             onClick: handleCreateNote,
           }}
         >
-          <NoteList trip={trip} notes={trip?.notes ?? []} headingLevel="h3" />
+          <NoteList
+            trip={trip}
+            notes={trip?.notes ?? []}
+            headingLevel="h3"
+            titleOnly={trip?.notesSection?.showTitleOnly ?? false}
+          />
         </TripSectionAccordion>
 
         <TripSectionAccordion

@@ -52,6 +52,7 @@ const STrip: Schema = new Schema(
     },
     notesSection: {
       isAccordionOpen: { type: Boolean, default: true },
+      showTitleOnly: { type: Boolean, default: false },
     },
     todosSection: {
       isAccordionOpen: { type: Boolean, default: true },

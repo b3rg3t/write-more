@@ -9,7 +9,9 @@ export interface ITripSectionBase {
   isAccordionOpen: boolean;
 }
 
-export interface ITripNotesSection extends ITripSectionBase {}
+export interface ITripNotesSection extends ITripSectionBase {
+  showTitleOnly: boolean;
+}
 
 export interface ITripTodosSection extends ITripSectionBase {
   showCompleted: boolean;

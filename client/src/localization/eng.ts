@@ -50,6 +50,8 @@ export const text = {
       fetchError: "Failed to load notes. Please try again.",
       createTodo: "Create Todo",
       noNotesAvailable: "No notes available.",
+      showTitleOnly: "Show title only",
+      showFullNote: "Show full note",
     },
     noteDetail: {
       loading: "Loading...",
