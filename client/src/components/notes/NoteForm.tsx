@@ -6,13 +6,13 @@ import { ENoteForm } from "../../models/enum/ENoteForm";
 import { text } from "../../localization/eng";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { INote } from "../../models/interface/INote";
+import { parseDateOnlyString } from "../../util/date";
 import {
   cancelNote,
   selectCreatingNoteForTrip,
   selectCreatingNoteForTripDate,
   selectIsNew,
 } from "../../store/reducers/notes/notesSlice";
-import { formatDateToInputValue } from "../../util/date";
 import {
   useAddNoteMutation,
   useUpdateNoteMutation,
@@ -60,8 +60,16 @@ export const NoteForm: FC<{
       setValue(ENoteForm.TITLE, note?.title || "");
       setValue(ENoteForm.CONTENT, note?.content || "");
       setValue(ENoteForm.LINKS, note?.links || []);
-      setValue(ENoteForm.START_DATE, formatDateToInputValue(note?.startDate));
-      setValue(ENoteForm.END_DATE, formatDateToInputValue(note?.endDate));
+      setValue(
+        ENoteForm.START_DATE,
+        note?.startDate
+          ? new Date(note.startDate).toISOString().split("T")[0]
+          : "",
+      );
+      setValue(
+        ENoteForm.END_DATE,
+        note?.endDate ? new Date(note.endDate).toISOString().split("T")[0] : "",
+      );
     } else if (isNew || creatingNoteForTrip) {
       reset({
         [ENoteForm.TITLE]: "",
@@ -87,8 +95,9 @@ export const NoteForm: FC<{
       title: data[ENoteForm.TITLE] || "",
       content: data[ENoteForm.CONTENT] || "",
       links: data[ENoteForm.LINKS],
-      startDate: data[ENoteForm.START_DATE] || null,
-      endDate: data[ENoteForm.END_DATE] || null,
+      startDate:
+        parseDateOnlyString(String(data[ENoteForm.START_DATE])) ?? null,
+      endDate: parseDateOnlyString(String(data[ENoteForm.END_DATE])) ?? null,
     };
     if (creatingNoteForTrip) {
       try {

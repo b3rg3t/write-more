@@ -24,7 +24,7 @@ import { IComment } from "../../models/interface/IComment";
 import { text } from "../../localization/eng";
 import { setEditNote } from "../../store/reducers/notes/notesSlice";
 import { TLink } from "../../models/type/TLink";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 import { TripDates } from "../utils/TripDates";
 import { NoteComments } from "./NoteComments";
@@ -68,13 +68,20 @@ export const NoteItem: FC<{
 }> = ({ headingLevel = "h3", note, tripId, titleOnly = false }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [updateNote] = useUpdateNoteMutation();
+  const isCurrentNoteRoute =
+    location.pathname === ERoutes.NOTE_DETAIL.replace(":noteId", note._id);
 
   const handleEditNote = () => {
     dispatch(setEditNote(note._id));
   };
 
   const handleClick = () => {
+    if (isCurrentNoteRoute) {
+      return;
+    }
+
     navigate(ERoutes.NOTE_DETAIL.replace(":noteId", note._id), {
       state: tripId ? { tripId } : undefined,
     });
@@ -100,7 +107,7 @@ export const NoteItem: FC<{
         borderRadius: 2,
         width: "100%",
         mb: 0,
-        cursor: "pointer",
+        cursor: isCurrentNoteRoute ? "default" : "pointer",
       }}
       onClick={handleClick}
     >
@@ -147,14 +154,17 @@ export const NoteItem: FC<{
             </IconButton>
           </Stack>
         </Stack>
-        <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0 }}>
-          {titleOnly && (
-            <TripDates
-              startDate={note.startDate}
-              endDate={note.endDate}
-              styles={{ mt: 0, mb: 1 }}
-            />
-          )}
+        <Stack
+          direction={titleOnly ? "row" : "column"}
+          spacing={1}
+          alignItems={titleOnly ? "center" : "start"}
+          sx={{ mb: 0 }}
+        >
+          <TripDates
+            startDate={note.startDate}
+            endDate={note.endDate}
+            styles={{ mt: 0, mb: 1 }}
+          />
 
           {titleOnly && <NoteSummary note={note} />}
           {titleOnly ? (

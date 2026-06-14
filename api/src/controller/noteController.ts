@@ -7,6 +7,7 @@ import STrip from "../models/schemas/STrip";
 import SUser from "../models/schemas/SUser";
 import { AuthRequest } from "../middleware/authenticate";
 import { EUserRole } from "../models/enums/EUserRole";
+import { parseOptionalDate } from "../utils/date";
 
 const hasUserContext = (req: AuthRequest) => Boolean(req.userId);
 
@@ -133,6 +134,17 @@ export const createNote = async (
 ) => {
   const { title, content, links, startDate, endDate } = req.body;
 
+  const parsedStartDate = parseOptionalDate(startDate);
+  const parsedEndDate = parseOptionalDate(endDate);
+
+  if (startDate && parsedStartDate === undefined) {
+    return res.status(400).json({ message: "Invalid startDate format" });
+  }
+
+  if (endDate && parsedEndDate === undefined) {
+    return res.status(400).json({ message: "Invalid endDate format" });
+  }
+
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -148,8 +160,8 @@ export const createNote = async (
       links,
       order: newOrder,
       users: [req.userId],
-      startDate,
-      endDate,
+      startDate: parsedStartDate,
+      endDate: parsedEndDate,
     });
     const savedNote = await newNote.save();
     res.status(201).json(savedNote);
@@ -165,6 +177,17 @@ export const updateNote = async (
   next: NextFunction,
 ) => {
   const { title, content, links, startDate, endDate, archived } = req.body;
+
+  const parsedStartDate = parseOptionalDate(startDate);
+  const parsedEndDate = parseOptionalDate(endDate);
+
+  if (startDate && parsedStartDate === undefined) {
+    return res.status(400).json({ message: "Invalid startDate format" });
+  }
+
+  if (endDate && parsedEndDate === undefined) {
+    return res.status(400).json({ message: "Invalid endDate format" });
+  }
 
   try {
     if (!hasUserContext(req)) {
@@ -185,7 +208,14 @@ export const updateNote = async (
 
     const updatedNote = await SNote.findByIdAndUpdate(
       req.params.id,
-      { title, content, links, startDate, endDate, archived },
+      {
+        title,
+        content,
+        links,
+        startDate: parsedStartDate,
+        endDate: parsedEndDate,
+        archived,
+      },
       { new: true },
     );
     if (!updatedNote) {

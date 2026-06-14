@@ -23,7 +23,7 @@ import {
 import { useGetAllNotesQuery } from "../../store/reducers/api/apiSlice";
 import { useGetAllTodosQuery } from "../../store/reducers/api/apiSlice";
 import { useGetAllUsersQuery } from "../../store/reducers/api/apiSlice";
-import { formatDateToInputValue } from "../../util/date";
+import { parseDateOnlyString } from "../../util/date";
 
 export const TripForm: FC<{
   trip?: ITrip;
@@ -82,8 +82,16 @@ export const TripForm: FC<{
     } else {
       setValue(ETripForm.TITLE, trip?.title || "");
       setValue(ETripForm.DESCRIPTION, trip?.description || "");
-      setValue(ETripForm.START_DATE, formatDateToInputValue(trip?.startDate));
-      setValue(ETripForm.END_DATE, formatDateToInputValue(trip?.endDate));
+      setValue(
+        ETripForm.START_DATE,
+        trip?.startDate
+          ? new Date(trip.startDate).toISOString().split("T")[0]
+          : "",
+      );
+      setValue(
+        ETripForm.END_DATE,
+        trip?.endDate ? new Date(trip.endDate).toISOString().split("T")[0] : "",
+      );
       setValue(
         ETripForm.NOTES,
         trip?.notes.map((n) => (typeof n === "string" ? n : n._id)) || [],
@@ -112,12 +120,8 @@ export const TripForm: FC<{
         await createTrip({
           title: data[ETripForm.TITLE],
           description: data[ETripForm.DESCRIPTION],
-          startDate: data[ETripForm.START_DATE]
-            ? new Date(data[ETripForm.START_DATE])
-            : undefined,
-          endDate: data[ETripForm.END_DATE]
-            ? new Date(data[ETripForm.END_DATE])
-            : undefined,
+          startDate: parseDateOnlyString(String(data[ETripForm.START_DATE])),
+          endDate: parseDateOnlyString(String(data[ETripForm.END_DATE])),
           notes:
             data[ETripForm.NOTES]?.map((n) =>
               typeof n === "string" ? n : n._id,
@@ -141,12 +145,8 @@ export const TripForm: FC<{
           _id: trip._id,
           title: data[ETripForm.TITLE],
           description: data[ETripForm.DESCRIPTION],
-          startDate: data[ETripForm.START_DATE]
-            ? new Date(data[ETripForm.START_DATE])
-            : undefined,
-          endDate: data[ETripForm.END_DATE]
-            ? new Date(data[ETripForm.END_DATE])
-            : undefined,
+          startDate: parseDateOnlyString(String(data[ETripForm.START_DATE])),
+          endDate: parseDateOnlyString(String(data[ETripForm.END_DATE])),
           notes:
             data[ETripForm.NOTES]?.map((n) =>
               typeof n === "string" ? n : n._id,

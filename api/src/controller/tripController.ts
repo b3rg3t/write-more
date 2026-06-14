@@ -9,6 +9,7 @@ import SUser from "../models/schemas/SUser";
 import { AuthRequest } from "../middleware/authenticate";
 import { EUserRole } from "../models/enums/EUserRole";
 import { uploadTripImageToGridFs } from "../utils/tripImageStorage";
+import { parseOptionalDate } from "../utils/date";
 
 type TripImageUploadRequest = AuthRequest & {
   file?: Express.Multer.File;
@@ -149,6 +150,17 @@ export const createTrip = async (
   const { title, description, startDate, endDate, notes, todos } = req.body;
   const userId = req.userId;
 
+  const parsedStartDate = parseOptionalDate(startDate);
+  const parsedEndDate = parseOptionalDate(endDate);
+
+  if (startDate && parsedStartDate === undefined) {
+    return res.status(400).json({ message: "Invalid startDate format" });
+  }
+
+  if (endDate && parsedEndDate === undefined) {
+    return res.status(400).json({ message: "Invalid endDate format" });
+  }
+
   try {
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -161,8 +173,8 @@ export const createTrip = async (
     const newTrip = new STrip({
       title,
       description,
-      startDate,
-      endDate,
+      startDate: parsedStartDate,
+      endDate: parsedEndDate,
       notes: notes || [],
       todos: todos || [],
       images: [],
@@ -205,6 +217,17 @@ export const updateTrip = async (
   } = req.body;
   const userId = req.userId;
 
+  const parsedStartDate = parseOptionalDate(startDate);
+  const parsedEndDate = parseOptionalDate(endDate);
+
+  if (startDate && parsedStartDate === undefined) {
+    return res.status(400).json({ message: "Invalid startDate format" });
+  }
+
+  if (endDate && parsedEndDate === undefined) {
+    return res.status(400).json({ message: "Invalid endDate format" });
+  }
+
   try {
     // Check if user has access to this trip
     const existingTrip = await STrip.findOne({
@@ -222,8 +245,8 @@ export const updateTrip = async (
       {
         title,
         description,
-        startDate,
-        endDate,
+        startDate: parsedStartDate,
+        endDate: parsedEndDate,
         notes,
         todos,
         users,
