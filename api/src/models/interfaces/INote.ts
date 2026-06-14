@@ -10,6 +10,7 @@ export interface INote extends Document {
   users: mongoose.Types.ObjectId[];
   startDate?: Date;
   endDate?: Date;
+  archived?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

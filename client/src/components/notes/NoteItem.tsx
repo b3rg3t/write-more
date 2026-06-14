@@ -14,6 +14,8 @@ import {
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { FC } from "react";
 import { fontSize16 } from "../utils/FontSize";
@@ -26,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../models/enum/ERoutes";
 import { TripDates } from "../utils/TripDates";
 import { NoteComments } from "./NoteComments";
+import { useUpdateNoteMutation } from "../../store/reducers/api/apiSlice";
 
 const NoteSummary: FC<{ note: INote }> = ({ note }) => {
   const commentCount = (note.commentIds ?? []).filter(
@@ -65,6 +68,7 @@ export const NoteItem: FC<{
 }> = ({ headingLevel = "h3", note, tripId, titleOnly = false }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [updateNote] = useUpdateNoteMutation();
 
   const handleEditNote = () => {
     dispatch(setEditNote(note._id));
@@ -78,6 +82,14 @@ export const NoteItem: FC<{
 
   const handleLinkClick = (url: TLink["url"]) => {
     window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const handleToggleArchive = async () => {
+    try {
+      await updateNote({ _id: note._id, archived: !note.archived }).unwrap();
+    } catch (error) {
+      console.error("Error toggling note archive status:", error);
+    }
   };
 
   return (
@@ -105,7 +117,22 @@ export const NoteItem: FC<{
           >
             {note.title ? note.title : text.notes.notesForm.titleUnknown}
           </Typography>
-          <Stack direction="column" alignItems="start" spacing={0.5}>
+          <Stack direction="row" alignItems="start" spacing={0.5}>
+            <IconButton
+              edge="end"
+              aria-label={
+                note.archived
+                  ? text.notes.noteItem.unarchive
+                  : text.notes.noteItem.archive
+              }
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToggleArchive();
+              }}
+              sx={{ pr: 0.5, color: "warning.main" }}
+            >
+              {note.archived ? <UnarchiveIcon /> : <ArchiveIcon />}
+            </IconButton>
             <IconButton
               color="info"
               edge="end"

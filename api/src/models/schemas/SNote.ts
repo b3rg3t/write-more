@@ -47,6 +47,10 @@ const SNote: Schema = new Schema(
       type: Date,
       required: false,
     },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

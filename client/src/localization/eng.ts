@@ -26,6 +26,8 @@ export const text = {
     noteItem: {
       created: "Created",
       updated: "Updated",
+      archive: "Archive",
+      unarchive: "Unarchive",
       comments: {
         title: "Comment",
         add: "Add comment",

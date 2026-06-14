@@ -24,7 +24,12 @@ interface NoteListProps {
   titleOnly?: boolean;
 }
 
-export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip, titleOnly }) => {
+export const NoteList: FC<NoteListProps> = ({
+  notes,
+  headingLevel,
+  trip,
+  titleOnly,
+}) => {
   const [reorderNotes, {}] = useReorderNotesMutation();
   const [updateTrip, {}] = useUpdateTripMutation();
   const [notesState, setNotes] = useState<INote[]>([]);
@@ -68,7 +73,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip, titleOn
 
   if (notesState.length === 0 && notes.length === 0) {
     return (
-      <Typography variant={"body1"}>
+      <Typography variant={"body1"} sx={{ px: 2, py: 1 }}>
         {text.notes.notesList.noNotesAvailable}
       </Typography>
     );
@@ -87,7 +92,12 @@ export const NoteList: FC<NoteListProps> = ({ notes, headingLevel, trip, titleOn
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <NoteItem note={note} headingLevel={headingLevel} tripId={trip?._id} titleOnly={titleOnly} />
+                    <NoteItem
+                      note={note}
+                      headingLevel={headingLevel}
+                      tripId={trip?._id}
+                      titleOnly={titleOnly}
+                    />
                   </ListItem>
                 )}
               </Draggable>

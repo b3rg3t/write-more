@@ -10,4 +10,5 @@ export interface INote extends IBase {
   commentIds?: Array<string | IComment>;
   startDate?: Date | string | null;
   endDate?: Date | string | null;
+  archived?: boolean;
 }

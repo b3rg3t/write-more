@@ -57,7 +57,11 @@ const canAccessNote = async (userId: string, noteId: string) =>
   );
 
 // Get all notes
-export const getNotes = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getNotes = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -68,13 +72,17 @@ export const getNotes = async (req: AuthRequest, res: Response, next: NextFuncti
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    const baseFilter = { archived: { $ne: true } };
     const notes = accessContext.isAdmin
-      ? await SNote.find().populate(commentIdsPopulate).lean()
+      ? await SNote.find(baseFilter).populate(commentIdsPopulate).lean()
       : await SNote.find({
+          ...baseFilter,
           _id: {
             $in: await getAccessibleNoteIds(accessContext.userId),
           },
-        }).populate(commentIdsPopulate).lean();
+        })
+          .populate(commentIdsPopulate)
+          .lean();
 
     res.json(notes.map(addCommentUserNames));
   } catch (err) {
@@ -83,7 +91,11 @@ export const getNotes = async (req: AuthRequest, res: Response, next: NextFuncti
 };
 
 // Get a specific note by ID
-export const getNote = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getNote = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -101,7 +113,9 @@ export const getNote = async (req: AuthRequest, res: Response, next: NextFunctio
       return res.status(404).json({ message: "Note not found" });
     }
 
-    const note = await SNote.findById(req.params.id).populate(commentIdsPopulate).lean();
+    const note = await SNote.findById(req.params.id)
+      .populate(commentIdsPopulate)
+      .lean();
     if (!note) {
       return res.status(404).json({ message: "Note not found" });
     }
@@ -112,7 +126,11 @@ export const getNote = async (req: AuthRequest, res: Response, next: NextFunctio
 };
 
 // Create a new note
-export const createNote = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const createNote = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   const { title, content, links, startDate, endDate } = req.body;
 
   try {
@@ -141,8 +159,12 @@ export const createNote = async (req: AuthRequest, res: Response, next: NextFunc
 };
 
 // Update a note
-export const updateNote = async (req: AuthRequest, res: Response, next: NextFunction) => {
-  const { title, content, links, startDate, endDate } = req.body;
+export const updateNote = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { title, content, links, startDate, endDate, archived } = req.body;
 
   try {
     if (!hasUserContext(req)) {
@@ -163,7 +185,7 @@ export const updateNote = async (req: AuthRequest, res: Response, next: NextFunc
 
     const updatedNote = await SNote.findByIdAndUpdate(
       req.params.id,
-      { title, content, links, startDate, endDate },
+      { title, content, links, startDate, endDate, archived },
       { new: true },
     );
     if (!updatedNote) {
@@ -176,7 +198,11 @@ export const updateNote = async (req: AuthRequest, res: Response, next: NextFunc
 };
 
 // Update order for all notes
-export const updateOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const updateOrder = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   const updates: Pick<INote, "_id" | "order">[] = req.body; // array of { id, order }
 
   try {
@@ -219,7 +245,11 @@ export const updateOrder = async (req: AuthRequest, res: Response, next: NextFun
 };
 
 // Delete a note
-export const deleteNote = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const deleteNote = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     if (!hasUserContext(req)) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -248,7 +278,11 @@ export const deleteNote = async (req: AuthRequest, res: Response, next: NextFunc
 };
 
 // Create a comment for a specific note
-export const createCommentForNote = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const createCommentForNote = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   const { content } = req.body;
   const noteId = req.params.id;
 

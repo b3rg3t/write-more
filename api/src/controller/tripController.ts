@@ -22,14 +22,21 @@ const tripImagePopulate = {
 };
 
 // Get all trips for the authenticated user
-export const getTrips = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getTrips = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const userId = req.userId;
 
     // Only get trips where the user is in the users array
     const trips = await STrip.find({ users: userId })
       .populate(tripImagePopulate)
-      .populate("notes")
+      .populate({
+        path: "notes",
+        match: { archived: { $ne: true } },
+      })
       .populate("todos")
       .populate("users", "username email firstName lastName")
       .populate("createdBy", "username email firstName lastName")
@@ -42,7 +49,11 @@ export const getTrips = async (req: AuthRequest, res: Response, next: NextFuncti
 };
 
 // Admin endpoint - get all trips
-export const getAllTripsAdmin = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getAllTripsAdmin = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const userId = req.userId;
 
@@ -55,7 +66,7 @@ export const getAllTripsAdmin = async (req: AuthRequest, res: Response, next: Ne
     // Get all trips
     const trips = await STrip.find()
       .populate(tripImagePopulate)
-      .populate("notes")
+      .populate({ path: "notes", match: { archived: { $ne: true } } })
       .populate("todos")
       .populate("users", "username email firstName lastName")
       .populate("createdBy", "username email firstName lastName")
@@ -68,7 +79,11 @@ export const getAllTripsAdmin = async (req: AuthRequest, res: Response, next: Ne
 };
 
 // Get a specific trip by ID
-export const getTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getTrip = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const userId = req.userId;
 
@@ -76,6 +91,7 @@ export const getTrip = async (req: AuthRequest, res: Response, next: NextFunctio
       .populate(tripImagePopulate)
       .populate({
         path: "notes",
+        match: { archived: { $ne: true } },
         populate: {
           path: "commentIds",
           populate: {
@@ -125,7 +141,11 @@ export const getTrip = async (req: AuthRequest, res: Response, next: NextFunctio
 };
 
 // Create a new trip
-export const createTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const createTrip = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   const { title, description, startDate, endDate, notes, todos } = req.body;
   const userId = req.userId;
 
@@ -154,7 +174,7 @@ export const createTrip = async (req: AuthRequest, res: Response, next: NextFunc
 
     const populatedTrip = await STrip.findById(savedTrip._id)
       .populate(tripImagePopulate)
-      .populate("notes")
+      .populate({ path: "notes", match: { archived: false } })
       .populate("todos")
       .populate("users", "username email firstName lastName")
       .populate("createdBy", "username email firstName lastName");
@@ -166,7 +186,11 @@ export const createTrip = async (req: AuthRequest, res: Response, next: NextFunc
 };
 
 // Update a trip
-export const updateTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const updateTrip = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   const {
     title,
     description,
@@ -210,7 +234,7 @@ export const updateTrip = async (req: AuthRequest, res: Response, next: NextFunc
       { new: true },
     )
       .populate(tripImagePopulate)
-      .populate("notes")
+      .populate({ path: "notes", match: { archived: false } })
       .populate("todos")
       .populate("users", "username email firstName lastName")
       .populate("createdBy", "username email firstName lastName");
@@ -225,7 +249,11 @@ export const updateTrip = async (req: AuthRequest, res: Response, next: NextFunc
 };
 
 // Update order for all trips
-export const updateOrder = async (req: Request, res: Response, next: NextFunction) => {
+export const updateOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const updates: Pick<ITrip, "_id" | "order">[] = req.body; // array of { id, order }
 
   try {
@@ -244,7 +272,11 @@ export const updateOrder = async (req: Request, res: Response, next: NextFunctio
 };
 
 // Delete a trip
-export const deleteTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const deleteTrip = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const userId = req.userId;
 
@@ -267,7 +299,11 @@ export const deleteTrip = async (req: AuthRequest, res: Response, next: NextFunc
 };
 
 // Create a todo and connect it to a trip
-export const createTodoForTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const createTodoForTrip = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   const { name, isCompleted } = req.body;
   const tripId = req.params.tripId;
   const userId = req.userId;
@@ -318,7 +354,11 @@ export const createTodoForTrip = async (req: AuthRequest, res: Response, next: N
 };
 
 // Create a note and connect it to a trip
-export const createNoteForTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const createNoteForTrip = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   const { title, content, links, startDate, endDate } = req.body;
   const tripId = req.params.tripId;
   const userId = req.userId;
@@ -353,7 +393,7 @@ export const createNoteForTrip = async (req: AuthRequest, res: Response, next: N
         },
       },
       { new: true },
-    ).populate("notes");
+    ).populate({ path: "notes", match: { archived: false } });
 
     if (!updatedTrip) {
       // If trip update fails, we should probably delete the created note
@@ -372,7 +412,11 @@ export const createNoteForTrip = async (req: AuthRequest, res: Response, next: N
 };
 
 // Add users to a trip
-export const addUserToTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const addUserToTrip = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     const { userId: userIdToAdd } = req.body;
@@ -394,7 +438,7 @@ export const addUserToTrip = async (req: AuthRequest, res: Response, next: NextF
 
     const updatedTrip = await STrip.findById(id)
       .populate(tripImagePopulate)
-      .populate("notes")
+      .populate({ path: "notes", match: { archived: false } })
       .populate("todos")
       .populate("users", "username email firstName lastName")
       .populate("createdBy", "username email firstName lastName");
@@ -406,7 +450,11 @@ export const addUserToTrip = async (req: AuthRequest, res: Response, next: NextF
 };
 
 // Remove user from a trip
-export const removeUserFromTrip = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const removeUserFromTrip = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id, userId: userIdToRemove } = req.params;
     const currentUserId = req.userId;
@@ -431,7 +479,7 @@ export const removeUserFromTrip = async (req: AuthRequest, res: Response, next: 
 
     const updatedTrip = await STrip.findById(id)
       .populate(tripImagePopulate)
-      .populate("notes")
+      .populate({ path: "notes", match: { archived: false } })
       .populate("todos")
       .populate("users", "username email firstName lastName")
       .populate("createdBy", "username email firstName lastName");
