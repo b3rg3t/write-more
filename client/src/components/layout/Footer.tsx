@@ -42,7 +42,7 @@ export const Footer = () => {
             maxWidth: 400,
           }}
         >
-          <About />
+          <About hideTopSection={true} />
         </Box>
       </Container>
     );
